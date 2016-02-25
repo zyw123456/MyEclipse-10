@@ -1,0 +1,201 @@
+package com.sinoway.common.parse;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.service.parse.GeneralJsonTradeMsgTransfer;
+import com.sinoway.common.service.parse.GeneralXmlTradeMsgTransfer;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+
+/**
+ * 测试解析报文的方法
+ * @author dell
+ *
+ */
+public class TestJSONParse {
+
+	/**
+	 * @param args
+	 */
+	public static void main1(String[] args) {
+		
+		 XPath xpath;
+	     //创建Document对象及读取XML文件
+		 DocumentBuilderFactory builderFactory = DocumentBuilderFactory .newInstance();
+		          //解析XML
+		         Document document=null;
+		         try {
+		        	 DocumentBuilder builder= builderFactory.newDocumentBuilder(); 
+		             
+		             document = builder.parse(new File("D:\\XML_IBankServerMapsTemplate.xml"));
+		             
+		             
+		             //创建 xPath对象
+		             XPathFactory factory = XPathFactory.newInstance();
+		             xpath = (XPath) factory.newXPath();
+
+		             Element node;
+					try {
+						node = (Element) xpath.evaluate("/TRADETEMPLATE/TRADE/MESSAGE/OBJ",document,XPathConstants.NODE);
+						GeneralJsonTradeMsgTransfer transfer  =  new GeneralJsonTradeMsgTransfer();
+						JSONObject obj = new JSONObject();
+						
+						JSONObject  a = new JSONObject();
+						a.put("o", "test1");
+						a.put("p", "test2");
+						obj.put("a", a);
+						
+						
+				try {
+					JSONObject   returnObj = transfer.transfJsonMsgByJTemp(node,obj,obj,"",new GeneralBusEntity());
+					System.out.println(returnObj.toJSONString());
+				} catch (JsonMsgParseException e) {
+					e.printStackTrace();
+				} catch (TradeMsgTransfException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				} catch (XPathExpressionException e) {
+					e.printStackTrace();
+				}     
+		             
+		        } catch (ParserConfigurationException e) {
+		             e.printStackTrace();
+		         } catch (SAXException e) {
+		             e.printStackTrace();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+//		         Element rootElement = document.getDocumentElement(); //获取根节点
+//		         Node  childNodes = rootElement; //根节点下所有子节点
+//		         System.out.println(rootElement.getNodeValue()+"根节点");
+//		 
+//		         
+//		          System.out.println(childNodes+"子节点====");
+//		         for (int i = 0; i < childNodes.getLength(); i++) {  //循环第一层子节点
+//		                  Node childNode = childNodes.item(i);  
+//		                  NodeList childNodes_2 = childNode.getChildNodes();  
+//		                      for(int j = 0;j < childNodes_2.getLength();j++){   //循环第二层子节点
+//		                      Node childNode_2 = childNodes_2.item(j);  
+//		                       NodeList childNodes_3 = childNode_2.getChildNodes();  
+//		                           for(int k = 0;k < childNodes_3.getLength();k++){    //第三层
+//		                                 Node childNode_3 = childNodes_3.item(k);                    
+//		                             System.out.println(childNode_3.getNodeValue());
+//		                           }
+//		                      }
+//		             }
+		
+
+	}
+	
+	public static void main(String[] args) {
+		
+		
+	     //创建Document对象及读取XML文件
+		 DocumentBuilderFactory builderFactory = DocumentBuilderFactory .newInstance();
+          //解析XML
+         Document document=null;
+        	 DocumentBuilder builder;
+			try {
+				builder = builderFactory.newDocumentBuilder();
+				document = builder.parse(new File("D:\\Untitled2.xml"));
+				Element el = (Element)XPathAPI.selectSingleNode(document, "/head");
+				
+				JSONObject json = new JSONObject();
+				JSONObject x = new JSONObject();
+				
+				x.put("a", "test1");
+				x.put("b", "test2");
+				x.put("c", "1111111111");
+		
+				JSONObject y = new JSONObject();
+				JSONObject y1 = new JSONObject();
+				y.put("e", "test4");
+				y.put("f", "test5");
+				y.put("g", "test6");
+				y1.put("d", y);
+				
+				JSONObject z1 = new JSONObject();
+				JSONObject z = new JSONObject();
+				z1.put("j", "test7");
+				z1.put("k", "test8");
+				z1.put("l", "test9");
+				z.put("h", z1);
+				y.put("h", z);
+				
+				JSONArray arr =  new JSONArray();
+				JSONObject obj1 = new JSONObject();
+				obj1.put("r", "test10");
+				obj1.put("s", "test11");
+				obj1.put("t", "test12");
+				
+				JSONObject obj2 = new JSONObject();
+				obj2.put("r", "test13");
+				obj2.put("s", "test14");
+				obj2.put("t", "test15");
+				
+				JSONObject obj3 = new JSONObject();
+				obj3.put("r", "test16");
+				obj3.put("s", "test17");
+				obj3.put("t", "test18");
+				arr.add(obj1);
+				arr.add(obj2);
+				arr.add(obj3);
+				z1.put("list", arr);
+				x.put("d", y1);
+				json.put("x", x);
+				
+				System.out.println(json.toJSONString());
+				
+				//此类是json转换json 转化器测试工具类
+				//GeneralJsonTradeMsgTransfer transfer  =  new GeneralJsonTradeMsgTransfer();
+				//此类是json 转换xml 转化器工具类
+				GeneralXmlTradeMsgTransfer transfer  = new GeneralXmlTradeMsgTransfer();
+			    Document  doucment =  transfer.transfJsonMsgByJTemp(DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument(),el, json, json);
+				System.out.println(":::::" + DocumentUtil.domToStrByDefDecode(doucment));
+
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (TransformerException e) {
+				e.printStackTrace();
+			} catch (JsonMsgParseException e) {
+				e.printStackTrace();
+			} catch (TradeMsgTransfException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+             
+	}
+
+}

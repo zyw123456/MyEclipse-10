@@ -1,0 +1,79 @@
+package com.sinoway.common.util;
+
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate3.Hibernate3Module;
+
+public class JsonBinder {
+
+	private static Logger logger = LoggerFactory.getLogger(JsonBinder.class);
+	private static ObjectMapper defaultMapper = generateMapper(JsonInclude.Include.ALWAYS);
+
+	public static ObjectMapper generateMapper(Include inclusion) {
+		ObjectMapper mapper = new ObjectMapper();
+
+		// 设置输出包含的属性
+		mapper.setSerializationInclusion(inclusion);
+		// 设置输入时忽略JSON字符串中存在而Java对象实际没有的属性
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		// 解决hibernate3延迟加载
+		Hibernate3Module hbm = new Hibernate3Module();
+		hbm.enable(Hibernate3Module.Feature.FORCE_LAZY_LOADING);
+		mapper.registerModule(hbm);
+
+		// json字符串转Blob类型时的转换器
+//		SimpleModule simpleModule = new SimpleModule();
+//		SimpleDeserializers deserializers = new SimpleDeserializers();
+//		deserializers.addDeserializer(Blob.class, new BlobDeSerializer());
+//		simpleModule.setDeserializers(deserializers);
+//		mapper.registerModule(simpleModule);
+//		
+//		SimpleSerializers serializers = new SimpleSerializers();
+//		serializers.addSerializer(Blob.class, new BlobSerializer());
+//		mapper.getSerializerFactory().withAdditionalSerializers(serializers);
+
+		return mapper;
+	}
+
+	/**
+	 * 如果JSON字符串为Null或"null"字符串,返回Null. 如果JSON字符串为"[]",返回空集合.
+	 * 
+	 * 如需读取集合如List/Map,且不是List<String>这种简单类型时使用如下语句: List<MyBean> beanList =
+	 * binder.getMapper().readValue(listString, new
+	 * TypeReference<List<MyBean>>() {});
+	 */
+	public static <T> T fromJson(String jsonString, Class<T> clazz) {
+		if (StringUtils.isEmpty(jsonString)) {
+			return null;
+		}
+		try {
+			return defaultMapper.readValue(jsonString, clazz);
+		} catch (IOException e) {
+			logger.warn("parse json string error:" + jsonString, e);
+			return null;
+		}
+	}
+
+	public static String toJson(Object object) {
+		try {
+			defaultMapper = generateMapper(JsonInclude.Include.ALWAYS);
+			return defaultMapper.writeValueAsString(object);
+		} catch (IOException e) {
+			logger.warn("write to json string error:" + object, e);
+			return null;
+		}
+	}
+
+	public static ObjectMapper getMapper() {
+		return defaultMapper;
+	}
+}

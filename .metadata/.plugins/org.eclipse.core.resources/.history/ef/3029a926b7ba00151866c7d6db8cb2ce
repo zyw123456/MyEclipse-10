@@ -1,0 +1,176 @@
+package com.sinoway.common.util;
+
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
+
+
+
+/**
+ * 
+ * @author dell
+ *
+ */
+public class Utils {
+	
+	public  static MessageDigest msgDigest = null;
+    public static  String upperSign = "";
+	 public static String encodeParam(String str) throws Exception{
+	    	return DESUtil.encode("12345678", str.getBytes());
+	    }
+	 public static String gzt_bank_md5(String str) throws Exception{
+	        try {
+	             msgDigest = MessageDigest.getInstance("MD5");
+	             msgDigest.update(str.toString().getBytes("utf-8"));
+	             byte[] bytes = msgDigest.digest();
+	             upperSign = bin2hex(bytes).toLowerCase();
+	        } catch (NoSuchAlgorithmException e) {
+	            e.printStackTrace();
+	        }
+	        return upperSign;
+	 }
+	 
+	 public static String bin2hex(byte[] bs) {
+	        char[] digital = "0123456789ABCDEF".toCharArray();
+	        StringBuffer sb = new StringBuffer("");
+	        int bit;
+	        for (int i = 0; i < bs.length; i++) {
+	            bit = (bs[i] & 0x0f0) >> 4;
+	            sb.append(digital[bit]);
+	            bit = bs[i] & 0x0f;
+	            sb.append(digital[bit]);
+	        }
+	        return sb.toString();
+	    }
+	 
+	 /**
+	  * ����ֻ������Ӫ��
+	  * @param phone_number
+	  * @return 1���ƶ� 2����ͨ 3������ 4 ����
+	  */
+	 public static int matchesPhoneNumber(String phone_number) {
+
+		 String cm = "^((13[4-9])|(147)|(15[0-2,7-9])|(18[2-3,7-8]))\\d{8}$";
+		 String cu = "^((13[0-2])|(145)|(15[5-6])|(18[5,6]))\\d{8}$";
+		 String ct = "^((133)|(153)|(18[0,9]))\\d{8}$";
+
+		 int flag = 0;
+		 if (phone_number.matches(cm)) {
+		 flag = 1;
+		 } else if (phone_number.matches(cu)) {
+		 flag = 2;
+		 } else if (phone_number.matches(ct)) {
+		 flag = 3;
+		 } else {
+		 flag = 4;
+		 }
+		 return flag;
+		 } 
+	 
+	 public static String urlEncode(String str,String charset) throws Exception{
+		 return URLEncoder.encode(str,charset).toLowerCase();
+	 }
+	 /**
+	  * ��ݸ�ʽ��ȡ��ǰʱ��
+	  * @param formart
+	  * @return
+	  */
+	 public static String getNowTime(String formart){
+		 Date now = new Date();
+		 SimpleDateFormat sdf = new SimpleDateFormat(formart);
+		 return sdf.format(now);
+	 }
+	 
+	 /**
+	     * java���������ֺ���ĸ���
+	     * @param length[��������ĳ���]
+	     * @return
+	     */
+	    public static String getCharAndNumr(int length) {
+	        String val = "";
+	        Random random = new Random();
+	        for (int i = 0; i < length; i++) {
+	            // �����ĸ��������
+	            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; 
+	            // �ַ�
+	            if ("char".equalsIgnoreCase(charOrNum)) {
+	                // ȡ�ô�д��ĸ����Сд��ĸ
+	                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; 
+	                val += (char) (choice + random.nextInt(26));
+	            } else if ("num".equalsIgnoreCase(charOrNum)) { // ����
+	                val += String.valueOf(random.nextInt(10));
+	            }
+	        }
+	        return val;
+	    }
+	    /**
+	     * ����sign
+	     * @param _ref
+	     * @param _pwd
+	     * @return
+	     * @throws Exception
+	     */
+	    public static final String getCustSign(String _ref, String _pwd) throws Exception {
+			return SAuthRss.getSign(_ref, UEncrypt.HASH_TYPE.MD5, UEncrypt.getHash(UEncrypt.HASH_TYPE.MD5, _pwd), SAuthRss.SEED_TYPE.ROT13MD5REF);
+		}
+	    public static String str2HexStr(String str) {
+	    		 
+	    		        char[] chars = "0123456789ABCDEF".toCharArray();
+	    		        StringBuilder sb = new StringBuilder("");
+	    		        byte[] bs = str.getBytes();
+	    		        int bit;
+	    		 
+	    		        for (int i = 0; i < bs.length; i++) {
+	    		            bit = (bs[i] & 0x0f0) >> 4;
+	    		            sb.append(chars[bit]);
+	    		            bit = bs[i] & 0x0f;
+	    		            sb.append(chars[bit]);
+	    		            sb.append(' ');
+	    		        }
+	    		        return sb.toString().trim();
+	    		    }
+	    public static String unicodeToString(String hex) {
+	    		        int t = hex.length() / 6;
+	    		        StringBuilder str = new StringBuilder();
+	    		        for (int i = 0; i < t; i++) {
+	    		            String s = hex.substring(i * 6, (i + 1) * 6);
+	    		            // ��λ��Ҫ����00��ת
+	    		            String s1 = s.substring(2, 4) + "00";
+	    		            // ��λֱ��ת
+	    		            String s2 = s.substring(4);
+	    		            // ��16���Ƶ�stringתΪint
+	    		            int n = Integer.valueOf(s1, 16) + Integer.valueOf(s2, 16);
+	    		            // ��intת��Ϊ�ַ�
+	    		            char[] chars = Character.toChars(n);
+	    		            str.append(new String(chars));
+	    		        }
+	    		        return str.toString();
+	    		    }
+	    public static String ByteArr2HexString(byte[] bytearr) {
+			 if (bytearr == null) {
+			 return "null";
+			 }
+			 StringBuffer sb = new StringBuffer();
+			
+			 for (int k = 0; k < bytearr.length; k++) {
+			 if ((bytearr[k] & 0xFF) < 16) {
+			 sb.append("0");
+			 }
+			 sb.append(Integer.toString(bytearr[k] & 0xFF, 16));
+			 }
+			 return sb.toString();
+
+		}
+	    
+	    
+	    		    public static void main(String[] args) {
+	    		         
+	    		        String str = "97e9a22f252f10ded57e0a2811a42ef0";
+	    		        System.out.println(ByteArr2HexString(str.getBytes()));
+	    		    }
+	    		}
+

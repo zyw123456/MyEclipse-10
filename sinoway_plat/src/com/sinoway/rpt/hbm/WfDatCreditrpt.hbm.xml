@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.rpt.entity.WfDatCreditrpt" table="WF_DAT_CREDITRPT">
+        <id name="rptid" type="string">
+            <column name="RPTID" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="redorptid" type="string">
+            <column name="REDORPTID" length="30" />
+        </property>
+        <property name="fntjrn" type="string">
+            <column name="FNTJRN" length="30" />
+        </property>
+        <property name="prsnnam" type="string">
+            <column name="PRSNNAM" length="32" not-null="true" />
+        </property>
+        <property name="credtyp" type="string">
+            <column name="CREDTYP" length="8" />
+        </property>
+        <property name="credtno" type="string">
+            <column name="CREDTNO" length="32" />
+        </property>
+        <property name="prsncod" type="string">
+            <column name="PRSNCOD" length="32" not-null="true" />
+        </property>
+         <property name="telno" type="string">
+            <column name="TELNO" length="30" />
+        </property>
+        <property name="rpttyp" type="string">
+            <column name="RPTTYP" length="10" />
+        </property>
+        <property name="rptnam" type="string">
+            <column name="RPTNAM" length="64" />
+        </property>
+        <property name="prdcod" type="string">
+            <column name="PRDCOD" length="8" />
+        </property>
+        <property name="prdnam" type="string">
+            <column name="PRDNAM" length="64" />
+        </property>
+        <property name="datcmitori" type="string">
+            <column name="DATCMITORI" length="8" />
+        </property>
+        <property name="rptdte" type="string">
+            <column name="RPTDTE" length="8" />
+        </property>
+        <property name="rpttim" type="string">
+            <column name="RPTTIM" length="12" />
+        </property>
+        <property name="rptsta" type="string">
+            <column name="RPTSTA" length="2">
+                <comment>
+                0&#161;&#162;&#213;&#253;&#212;&#218;&#180;&#166;&#192;&#237;&#163;&#172;1&#161;&#162;&#210;&#209;&#205;&#234;&#179;&#201;&#163;&#172;2&#161;&#162;&#205;&#163;&#211;&#195;&#163;&#168;&#201;&#190;&#179;&#253;&#163;&#169;</comment>
+            </column>
+        </property>
+        <property name="rptmoddte" type="string">
+            <column name="RPTMODDTE" length="8" />
+        </property>
+        <property name="rptmodtim" type="string">
+            <column name="RPTMODTIM" length="12" />
+        </property>
+        <property name="peoplecode" type="string">
+            <column name="PEOPLECODE" length="32" />
+        </property>
+        <property name="orgno" type="string">
+            <column name="ORGNO" length="32" />
+        </property>
+        <property name="parntcode" type="string">
+            <column name="PARNTCODE" length="32" />
+        </property>
+        <property name="reqadrr" type="string">
+            <column name="REQADRR" length="256" />
+        </property>
+        <property name="rtpadrr" type="string">
+            <column name="RTPADRR" length="256" />
+        </property>
+        <property name="usrid" type="string">
+            <column name="USRID" length="32" />
+        </property>
+        <property name="p_usrid" type="string">
+            <column name="P_USRID" length="32" />
+        </property>
+        <property name="corgno" type="string">
+            <column name="CORGNO" length="32" />
+        </property>
+        <property name="cporgno" type="string">
+            <column name="CPORGNO" length="32" />
+        </property>
+        
+    </class>
+</hibernate-mapping>

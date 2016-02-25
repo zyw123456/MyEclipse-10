@@ -1,0 +1,165 @@
+package com.sinoway.common.parse;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+
+/**
+ * json格式报文通用解析
+ * @author Liuzhen
+ * @version 1.0
+ * 2015-10-29
+ *
+ */
+public class GeneralJsonMsgParser {
+	
+	/**
+	 * 把一个json对象转换成Map
+	 * @param json 要解析的json
+	 * @param pKey
+	 * @return
+	 */
+	public static Map<String, Object> jsonMapTranfer(JSONObject json) throws JsonMsgParseException{
+		
+		// json 对象不能为空
+		if(json == null){
+			throw new JsonMsgParseException("转换Json对象到Map错误：Json对象不能为空");
+		}
+		
+		// 获取jsonObject中的所有key
+		Set<String> keys = json.keySet();
+		
+		
+		if(keys == null || keys.size() == 0){
+			return new HashMap<String,Object>();
+		}
+		
+		// 最终解析出来的map对象
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		// 开始逐个key解析
+		for (String key : keys) {
+			
+			Object o = json.get(key);
+
+			// 如果当前值类型为字符，直接放入map中
+			if (o instanceof String) {
+				map.put(key, ((String) o));
+
+			// 如果当前值类型JsonObject，递归解析
+			} else if (o instanceof JSONObject) {
+				
+				Map<String, Object> sMap= jsonMapTranfer((JSONObject) o);
+				map.put(key, sMap);
+
+			// 如果当前值类型，递归解析JsonArray
+			} else if (o instanceof JSONArray) {
+				JSONArray jsa = (JSONArray) o;
+
+				List list = jsonArrayListTransfer(jsa);
+
+				map.put(key,list);
+			}
+		}
+
+		return map;
+	}
+	
+	/**
+	 * 将一个JsonArray转换成一个List
+	 * @param jsa 要转换的JsonArray
+	 * @return 转换完成的List
+	 * @throws JsonMsgParseException
+	 */
+	public static List jsonArrayListTransfer(JSONArray jsa) throws JsonMsgParseException {
+
+		if(jsa == null){
+			throw new JsonMsgParseException("转换JsonArray到list错误：JsonArray对象不能为空");
+		}
+		// 转换完成后的list
+		List list = new ArrayList();
+
+		// 逐个元素开始解析
+		for (int i = 0; i < jsa.size(); i++) {
+			
+			Object o = jsa.get(i);
+
+			// 如果当前值类型为String，直接放入List中
+			if (o instanceof String) {
+				
+				list.add((String) o);
+			
+			// 如果当前值类型为JSONobject，继续向下解析
+			} else if (o instanceof JSONObject) {
+			
+				Map<String, Object> sMap = jsonMapTranfer((JSONObject) o);
+				list.add(sMap);
+			
+			// 如果当前值类型为JSONArray，继续向下解析
+			} else if (o instanceof JSONArray) {
+			
+				JSONArray sJsa = (JSONArray) o;
+
+				List sList = jsonArrayListTransfer(jsa);
+
+				list.add(sList);
+			}
+
+		}
+
+		return list;
+
+	}
+
+	/**
+	 * 根据key获取Json中的value，
+	 * @param json
+	 * @param key 例如 key|key2|key3
+	 * @return
+	 */
+	public static Object getJsonValueByKey(JSONObject json, String key) throws JsonMsgParseException {
+		
+		if(json == null){
+			throw new JsonMsgParseException("获取Json对象值错误：JSON对象不能为空");
+		}
+		
+		if(json == null){
+			throw new JsonMsgParseException("获取Json对象值错误：key值不能为空");
+		}
+
+		String[] keys = key.split("\\|");
+		if (keys.length == 1) {
+			return json.get(key);
+		} else {
+			JSONObject cJson = json;
+			for (int i = 0; i < keys.length; i++) {
+
+				Object o = cJson.get(keys[i]);
+
+				// 最后一个key，返回
+				if (i == keys.length - 1) {
+					return o;
+				}
+
+				if(o == null){
+					return null;
+				}
+				if (o instanceof JSONObject) {
+					cJson = (JSONObject) o;
+				} else {
+					return null;
+				}
+
+			}
+
+		}
+		return null;
+	}
+	
+}

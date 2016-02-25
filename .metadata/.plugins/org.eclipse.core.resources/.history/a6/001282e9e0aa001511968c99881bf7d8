@@ -1,0 +1,5 @@
+package com.sinoway.common.action;
+
+public @interface override {
+
+}

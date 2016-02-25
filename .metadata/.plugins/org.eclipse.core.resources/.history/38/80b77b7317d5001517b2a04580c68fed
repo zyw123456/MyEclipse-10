@@ -1,0 +1,146 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.base.entity.BCfgdefOrginfo;
+import com.sinoway.base.service.BCfgdefOrginfoService;
+import com.sinoway.common.constant.Constant.HttpStatus;
+import com.sinoway.common.constant.Constant.MsgCode;
+import com.sinoway.common.service.cfg.CommonOrganService;
+import com.sinoway.common.util.GUIDGenerator;
+import com.sinoway.common.util.JRNGenerator;
+
+@Transactional(propagation=Propagation.REQUIRED,rollbackFor =Exception.class)
+@Service("commonDefOrganService")
+public class CommonDefOrganService implements CommonOrganService{
+	Logger logger = LogManager.getLogger(CommonDefOrganService.class.getName());
+	@Autowired
+	private BCfgdefOrginfoService bCfgdefOrginfoService;
+	
+	@Override
+	public Object addOrganInfo(Object OrganInfo) throws Exception {
+		JSONObject jo = (JSONObject) OrganInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	try{
+		 //对字段长度进行校验
+		if(jo.get("orgnam").toString().length() >64){
+			 msg.append("新增机构名称超长\n");  
+		}
+		if(jo.get("porgno").toString().length() >24){
+			 msg.append("新增父机构id超长\n");  
+		}
+		logger.info("新增机构报文"+jo.toJSONString());
+		BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+		// 系统码 和 类别码 还没定
+		bCfgdefOrginfo.setOrgno(JRNGenerator.generate24Jrn("O", "P")); // 机构号
+		bCfgdefOrginfo.setOrgnam(jo.get("orgnam").toString()== null ? "" : jo.get("orgnam").toString()); // 机构名称
+		bCfgdefOrginfo.setPorgno(jo.get("porgno").toString()==null ? "" : jo.get("porgno").toString()); // 父账户
+		bCfgdefOrginfo.setOrgtyp(jo.get("orgtyp").toString()); // 机构类型
+		bCfgdefOrginfo.setId(GUIDGenerator.generateId());
+		Object obj = bCfgdefOrginfoService.insert("BCfgdefOrginfo.insertByEntity", bCfgdefOrginfo);
+
+		backobj.put("msgcode", "007"); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+		backobj.put("orgno", bCfgdefOrginfo.getOrgno()); // 机构号
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states", HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("新增机构成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("新增机构失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	  }catch(Exception e){
+		  logger.error("新增机构成出现异常"+jo.toJSONString());
+		  e.printStackTrace();
+		  throw e;
+	  }
+		return backobj;
+	}
+
+	@Override
+	public Object editOrganInfo(Object OrganInfo) throws Exception {
+		JSONObject jo = (JSONObject) OrganInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	try{
+		if(jo.get("orgnam").toString().length() >64){
+			 msg.append("修改机构名称超长\n");  
+		}
+		if(jo.get("porgno").toString().length() >24){
+			 msg.append("修改父机构id超长\n");  
+		}
+		if(jo.get("orgno").toString().length() >24){
+			 msg.append("修改机构id超长\n");  
+		}
+		logger.info("修改机构成报文"+jo.toJSONString());
+		BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+
+		bCfgdefOrginfo.setOrgno(jo.get("orgno").toString()==null ? "" : jo.get("orgno").toString()); // 机构号
+		bCfgdefOrginfo.setOrgnam(jo.get("orgnam").toString()== null ? "" : jo.get("orgnam").toString()); // 机构名称
+		bCfgdefOrginfo.setPorgno(jo.get("porgno").toString()==null ? "" : jo.get("porgno").toString()); // 父账户
+		bCfgdefOrginfo.setOrgtyp(jo.get("orgtyp").toString()); // 机构类型
+
+		// TODO 机构编号
+		Object obj = bCfgdefOrginfoService.update("BCfgdefOrginfo.updateByEntity", bCfgdefOrginfo);
+
+		backobj.put("msgcode",MsgCode.MSGCODE_UPDATEORGTEAM.getValue()); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+		backobj.put("orgno", bCfgdefOrginfo.getOrgno()); // 机构号
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states", HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("修改机构成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append( "修改机构失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	}catch(Exception e){
+		logger.info("修改机构出现异常"+jo.toJSONString());
+		e.printStackTrace();
+		throw e;
+	}
+		return backobj;
+	}
+
+	@Override
+	public Object delOrganInfo(Object OrganInfo) throws Exception {
+		JSONObject jo = (JSONObject) OrganInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	try{
+		if(jo.get("orgno").toString().length() >24){
+			 msg.append("机构id超长\n");  
+		}
+		logger.info("删除机构报文"+jo.toJSONString());
+		BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+		bCfgdefOrginfo.setOrgno(jo.get("orgno").toString()); // 机构号
+		bCfgdefOrginfo.setSta(HttpStatus.STATIS_FAIL.getCode()); // 逻辑删除 0 代表不可用
+		Object obj =  bCfgdefOrginfoService.update("BCfgdefOrginfo.updateByEntity", bCfgdefOrginfo);
+
+		backobj.put("msgcode", MsgCode.MSGCODE_DELETEORGTEAM.getValue()); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states", HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			msg.append("删除机构成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			msg.append("删除机构失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	}catch(Exception e){
+		logger.info("删除机构出现异常"+jo.toJSONString());
+		e.printStackTrace();
+		throw e;
+	}
+		return backobj;
+	}
+
+}

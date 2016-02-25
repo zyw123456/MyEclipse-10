@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="380" key="DIALOG_WIDTH"/>
+		<item value="430" key="DIALOG_Y_ORIGIN"/>
+		<item value="1160" key="DIALOG_X_ORIGIN"/>
+		<item value="347" key="DIALOG_HEIGHT"/>
+		<item value="1|微软雅黑|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|微软雅黑" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="true" key="wrap"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wholeword"/>
+		<item value="Redorptid" key="selection"/>
+		<list key="findhistory">
+			<item value="redorptid"/>
+			<item value="findListByConditions"/>
+			<item value="fraudObj"/>
+			<item value="queryBean"/>
+			<item value="UploadEvent"/>
+			<item value="fileUpLoadListener"/>
+			<item value="rptContFlow"/>
+			<item value="tb1"/>
+		</list>
+		<list key="replacehistory">
+			<item value=""/>
+			<item value="HttpStatus.STATIS_FAIL.getCode()"/>
+			<item value="HttpStatus.STATIS_SUCCESS.getCode()"/>
+			<item value="//"/>
+			<item value="&quot;"/>
+			<item value="\&quot;"/>
+			<item value="\\"/>
+			<item value="(JSONObject) JSONObject.parse("/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="300" key="DIALOG_Y_ORIGIN"/>
+		<item value="569" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>

@@ -1,0 +1,225 @@
+
+function assigent(){
+	$.ajax({
+		url : ctx + "/getAssigent.action",
+		type : "post",
+		data :{versionNumber:plat_alarmDetail_v},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : true,
+		success : function(data, textStatus) {
+			if (data != "") {
+				var frontObj = JSON.parse(data);
+				if(frontObj != null){
+					if(null != frontObj.errorCode){
+						alert(frontObj.errorCode);
+					}else{
+					
+						$("#plat_alarmDetail_v").html(frontObj.frontMap["plat_alarmDetail_v"]);
+					
+					}
+				}
+			}
+		},
+		
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+
+function init() {
+	var plat_alarmDetail_v =$("#plat_alarmDetail_v").html();//平台监控预警明细版本号
+	$.ajax({
+		url : ctx + "/getPlatAlarmNo.action",
+		type : "post",
+		data :{versionNumber:plat_alarmDetail_v},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : false,
+		success : function(data, textStatus) {
+			if (data != "") {
+				var frontObj = JSON.parse(data);
+				if(frontObj != null){
+					if(null != frontObj.errorCode){
+						alert(frontObj.errorCode);
+					}else{
+					
+						$("#plat_alarmDetail_v").html(frontObj.frontMap["plat_alarmDetail_v"]);
+						$("#platMonitor").html(frontObj.frontMap["platMonitor"]);
+						$("#platAlarm").html(frontObj.frontMap["platAlarm"]);
+						$("#plat_alarmNo_v").html(frontObj.frontMap["plat_alarmNo_v"]);
+						$("#acc_alarmNo_v").html(frontObj.frontMap["acc_alarmNo_v"]);
+						$("#acc_report_v").html(frontObj.frontMap["acc_report_v"]);
+						window.parent.bottom.$("#versionNumberHb").html(frontObj.frontMap["acc_dailyDataUsage_v"]);
+					
+					}
+				}
+			}
+		},
+		
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+	var plat_alarmNo_v =$("#plat_alarmNo_v").html();//平台监控预警数版本号
+	
+
+	$.ajax({
+		url : ctx + "/getAccAlarmNo.action",
+		type : "post",
+		data : {versionNumber:plat_alarmNo_v},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async :false,
+		success : function(data, textStatus) {
+			if (data != "") {
+				var frontObj = JSON.parse(data);
+				if(frontObj != null){
+					if(null != frontObj.errorCode){
+						alert(frontObj.errorCode);
+					}else{
+						$("#accMonitor").html(frontObj.frontMap["accMonitor"]);
+						$("#accAlarm").html(frontObj.frontMap["accAlarm"]);
+					}
+				}
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+	var acc_alarmNo_v =$("#acc_alarmNo_v").html();// 用户预警数版本号
+	$.ajax({
+		url : ctx + "/getTopAccRpt.action",
+		type : "post",
+		data :{versionNumber:acc_alarmNo_v},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : false,
+		success : function(data, textStatus) {
+			if (data != "") {
+				var frontObj = JSON.parse(data);
+				if(frontObj != null){
+					if(null != frontObj.errorCode){
+						alert(frontObj.errorCode);
+					}else{
+						if(null != frontObj.rptlist){
+							var tbody = "";
+							for(var i=0;i<frontObj.rptlist.length;i++){
+								tbody += "<tr class='myTr2'><td>"+frontObj.rptlist[i].rptmodtim+"</td><td>"+frontObj.rptlist[i].rptid+"</td><td>"+frontObj.rptlist[i].prsnnam+"</td><td>"
+								+frontObj.rptlist[i].prsncod+"</td><td>"+frontObj.rptlist[i].rpttyp+"</td></tr>";
+							}
+							for(var i=0;i<10-frontObj.rptlist.length;i++){
+								tbody +="<tr class='myTr2'><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+							}
+							$("tr").remove(".myTr2");
+							$("#mytable2").append(tbody);
+						}
+					}
+				}
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+	var acc_report_v =$("#acc_report_v").html();// 平台报告明细版本号
+	$.ajax({
+		url : ctx + "/getTopPlatAlarmDetail.action",
+		type : "post",
+		data : {versionNumber:acc_report_v},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : false,
+		success : function(data, textStatus) {
+			if (data != "") {
+				var frontObj = JSON.parse(data);
+				if(frontObj != null){
+					if(null != frontObj.errorCode){
+						alert(frontObj.errorCode);
+					}else{
+						if(null != frontObj.warnlist){
+							var tbody = "";
+							for(var i=0;i<frontObj.warnlist.length;i++){
+								tbody += "<tr class='myTr'><td>"+frontObj.warnlist[i].warnTim+"</br><span>"+frontObj.warnlist[i].trnNam+"  信息可靠度"+frontObj.warnlist[i].reality+"</span></td></tr>";
+							}
+							for(var i=0;i<6-frontObj.warnlist.length;i++){
+								tbody +="<tr class='myTr'><td><br><span>&nbsp;</span></td></tr>";
+							}
+						}else{
+							for(var i=0;i<6;i++){
+								tbody +="<tr class='myTr'><td><br><span>&nbsp;</span></td></tr>";
+							}
+						}
+						$("tr").remove(".myTr");
+						$("#mytable").append(tbody);
+					}
+				}
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+
+$(document).ready(function() {
+	$("#mainlist",window.parent.parent.document).attr("rows","200px,*,100px");
+	assigent();
+	init();
+	contFlow();
+	
+});
+/**
+ * 首页底部的流量统计
+ */
+function contFlow(){
+	var versionNumberHb = window.parent.bottom.$("#versionNumberHb").html();//首页底部流量统计版本号
+	$.ajax({
+		url : "hpCache_homePageFlowStatistics.action",
+		type : "post",
+		data : {versionNumber:versionNumberHb},
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : false,
+		success : function(data, textStatus) {
+			if (data != null) {
+				var obj = JSON.parse(data);
+				var todayFlow = obj.data.todayFlow;
+				
+				
+				
+				//var nearlyThreeDaysFlow = obj.data.nearlyThreeDaysFlow;
+				 window.parent.bottom.$("#todayFlow").html(todayFlow);
+				// window.parent.bottom.$("#nearlyThreeDaysFlow").html(nearlyThreeDaysFlow);
+				 window.parent.bottom.$("#yesterdayData").html(obj.data.yesterdayData);
+				 window.parent.bottom.$("#berfareYesterdayData").html(obj.data.berfareYesterdayData);
+				 window.parent.bottom.$("#threeDaysAgoData").html(obj.data.threeDaysAgoData);
+				 window.parent.bottom.$("#versionNumberHb").html(obj.data.versionNo);
+				 
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}

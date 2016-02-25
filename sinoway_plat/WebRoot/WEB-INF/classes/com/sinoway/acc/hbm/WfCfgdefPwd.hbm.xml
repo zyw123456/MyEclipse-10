@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.acc.entity.WfCfgdefPwd" table="PO_PEOPLEINFO">
+        <id name="sid" type="string">
+            <column name="SID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="pwd" type="string">
+            <column name="PWD" length="64" />
+        </property>
+        <property name="peoplecode" type="string">
+            <column name="PEOPLECODE" length="20" />
+        </property>
+        <property name="recentpasswordrecord" type="string">
+            <column name="RECENTPASSWORDRECORD" length="512" />
+        </property>
+        <property name="lastchangepwdtime" type="date">
+            <column name="LASTCHANGEPWDTIME" length="16" />
+        </property>
+    </class>
+</hibernate-mapping>

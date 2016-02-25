@@ -1,0 +1,12 @@
+package com.sinoway.mcp.service.yimei.task;
+
+import java.util.TimerTask;
+
+public class TokenTask extends TimerTask {
+
+	public void run() {
+	
+		
+	}
+
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configs>
+	<!-- 以下是密文登录名和密码autek/flyvideo，如果需要改成明文，则去掉encrypt属性然后填写明文即可 
+	<ParamGroup name="WFDB" memo="WF数据库配置">
+		<Param name="driverClass">net.sourceforge.jtds.jdbc.Driver</Param>
+		<Param name="jdbcUrl">jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=wf;SelectMethod=cursor</Param>
+		<Param name="user" encrypt="1">tIIdeiM7Qwo=</Param>
+		<Param name="password" encrypt="1">StOV/X3PurXvORAl4nuRvA==</Param>
+		<Param name="dialect">org.hibernate.dialect.SQLServerDialect</Param>
+		<Param name="show_sql">false</Param>
+		<Param name="hbm2ddl.auto">none</Param>
+	</ParamGroup>
+	
+	-->
+<!-- 	
+	<ParamGroup name="WFDB" memo="WF数据库配置">
+		<Param name="driverClass">net.sourceforge.jtds.jdbc.Driver</Param>
+		<Param name="jdbcUrl">jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=wf;SelectMethod=cursor</Param>
+		<Param name="user" encrypt="1">tIIdeiM7Qwo=</Param>
+		<Param name="password" encrypt="1">StOV/X3PurXvORAl4nuRvA==</Param>
+		<Param name="dialect">org.hibernate.dialect.SQLServerDialect</Param>
+		<Param name="show_sql">false</Param>
+		<Param name="hbm2ddl.auto">none</Param>
+	</ParamGroup>
+	<ParamGroup name="WFDB" memo="WF数据库配置">
+		<Param name="driverClass">oracle.jdbc.driver.OracleDriver</Param>
+		<Param name="jdbcUrl">jdbc:oracle:thin:@127.0.0.1:1521:orcl1</Param>
+		<Param name="user">wfuser</Param>
+		<Param name="password">flyvideo</Param>
+		<Param name="dialect">org.hibernate.dialect.OracleDialect</Param>
+		<Param name="show_sql">false</Param>
+		<Param name="hbm2ddl.auto">none</Param>
+	</ParamGroup>-->
+	
+	<ParamGroup name="WFDB" memo="WF数据库配置">
+		<Param name="driverClass">com.ibm.db2.jcc.DB2Driver</Param>
+		<Param name="jdbcUrl">jdbc:db2://10.0.1.170:50000/toolsdb:currentSchema=PLATTEST;</Param>
+		
+		<!-- <Param name="jdbcUrl">jdbc:db2://10.0.1.170:50000/toolsdb</Param> -->
+<!-- 		<Param name="jdbcUrl">jdbc:db2://192.168.1.171:50000/FrontDb</Param> -->
+
+		<Param name="user">db2admin</Param>
+		<Param name="password">flyvideo</Param>
+
+		<Param name="dialect">org.hibernate.dialect.DB2Dialect</Param>
+		<Param name="show_sql">false</Param>
+		<Param name="hbm2ddl.auto">none</Param>
+	</ParamGroup>
+
+
+	
+</Configs>

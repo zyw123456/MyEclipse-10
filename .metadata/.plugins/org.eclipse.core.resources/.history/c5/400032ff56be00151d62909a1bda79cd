@@ -1,0 +1,21 @@
+package com.sinoway.common.que;
+
+import com.sinoway.common.service.consumer.GeneralOPConsumerService;
+import com.sinoway.mcp.queue.exception.QueueOperatException;
+import com.sinoway.mcp.queue.producer.MessageProducer;
+
+public class Test {
+
+	public static void main(String[] args) {
+		MessageProducer m = new MessageProducer();
+		//String a = "{\"bodys\":[{\"name\":\"啊三哥\",\"idcard\":\"232321198306198782\"}],\"header\":{\"intrncod\":\"10000001\",\"masttrndte\":\"20151226\",\"masttrntim\":\"102130100\",\"mastjrn\":\"1111\",\"chnlcod\":\"1000\",\"fnttrndte\":\"20150931\",\"fnttrnjrn\":\"F01000000115112611223800004001\",\"fnttrntim\":\"111111786\",\"orgno\":\"110\",\"prdcod\":\"1\",\"subusrid\":\"001\",\"trnbtchid\":\"000001\",\"usrid\":\"007\"}}";
+		//String a = "{\"bodys\":[{\"trncod\":\"10000001\",\"name\":\"啊三哥\",\"idcard\":\"232321198306198782\"},{\"trncod\":\"10000001\",\"name\":\"啊三哥\",\"idcard\":\"232321198306198782\"}],\"header\":{\"intrncod\":\"\",\"masttrndte\":\"20151226\",\"masttrntim\":\"102130100\",\"mastjrn\":\"1111\",\"chnlcod\":\"1000\",\"fnttrndte\":\"20150931\",\"fnttrnjrn\":\"F2prd0000115112613391900006003\",\"fnttrntim\":\"111111786\",\"orgno\":\"110\",\"prdcod\":\"prd00001\",\"subusrid\":\"001\",\"trnbtchid\":\"000001\",\"usrid\":\"007\"}}";
+		String a = "{\"bodys\":[{\"tellphone\":\"13810133902\",\"birthday\":\"19830619\",\"sex\":\"女\",\"certtype\":\"01\",\"age\":\"32\",\"certcod\":\"232321198306198782\",\"certorg\":\"黑龙江绥化\"}],\"header\":{\"chnlcod\":\"30000001\",\"intrncod\":\"50000001\",\"mastjrn\":\"C5000000115112318563700001006\",\"masttrndte\":\"20151123\",\"masttrntim\":\"185637451\",\"orgno\":\"1000\",\"prdjrn\":\"C0215112318563500001001\",\"subusrid\":\"100000000000000000000001\",\"trnbtchid\":\"185635052\",\"trncod\":\"50000001\",\"trndte\":\"20151123\",\"trnjrn\":\"C5000000115112318563700001006\",\"trntim\":\"185637451\",\"usrid\":\"100000000000000000000001\"}}";
+		try {
+			m.sendData("aaaaffff","req2");
+		} catch (QueueOperatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

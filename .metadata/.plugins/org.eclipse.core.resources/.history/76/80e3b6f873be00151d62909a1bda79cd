@@ -1,0 +1,75 @@
+package com.sinoway.common.service.consumer;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.constant.SystemConstant.LogType;
+import com.sinoway.common.entity.TradeLogEntity;
+import com.sinoway.common.util.GUIDGenerator;
+import com.sinoway.common.util.McpLogger;
+import com.sinoway.mcp.entity.FDatExptrnlog;
+import com.sinoway.mcp.entity.FDatOvertrnlog;
+import com.sinoway.mcp.entity.FLogTrnflw;
+import com.sinoway.mcp.service.FDatOvertrnlogService;
+import com.sinoway.mcp.service.FLogTrnflwService;
+
+/**
+ * 对消息队列的日志进行处理
+ * @author zhangyanwei
+ *
+ */
+public class LogRecordConsumerService extends DefaultConsumerService {
+
+	
+	private McpLogger logger = McpLogger.getLogger(getClass());
+	
+	private FLogTrnflwService fLogTrnflwService = null;// 交易日志service
+	
+	private FDatOvertrnlogService fDatOvertrnlogService = null;// 超时重发交易日志service
+	
+	
+
+	@Override
+	public void excuteMsg(String msg) throws Exception {
+
+		String logId = GUIDGenerator.generateId();// 日志ID
+		logger.info(logId + "：接收到日志......,内容:" + msg);
+		
+		JSONObject  json = (JSONObject) JSONObject.parse(msg);
+		
+		//将json转化成对象
+		TradeLogEntity   entity = JSON.toJavaObject(json, TradeLogEntity.class);
+	
+     try{
+	    if(entity.getLogtype().equals(LogType.TRADE.getValue())){
+	    	//交易日志
+		  FLogTrnflw  flw = new FLogTrnflw();
+		  BeanUtils.copyProperties(flw, entity);
+			 // 生成交易日志
+		  fLogTrnflwService.save(flw);
+	    }else if(entity.getLogtype().equals(LogType.TIMEOUT.getValue())){
+	    	//超时重发日志
+		  FDatOvertrnlog overlog = new FDatOvertrnlog();
+	      BeanUtils.copyProperties(overlog, entity);	
+	      
+	    }else if(entity.getLogtype().equals(LogType.ERROR.getValue())){
+	    	//异常交易日志
+		  FDatExptrnlog  execLog  = new FDatExptrnlog();
+	      BeanUtils.copyProperties(execLog, entity);	
+	    }
+		
+		}catch(Exception e){
+		   throw e;
+		}
+		
+	}
+     public FLogTrnflwService getfLogTrnflwService() {
+ 		return fLogTrnflwService;
+ 	}
+
+ 	public void setfLogTrnflwService(FLogTrnflwService fLogTrnflwService) {
+ 		this.fLogTrnflwService = fLogTrnflwService;
+ 	}
+
+}

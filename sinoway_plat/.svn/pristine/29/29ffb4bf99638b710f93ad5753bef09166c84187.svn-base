@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<!-- sql 查询页面要素 -->
+	<sql-query name="creditrptDao.findTrninele"
+		cacheable="true">
+		<![CDATA[
+			SELECT {wft.*} FROM WF_CFGREf_trninele wft WHERE wft.trncod IN 
+				(SELECT wfp.TRNCOD FROM WF_CFGREF_PRDDETIL wfp WHERE wfp.PRDCOD = :prdcod) 
+				AND wft.trncod NOT IN (:trncod)
+			ORDER BY wft.trncod,to_number(wft.sort) asc
+		]]>
+		<return alias="wft" class="com.sinoway.common.entity.WfCfgrefTrninele"/>
+	</sql-query>
+
+	<!-- sql 查询原报告元素名称 -->
+	<sql-query name="creditrptDao.findTranByRptid"
+		cacheable="true">
+		<return-scalar column="elecod" type="string"/>
+		<return-scalar column="elenam" type="string"/>
+		<return-scalar column="datatype" type="string"/>
+		<![CDATA[
+		 select wtr.elecod,wtr.elenam,wtr.datatype from wf_cfgref_trninele wtr where wtr.id in (
+			 select max(wftl.id) from wf_cfgref_trninele wftl  
+			 where wftl.trncod in (select w.trncod from wf_cfgref_prddetil w where w.prdcod =(	select wcp.prdcod from wf_dat_creditrpt wcp where wcp.rptid =:rptId))
+				group by wftl.elecod,wftl.elenam,wftl.datatype
+			) order by  wtr.trncod,to_number(wtr.sort) asc
+		 
+		]]>
+	</sql-query>
+	
+	<!-- sql 查询原报告拥有的原交易 -->
+	<sql-query name="creditrptDao.findOldTranByRptid"
+		cacheable="true">
+		<return-scalar column="rtpadrr" type="string"/>
+		<![CDATA[
+		 	select wcp.rtpadrr from WF_DAT_CREDITRPT wcp where wcp.rptid = :rptId
+		]]>
+	</sql-query>
+
+	<!-- sql 查询当前用户所拥有的产品信息 -->
+	<sql-query name="creditrptDao.getFraudByPeoplecode"
+		cacheable="true">
+		<![CDATA[
+			select {prdinfo.*}  from WF_CFGREF_COMPUSRPRD  usrprd
+						inner join WF_CFGDEF_PRDINFO  prdinfo on usrprd.PRDCOD=prdinfo.PRDCOD and prdinfo.appcod=:appcod
+			where usrprd.PEOPLECODE = :peopleid and prdinfo.sta <> :sta and prdinfo.appcod=:appcod
+		]]>
+		<return alias="prdinfo" class="com.yzj.wf.plat.entity.WfCfgdefPrdinfo"/>
+	</sql-query>
+	
+	<!-- 删除反欺诈报告 -->	
+	<query name="creditrptDao.deleteFraudByRptids">
+		<![CDATA[
+			update com.sinoway.rpt.entity.WfDatCreditrpt wdc 
+			set wdc.rptsta = :rptsta
+			where wdc.rptid in (:rptid) 
+		]]>
+	</query>
+	
+
+</hibernate-mapping>

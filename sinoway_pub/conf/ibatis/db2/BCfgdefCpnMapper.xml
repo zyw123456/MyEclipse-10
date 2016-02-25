@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefCpn" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefCpn" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- CPNTYPID -->
+    <result column="CPNTYPID" property="cpntypid" jdbcType="VARCHAR" />
+    <!-- CPNNAME -->
+    <result column="CPNNAME" property="cpnname" jdbcType="VARCHAR" />
+    <!-- STADTE -->
+    <result column="STADTE" property="stadte" jdbcType="VARCHAR" />
+    <!-- ENDDTE -->
+    <result column="ENDDTE" property="enddte" jdbcType="VARCHAR" />
+    <!-- VLDDTE -->
+    <result column="VLDDTE" property="vlddte" jdbcType="VARCHAR" />
+    <!-- CPNPNT -->
+    <result column="CPNPNT" property="cpnpnt" jdbcType="VARCHAR" />
+    <!-- CPNCRT -->
+    <result column="CPNCRT" property="cpncrt" jdbcType="VARCHAR" />
+    <!-- WALID -->
+    <result column="WALID" property="walid" jdbcType="VARCHAR" />
+    <!-- MMO -->
+    <result column="MMO" property="mmo" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			CPNTYPID,
+			CPNNAME,
+			STADTE,
+			ENDDTE,
+			VLDDTE,
+			CPNPNT,
+			CPNCRT,
+			WALID,
+			MMO
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="cpntypid != null" >	  CPNTYPID = #{cpntypid,jdbcType=VARCHAR},	</if>
+    <if test="cpnname != null" >	  CPNNAME = #{cpnname,jdbcType=VARCHAR},	</if>
+    <if test="stadte != null" >	  STADTE = #{stadte,jdbcType=VARCHAR},	</if>
+    <if test="enddte != null" >	  ENDDTE = #{enddte,jdbcType=VARCHAR},	</if>
+    <if test="vlddte != null" >	  VLDDTE = #{vlddte,jdbcType=VARCHAR},	</if>
+    <if test="cpnpnt != null" >	  CPNPNT = #{cpnpnt,jdbcType=VARCHAR},	</if>
+    <if test="cpncrt != null" >	  CPNCRT = #{cpncrt,jdbcType=VARCHAR},	</if>
+    <if test="walid != null" >	  WALID = #{walid,jdbcType=VARCHAR},	</if>
+    <if test="mmo != null" >	  MMO = #{mmo,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="cpntypid != null" >
+		  and CPNTYPID = #{cpntypid,jdbcType=VARCHAR}
+		</if>
+	    <if test="cpnname != null" >
+		  and CPNNAME = #{cpnname,jdbcType=VARCHAR}
+		</if>
+	    <if test="stadte != null" >
+		  and STADTE = #{stadte,jdbcType=VARCHAR}
+		</if>
+	    <if test="enddte != null" >
+		  and ENDDTE = #{enddte,jdbcType=VARCHAR}
+		</if>
+	    <if test="vlddte != null" >
+		  and VLDDTE = #{vlddte,jdbcType=VARCHAR}
+		</if>
+	    <if test="cpnpnt != null" >
+		  and CPNPNT = #{cpnpnt,jdbcType=VARCHAR}
+		</if>
+	    <if test="cpncrt != null" >
+		  and CPNCRT = #{cpncrt,jdbcType=VARCHAR}
+		</if>
+	    <if test="walid != null" >
+		  and WALID = #{walid,jdbcType=VARCHAR}
+		</if>
+	    <if test="mmo != null" >
+		  and MMO = #{mmo,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_CPN
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefCpn" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_CPN
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_CPN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefCpn" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_CPN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_CPN (ID,
+			CPNTYPID,
+			CPNNAME,
+			STADTE,
+			ENDDTE,
+			VLDDTE,
+			CPNPNT,
+			CPNCRT,
+			WALID,
+			MMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{cpntypid,jdbcType=VARCHAR},
+    #{cpnname,jdbcType=VARCHAR},
+    #{stadte,jdbcType=VARCHAR},
+    #{enddte,jdbcType=VARCHAR},
+    #{vlddte,jdbcType=VARCHAR},
+    #{cpnpnt,jdbcType=VARCHAR},
+    #{cpncrt,jdbcType=VARCHAR},
+    #{walid,jdbcType=VARCHAR},
+    #{mmo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefCpn" >
+    insert into B_CFGDEF_CPN (ID,
+			CPNTYPID,
+			CPNNAME,
+			STADTE,
+			ENDDTE,
+			VLDDTE,
+			CPNPNT,
+			CPNCRT,
+			WALID,
+			MMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{cpntypid,jdbcType=VARCHAR},
+    #{cpnname,jdbcType=VARCHAR},
+    #{stadte,jdbcType=VARCHAR},
+    #{enddte,jdbcType=VARCHAR},
+    #{vlddte,jdbcType=VARCHAR},
+    #{cpnpnt,jdbcType=VARCHAR},
+    #{cpncrt,jdbcType=VARCHAR},
+    #{walid,jdbcType=VARCHAR},
+    #{mmo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_CPN
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefCpn">
+  	delete from B_CFGDEF_CPN 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_CPN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefCpn">
+  	update B_CFGDEF_CPN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_CPN (ID,
+			CPNTYPID,
+			CPNNAME,
+			STADTE,
+			ENDDTE,
+			VLDDTE,
+			CPNPNT,
+			CPNCRT,
+			WALID,
+			MMO)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.cpntypid,jdbcType=VARCHAR},
+    #{item.cpnname,jdbcType=VARCHAR},
+    #{item.stadte,jdbcType=VARCHAR},
+    #{item.enddte,jdbcType=VARCHAR},
+    #{item.vlddte,jdbcType=VARCHAR},
+    #{item.cpnpnt,jdbcType=VARCHAR},
+    #{item.cpncrt,jdbcType=VARCHAR},
+    #{item.walid,jdbcType=VARCHAR},
+    #{item.mmo,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_CPN 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

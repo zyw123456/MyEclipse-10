@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="webServiceWizard">
+		<item value="false" key="WSDL_FILE_USED"/>
+		<list key="WSDL_URL_KEY">
+			<item value="http://116.58.219.253:9099/HD_GetAccess_Token.asmx?wsdl"/>
+			<item value="http://116.58.219.253:9099/HD_Check/User_CheckService.asmx?wsdl"/>
+		</list>
+	</section>
+</section>

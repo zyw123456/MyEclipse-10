@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FDatMetatrnflw" >
+  <resultMap id="BaseResultMap" type="com.sinoway.mcp.entity.FDatMetatrnflw" >
+    <!-- FNTTRNJRN -->
+	<id column="FNTTRNJRN" property="fnttrnjrn" jdbcType="VARCHAR" />
+
+
+    <!-- TRNBTCHID -->
+    <result column="TRNBTCHID" property="trnbtchid" jdbcType="VARCHAR" />
+    <!-- SUPPTRNJRN -->
+    <result column="SUPPTRNJRN" property="supptrnjrn" jdbcType="VARCHAR" />
+    <!-- MASTJRN -->
+    <result column="MASTJRN" property="mastjrn" jdbcType="VARCHAR" />
+    <!-- ORGNO -->
+    <result column="ORGNO" property="orgno" jdbcType="VARCHAR" />
+    <!-- ORGNAM -->
+    <result column="ORGNAM" property="orgnam" jdbcType="VARCHAR" />
+    <!-- USRID -->
+    <result column="USRID" property="usrid" jdbcType="VARCHAR" />
+    <!-- USRNAM -->
+    <result column="USRNAM" property="usrnam" jdbcType="VARCHAR" />
+    <!-- SUBUSRID -->
+    <result column="SUBUSRID" property="subusrid" jdbcType="VARCHAR" />
+    <!-- SUBUSRNAM -->
+    <result column="SUBUSRNAM" property="subusrnam" jdbcType="VARCHAR" />
+    <!-- CHNLCOD -->
+    <result column="CHNLCOD" property="chnlcod" jdbcType="VARCHAR" />
+    <!-- OUTTRNCOD -->
+    <result column="OUTTRNCOD" property="outtrncod" jdbcType="VARCHAR" />
+    <!-- 包括：原交易编码、子交易编码 -->
+    <result column="INTRNCOD" property="intrncod" jdbcType="VARCHAR" />
+    <!-- CHNLNAM -->
+    <result column="CHNLNAM" property="chnlnam" jdbcType="VARCHAR" />
+    <!-- CHNLSRVIP -->
+    <result column="CHNLSRVIP" property="chnlsrvip" jdbcType="VARCHAR" />
+    <!-- CHNLSRVPORT -->
+    <result column="CHNLSRVPORT" property="chnlsrvport" jdbcType="VARCHAR" />
+    <!-- FNTTRNDTE -->
+    <result column="FNTTRNDTE" property="fnttrndte" jdbcType="VARCHAR" />
+    <!-- FNTTRNTIM -->
+    <result column="FNTTRNTIM" property="fnttrntim" jdbcType="VARCHAR" />
+    <!-- SUPPTRNDTE -->
+    <result column="SUPPTRNDTE" property="supptrndte" jdbcType="VARCHAR" />
+    <!-- SUPPTRNTIM -->
+    <result column="SUPPTRNTIM" property="supptrntim" jdbcType="VARCHAR" />
+    <!-- MASTTRNDTE -->
+    <result column="MASTTRNDTE" property="masttrndte" jdbcType="VARCHAR" />
+    <!-- MASTTRNTIM -->
+    <result column="MASTTRNTIM" property="masttrntim" jdbcType="VARCHAR" />
+    <!-- TMOUT -->
+    <result column="TMOUT" property="tmout" jdbcType="VARCHAR" />
+    <!-- FILEFLG -->
+    <result column="FILEFLG" property="fileflg" jdbcType="VARCHAR" />
+    <!-- FILESTORADRR -->
+    <result column="FILESTORADRR" property="filestoradrr" jdbcType="VARCHAR" />
+    <!-- REQMSG -->
+    <result column="REQMSG" property="reqmsg" jdbcType="VARCHAR" />
+    <!-- RESPMSG -->
+    <result column="RESPMSG" property="respmsg" jdbcType="VARCHAR" />
+    <!-- 0-	没有结果 1-成功 2-供应商响应超时 3-由其他原因引起的异常
+
+0-没有结果 1-成功 2-核心处理超时 3-响应超时 4-由其他原因引起的异常 -->
+    <result column="RESPFLG" property="respflg" jdbcType="VARCHAR" />
+    <!-- FNTPRDTRNJRN -->
+    <result column="FNTPRDTRNJRN" property="fntprdtrnjrn" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    FNTTRNJRN,
+			TRNBTCHID,
+			SUPPTRNJRN,
+			MASTJRN,
+			ORGNO,
+			ORGNAM,
+			USRID,
+			USRNAM,
+			SUBUSRID,
+			SUBUSRNAM,
+			CHNLCOD,
+			OUTTRNCOD,
+			INTRNCOD,
+			CHNLNAM,
+			CHNLSRVIP,
+			CHNLSRVPORT,
+			FNTTRNDTE,
+			FNTTRNTIM,
+			SUPPTRNDTE,
+			SUPPTRNTIM,
+			MASTTRNDTE,
+			MASTTRNTIM,
+			TMOUT,
+			FILEFLG,
+			FILESTORADRR,
+			REQMSG,
+			RESPMSG,
+			RESPFLG,
+			FNTPRDTRNJRN
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="trnbtchid != null" >	  TRNBTCHID = #{trnbtchid,jdbcType=VARCHAR},	</if>
+    <if test="supptrnjrn != null" >	  SUPPTRNJRN = #{supptrnjrn,jdbcType=VARCHAR},	</if>
+    <if test="mastjrn != null" >	  MASTJRN = #{mastjrn,jdbcType=VARCHAR},	</if>
+    <if test="orgno != null" >	  ORGNO = #{orgno,jdbcType=VARCHAR},	</if>
+    <if test="orgnam != null" >	  ORGNAM = #{orgnam,jdbcType=VARCHAR},	</if>
+    <if test="usrid != null" >	  USRID = #{usrid,jdbcType=VARCHAR},	</if>
+    <if test="usrnam != null" >	  USRNAM = #{usrnam,jdbcType=VARCHAR},	</if>
+    <if test="subusrid != null" >	  SUBUSRID = #{subusrid,jdbcType=VARCHAR},	</if>
+    <if test="subusrnam != null" >	  SUBUSRNAM = #{subusrnam,jdbcType=VARCHAR},	</if>
+    <if test="chnlcod != null" >	  CHNLCOD = #{chnlcod,jdbcType=VARCHAR},	</if>
+    <if test="outtrncod != null" >	  OUTTRNCOD = #{outtrncod,jdbcType=VARCHAR},	</if>
+    <if test="intrncod != null" >	  INTRNCOD = #{intrncod,jdbcType=VARCHAR},	</if>
+    <if test="chnlnam != null" >	  CHNLNAM = #{chnlnam,jdbcType=VARCHAR},	</if>
+    <if test="chnlsrvip != null" >	  CHNLSRVIP = #{chnlsrvip,jdbcType=VARCHAR},	</if>
+    <if test="chnlsrvport != null" >	  CHNLSRVPORT = #{chnlsrvport,jdbcType=VARCHAR},	</if>
+    <if test="fnttrndte != null" >	  FNTTRNDTE = #{fnttrndte,jdbcType=VARCHAR},	</if>
+    <if test="fnttrntim != null" >	  FNTTRNTIM = #{fnttrntim,jdbcType=VARCHAR},	</if>
+    <if test="supptrndte != null" >	  SUPPTRNDTE = #{supptrndte,jdbcType=VARCHAR},	</if>
+    <if test="supptrntim != null" >	  SUPPTRNTIM = #{supptrntim,jdbcType=VARCHAR},	</if>
+    <if test="masttrndte != null" >	  MASTTRNDTE = #{masttrndte,jdbcType=VARCHAR},	</if>
+    <if test="masttrntim != null" >	  MASTTRNTIM = #{masttrntim,jdbcType=VARCHAR},	</if>
+    <if test="tmout != null" >	  TMOUT = #{tmout,jdbcType=VARCHAR},	</if>
+    <if test="fileflg != null" >	  FILEFLG = #{fileflg,jdbcType=VARCHAR},	</if>
+    <if test="filestoradrr != null" >	  FILESTORADRR = #{filestoradrr,jdbcType=VARCHAR},	</if>
+    <if test="reqmsg != null" >	  REQMSG = #{reqmsg,jdbcType=VARCHAR},	</if>
+    <if test="respmsg != null" >	  RESPMSG = #{respmsg,jdbcType=VARCHAR},	</if>
+    <if test="respflg != null" >	  RESPFLG = #{respflg,jdbcType=VARCHAR},	</if>
+    <if test="fntprdtrnjrn != null" >	  FNTPRDTRNJRN = #{fntprdtrnjrn,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="fnttrnjrn != null" >
+		 and FNTTRNJRN = #{fnttrnjrn,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="trnbtchid != null" >
+		  and TRNBTCHID = #{trnbtchid,jdbcType=VARCHAR}
+		</if>
+	    <if test="supptrnjrn != null" >
+		  and SUPPTRNJRN = #{supptrnjrn,jdbcType=VARCHAR}
+		</if>
+	    <if test="mastjrn != null" >
+		  and MASTJRN = #{mastjrn,jdbcType=VARCHAR}
+		</if>
+	    <if test="orgno != null" >
+		  and ORGNO = #{orgno,jdbcType=VARCHAR}
+		</if>
+	    <if test="orgnam != null" >
+		  and ORGNAM = #{orgnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrid != null" >
+		  and USRID = #{usrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrnam != null" >
+		  and USRNAM = #{usrnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="subusrid != null" >
+		  and SUBUSRID = #{subusrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="subusrnam != null" >
+		  and SUBUSRNAM = #{subusrnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="chnlcod != null" >
+		  and CHNLCOD = #{chnlcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="outtrncod != null" >
+		  and OUTTRNCOD = #{outtrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="intrncod != null" >
+		  and INTRNCOD = #{intrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="chnlnam != null" >
+		  and CHNLNAM = #{chnlnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="chnlsrvip != null" >
+		  and CHNLSRVIP = #{chnlsrvip,jdbcType=VARCHAR}
+		</if>
+	    <if test="chnlsrvport != null" >
+		  and CHNLSRVPORT = #{chnlsrvport,jdbcType=VARCHAR}
+		</if>
+	    <if test="fnttrndte != null" >
+		  and FNTTRNDTE = #{fnttrndte,jdbcType=VARCHAR}
+		</if>
+	    <if test="fnttrntim != null" >
+		  and FNTTRNTIM = #{fnttrntim,jdbcType=VARCHAR}
+		</if>
+	    <if test="supptrndte != null" >
+		  and SUPPTRNDTE = #{supptrndte,jdbcType=VARCHAR}
+		</if>
+	    <if test="supptrntim != null" >
+		  and SUPPTRNTIM = #{supptrntim,jdbcType=VARCHAR}
+		</if>
+	    <if test="masttrndte != null" >
+		  and MASTTRNDTE = #{masttrndte,jdbcType=VARCHAR}
+		</if>
+	    <if test="masttrntim != null" >
+		  and MASTTRNTIM = #{masttrntim,jdbcType=VARCHAR}
+		</if>
+	    <if test="tmout != null" >
+		  and TMOUT = #{tmout,jdbcType=VARCHAR}
+		</if>
+	    <if test="fileflg != null" >
+		  and FILEFLG = #{fileflg,jdbcType=VARCHAR}
+		</if>
+	    <if test="filestoradrr != null" >
+		  and FILESTORADRR = #{filestoradrr,jdbcType=VARCHAR}
+		</if>
+	    <if test="reqmsg != null" >
+		  and REQMSG = #{reqmsg,jdbcType=VARCHAR}
+		</if>
+	    <if test="respmsg != null" >
+		  and RESPMSG = #{respmsg,jdbcType=VARCHAR}
+		</if>
+	    <if test="respflg != null" >
+		  and RESPFLG = #{respflg,jdbcType=VARCHAR}
+		</if>
+	    <if test="fntprdtrnjrn != null" >
+		  and FNTPRDTRNJRN = #{fntprdtrnjrn,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from F_DAT_METATRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw" resultType="java.lang.Integer" >
+    select count(*) from F_DAT_METATRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from F_DAT_METATRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw" >
+    select 
+    <include refid="base_column_list" />
+    from F_DAT_METATRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectTmOut" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="base_column_list" />
+    from F_DAT_METATRNFLW
+    where 
+     <![CDATA[
+     	TMOUT < #{tmout}
+     ]]>
+    
+    and (RESPFLG='0' or RESPFLG='1' or RESPFLG='5') 
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into F_DAT_METATRNFLW (FNTTRNJRN,
+			TRNBTCHID,
+			SUPPTRNJRN,
+			MASTJRN,
+			ORGNO,
+			ORGNAM,
+			USRID,
+			USRNAM,
+			SUBUSRID,
+			SUBUSRNAM,
+			CHNLCOD,
+			OUTTRNCOD,
+			INTRNCOD,
+			CHNLNAM,
+			CHNLSRVIP,
+			CHNLSRVPORT,
+			FNTTRNDTE,
+			FNTTRNTIM,
+			SUPPTRNDTE,
+			SUPPTRNTIM,
+			MASTTRNDTE,
+			MASTTRNTIM,
+			TMOUT,
+			FILEFLG,
+			FILESTORADRR,
+			REQMSG,
+			RESPMSG,
+			RESPFLG,
+			FNTPRDTRNJRN)
+    values (
+	#{fnttrnjrn,jdbcType=VARCHAR},
+
+
+    #{trnbtchid,jdbcType=VARCHAR},
+    #{supptrnjrn,jdbcType=VARCHAR},
+    #{mastjrn,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{orgnam,jdbcType=VARCHAR},
+    #{usrid,jdbcType=VARCHAR},
+    #{usrnam,jdbcType=VARCHAR},
+    #{subusrid,jdbcType=VARCHAR},
+    #{subusrnam,jdbcType=VARCHAR},
+    #{chnlcod,jdbcType=VARCHAR},
+    #{outtrncod,jdbcType=VARCHAR},
+    #{intrncod,jdbcType=VARCHAR},
+    #{chnlnam,jdbcType=VARCHAR},
+    #{chnlsrvip,jdbcType=VARCHAR},
+    #{chnlsrvport,jdbcType=VARCHAR},
+    #{fnttrndte,jdbcType=VARCHAR},
+    #{fnttrntim,jdbcType=VARCHAR},
+    #{supptrndte,jdbcType=VARCHAR},
+    #{supptrntim,jdbcType=VARCHAR},
+    #{masttrndte,jdbcType=VARCHAR},
+    #{masttrntim,jdbcType=VARCHAR},
+    #{tmout,jdbcType=VARCHAR},
+    #{fileflg,jdbcType=VARCHAR},
+    #{filestoradrr,jdbcType=VARCHAR},
+    #{reqmsg,jdbcType=VARCHAR},
+    #{respmsg,jdbcType=VARCHAR},
+    #{respflg,jdbcType=VARCHAR},
+    #{fntprdtrnjrn,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw" >
+    insert into F_DAT_METATRNFLW (FNTTRNJRN,
+			TRNBTCHID,
+			SUPPTRNJRN,
+			MASTJRN,
+			ORGNO,
+			ORGNAM,
+			USRID,
+			USRNAM,
+			SUBUSRID,
+			SUBUSRNAM,
+			CHNLCOD,
+			OUTTRNCOD,
+			INTRNCOD,
+			CHNLNAM,
+			CHNLSRVIP,
+			CHNLSRVPORT,
+			FNTTRNDTE,
+			FNTTRNTIM,
+			SUPPTRNDTE,
+			SUPPTRNTIM,
+			MASTTRNDTE,
+			MASTTRNTIM,
+			TMOUT,
+			FILEFLG,
+			FILESTORADRR,
+			REQMSG,
+			RESPMSG,
+			RESPFLG,
+			FNTPRDTRNJRN)
+    values (
+	#{fnttrnjrn,jdbcType=VARCHAR},
+
+
+    #{trnbtchid,jdbcType=VARCHAR},
+    #{supptrnjrn,jdbcType=VARCHAR},
+    #{mastjrn,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{orgnam,jdbcType=VARCHAR},
+    #{usrid,jdbcType=VARCHAR},
+    #{usrnam,jdbcType=VARCHAR},
+    #{subusrid,jdbcType=VARCHAR},
+    #{subusrnam,jdbcType=VARCHAR},
+    #{chnlcod,jdbcType=VARCHAR},
+    #{outtrncod,jdbcType=VARCHAR},
+    #{intrncod,jdbcType=VARCHAR},
+    #{chnlnam,jdbcType=VARCHAR},
+    #{chnlsrvip,jdbcType=VARCHAR},
+    #{chnlsrvport,jdbcType=VARCHAR},
+    #{fnttrndte,jdbcType=VARCHAR},
+    #{fnttrntim,jdbcType=VARCHAR},
+    #{supptrndte,jdbcType=VARCHAR},
+    #{supptrntim,jdbcType=VARCHAR},
+    #{masttrndte,jdbcType=VARCHAR},
+    #{masttrntim,jdbcType=VARCHAR},
+    #{tmout,jdbcType=VARCHAR},
+    #{fileflg,jdbcType=VARCHAR},
+    #{filestoradrr,jdbcType=VARCHAR},
+    #{reqmsg,jdbcType=VARCHAR},
+    #{respmsg,jdbcType=VARCHAR},
+    #{respflg,jdbcType=VARCHAR},
+    #{fntprdtrnjrn,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from F_DAT_METATRNFLW
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw">
+  	delete from F_DAT_METATRNFLW 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update F_DAT_METATRNFLW 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	FNTTRNJRN = #{fnttrnjrn}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw">
+  	update F_DAT_METATRNFLW 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	FNTTRNJRN = #{fnttrnjrn}
+
+  </update>
+	<update id="updateByFlwAndSta" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw">
+  	update F_DAT_METATRNFLW 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	FNTTRNJRN = #{fnttrnjrn}
+ 	and
+ 	RESPFLG = #{whererespflg}
+
+  </update>
+  	<update id="updateTmoutByFlwAndSta" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw">
+  	update F_DAT_METATRNFLW 
+  	<set> 
+     	TMOUT=#{tmout}
+    </set>
+    where
+ 	FNTTRNJRN = #{fnttrnjrn}
+ 	and
+ 	RESPFLG = #{whererespflg}
+
+  </update>
+   <update id="updateResMsgByFlwAndSta" parameterType="com.sinoway.mcp.entity.FDatMetatrnflw">
+  	update F_DAT_METATRNFLW 
+  	<set> 
+     	RESPMSG=#{respmsg}
+    </set>
+    where
+ 	FNTTRNJRN = #{fnttrnjrn}
+ 	and
+ 	RESPFLG = #{whererespflg}
+
+  </update>
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into F_DAT_METATRNFLW (FNTTRNJRN,
+			TRNBTCHID,
+			SUPPTRNJRN,
+			MASTJRN,
+			ORGNO,
+			ORGNAM,
+			USRID,
+			USRNAM,
+			SUBUSRID,
+			SUBUSRNAM,
+			CHNLCOD,
+			OUTTRNCOD,
+			INTRNCOD,
+			CHNLNAM,
+			CHNLSRVIP,
+			CHNLSRVPORT,
+			FNTTRNDTE,
+			FNTTRNTIM,
+			SUPPTRNDTE,
+			SUPPTRNTIM,
+			MASTTRNDTE,
+			MASTTRNTIM,
+			TMOUT,
+			FILEFLG,
+			FILESTORADRR,
+			REQMSG,
+			RESPMSG,
+			RESPFLG,
+			FNTPRDTRNJRN)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.fnttrnjrn,jdbcType=VARCHAR},
+
+
+    #{item.trnbtchid,jdbcType=VARCHAR},
+    #{item.supptrnjrn,jdbcType=VARCHAR},
+    #{item.mastjrn,jdbcType=VARCHAR},
+    #{item.orgno,jdbcType=VARCHAR},
+    #{item.orgnam,jdbcType=VARCHAR},
+    #{item.usrid,jdbcType=VARCHAR},
+    #{item.usrnam,jdbcType=VARCHAR},
+    #{item.subusrid,jdbcType=VARCHAR},
+    #{item.subusrnam,jdbcType=VARCHAR},
+    #{item.chnlcod,jdbcType=VARCHAR},
+    #{item.outtrncod,jdbcType=VARCHAR},
+    #{item.intrncod,jdbcType=VARCHAR},
+    #{item.chnlnam,jdbcType=VARCHAR},
+    #{item.chnlsrvip,jdbcType=VARCHAR},
+    #{item.chnlsrvport,jdbcType=VARCHAR},
+    #{item.fnttrndte,jdbcType=VARCHAR},
+    #{item.fnttrntim,jdbcType=VARCHAR},
+    #{item.supptrndte,jdbcType=VARCHAR},
+    #{item.supptrntim,jdbcType=VARCHAR},
+    #{item.masttrndte,jdbcType=VARCHAR},
+    #{item.masttrntim,jdbcType=VARCHAR},
+    #{item.tmout,jdbcType=VARCHAR},
+    #{item.fileflg,jdbcType=VARCHAR},
+    #{item.filestoradrr,jdbcType=VARCHAR},
+    #{item.reqmsg,jdbcType=VARCHAR},
+    #{item.respmsg,jdbcType=VARCHAR},
+    #{item.respflg,jdbcType=VARCHAR},
+    #{item.fntprdtrnjrn,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from F_DAT_METATRNFLW 
+  	where 
+  	FNTTRNJRN
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.fnttrnjrn,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

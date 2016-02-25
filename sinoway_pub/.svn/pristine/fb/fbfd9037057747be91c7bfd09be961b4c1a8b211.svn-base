@@ -1,0 +1,57 @@
+package com.sinoway.common.service.cfg;
+
+import java.util.List;
+
+import com.sinoway.base.entity.BCfgdefPrdinfo;
+import com.sinoway.base.entity.BCfgrefPrddetil;
+
+/**
+ * 产品维护上层接口 
+ * @author Liuzhen
+ * @version 1.0
+ * 2015-12-24
+ */
+public interface CommonProductService {
+
+	/**
+	 * 添加产品
+	 * @param prdInfo 产品信息
+	 * @return 返回响应信息
+	 * @throws Exception
+	 */
+	public Object addprdInfo(Object prdInfo ) throws Exception;
+	
+	/**
+	 * 修改产品
+	 * @param prdInfo 产品信息
+	 * @return 返回响应信息
+	 * @throws Exception
+	 */
+	public Object editprdInfo(Object prdInfo ) throws Exception;
+	
+	/**
+	 * 删除产品
+	 * @param prdInfo 产品信息
+	 * @return 返回响应信息
+	 * @throws Exception
+	 */
+	public Object delprdInfo(Object prdInfo ) throws Exception;
+	/**
+	 * 新增产品明细
+	 * @param prdInfo 产品信息
+	 * @return 返回响应信息
+	 * @throws Exception
+	 */
+	public Object addPrddetil(Object bCfgdefPrdinfo)throws Exception;
+
+	/**
+	 * 修改产品明细
+	 * @param prdInfo 产品信息
+	 * @return 返回响应信息
+	 * @throws Exception
+	 */
+	public Object editPrddetil(Object bCfgdefPrdinfo)throws Exception;
+
+	public Object deletePrddetil(Object detail)throws Exception;
+
+}

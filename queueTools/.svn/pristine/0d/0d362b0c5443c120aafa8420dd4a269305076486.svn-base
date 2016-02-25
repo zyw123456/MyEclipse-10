@@ -1,0 +1,4 @@
+metadata.broker.list=master\:9092,node1\:9092,node2\:9092
+serializer.class=kafka.serializer.StringEncoder
+partitioner.class=com.sinoway.mcp.queue.producer.CustomizePartitioner
+request.required.acks=1

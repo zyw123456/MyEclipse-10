@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgrefInoutele" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgrefInoutele" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- CHNLCOD -->
+    <result column="CHNLCOD" property="chnlcod" jdbcType="VARCHAR" />
+    <!-- 包括：原交易编码、子交易编码 -->
+    <result column="INTRNCOD" property="intrncod" jdbcType="VARCHAR" />
+    <!-- OUTELECOD -->
+    <result column="OUTELECOD" property="outelecod" jdbcType="VARCHAR" />
+    <!-- INELECOD -->
+    <result column="INELECOD" property="inelecod" jdbcType="VARCHAR" />
+    <!-- 0-数字 1-金额 2-字符 3-日期 4-复合 -->
+    <result column="DTYPE" property="dtype" jdbcType="VARCHAR" />
+    <!-- DMAXLEN -->
+    <result column="DMAXLEN" property="dmaxlen" jdbcType="VARCHAR" />
+    <!-- DMINLEN -->
+    <result column="DMINLEN" property="dminlen" jdbcType="VARCHAR" />
+    <!-- 0-可以 1-不可以 -->
+    <result column="ISNUL" property="isnul" jdbcType="VARCHAR" />
+    <!-- 0-输出 1-输入 2-输入输出 -->
+    <result column="IOTYPE" property="iotype" jdbcType="VARCHAR" />
+    <!-- EXPELECOD -->
+    <result column="EXPELECOD" property="expelecod" jdbcType="VARCHAR" />
+    <!-- INPELECOD -->
+    <result column="INPELECOD" property="inpelecod" jdbcType="VARCHAR" />
+    <!-- STA -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+    <!-- 0-原交易 1-子交易 -->
+    <result column="TRNTYP" property="trntyp" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			CHNLCOD,
+			INTRNCOD,
+			OUTELECOD,
+			INELECOD,
+			DTYPE,
+			DMAXLEN,
+			DMINLEN,
+			ISNUL,
+			IOTYPE,
+			EXPELECOD,
+			INPELECOD,
+			STA,
+			TRNTYP
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="chnlcod != null" >	  CHNLCOD = #{chnlcod,jdbcType=VARCHAR},	</if>
+    <if test="intrncod != null" >	  INTRNCOD = #{intrncod,jdbcType=VARCHAR},	</if>
+    <if test="outelecod != null" >	  OUTELECOD = #{outelecod,jdbcType=VARCHAR},	</if>
+    <if test="inelecod != null" >	  INELECOD = #{inelecod,jdbcType=VARCHAR},	</if>
+    <if test="dtype != null" >	  DTYPE = #{dtype,jdbcType=VARCHAR},	</if>
+    <if test="dmaxlen != null" >	  DMAXLEN = #{dmaxlen,jdbcType=VARCHAR},	</if>
+    <if test="dminlen != null" >	  DMINLEN = #{dminlen,jdbcType=VARCHAR},	</if>
+    <if test="isnul != null" >	  ISNUL = #{isnul,jdbcType=VARCHAR},	</if>
+    <if test="iotype != null" >	  IOTYPE = #{iotype,jdbcType=VARCHAR},	</if>
+    <if test="expelecod != null" >	  EXPELECOD = #{expelecod,jdbcType=VARCHAR},	</if>
+    <if test="inpelecod != null" >	  INPELECOD = #{inpelecod,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR},	</if>
+    <if test="trntyp != null" >	  TRNTYP = #{trntyp,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="chnlcod != null" >
+		  and CHNLCOD = #{chnlcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="intrncod != null" >
+		  and INTRNCOD = #{intrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="outelecod != null" >
+		  and OUTELECOD = #{outelecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="inelecod != null" >
+		  and INELECOD = #{inelecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="dtype != null" >
+		  and DTYPE = #{dtype,jdbcType=VARCHAR}
+		</if>
+	    <if test="dmaxlen != null" >
+		  and DMAXLEN = #{dmaxlen,jdbcType=VARCHAR}
+		</if>
+	    <if test="dminlen != null" >
+		  and DMINLEN = #{dminlen,jdbcType=VARCHAR}
+		</if>
+	    <if test="isnul != null" >
+		  and ISNUL = #{isnul,jdbcType=VARCHAR}
+		</if>
+	    <if test="iotype != null" >
+		  and IOTYPE = #{iotype,jdbcType=VARCHAR}
+		</if>
+	    <if test="expelecod != null" >
+		  and EXPELECOD = #{expelecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="inpelecod != null" >
+		  and INPELECOD = #{inpelecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+	    <if test="trntyp != null" >
+		  and TRNTYP = #{trntyp,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_INOUTELE
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgrefInoutele" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_INOUTELE
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_INOUTELE
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgrefInoutele" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_INOUTELE
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGREF_INOUTELE (ID,
+			CHNLCOD,
+			INTRNCOD,
+			OUTELECOD,
+			INELECOD,
+			DTYPE,
+			DMAXLEN,
+			DMINLEN,
+			ISNUL,
+			IOTYPE,
+			EXPELECOD,
+			INPELECOD,
+			STA,
+			TRNTYP)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{chnlcod,jdbcType=VARCHAR},
+    #{intrncod,jdbcType=VARCHAR},
+    #{outelecod,jdbcType=VARCHAR},
+    #{inelecod,jdbcType=VARCHAR},
+    #{dtype,jdbcType=VARCHAR},
+    #{dmaxlen,jdbcType=VARCHAR},
+    #{dminlen,jdbcType=VARCHAR},
+    #{isnul,jdbcType=VARCHAR},
+    #{iotype,jdbcType=VARCHAR},
+    #{expelecod,jdbcType=VARCHAR},
+    #{inpelecod,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{trntyp,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgrefInoutele" >
+    insert into B_CFGREF_INOUTELE (ID,
+			CHNLCOD,
+			INTRNCOD,
+			OUTELECOD,
+			INELECOD,
+			DTYPE,
+			DMAXLEN,
+			DMINLEN,
+			ISNUL,
+			IOTYPE,
+			EXPELECOD,
+			INPELECOD,
+			STA,
+			TRNTYP)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{chnlcod,jdbcType=VARCHAR},
+    #{intrncod,jdbcType=VARCHAR},
+    #{outelecod,jdbcType=VARCHAR},
+    #{inelecod,jdbcType=VARCHAR},
+    #{dtype,jdbcType=VARCHAR},
+    #{dmaxlen,jdbcType=VARCHAR},
+    #{dminlen,jdbcType=VARCHAR},
+    #{isnul,jdbcType=VARCHAR},
+    #{iotype,jdbcType=VARCHAR},
+    #{expelecod,jdbcType=VARCHAR},
+    #{inpelecod,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{trntyp,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGREF_INOUTELE
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgrefInoutele">
+  	delete from B_CFGREF_INOUTELE 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGREF_INOUTELE 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgrefInoutele">
+  	update B_CFGREF_INOUTELE 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGREF_INOUTELE (ID,
+			CHNLCOD,
+			INTRNCOD,
+			OUTELECOD,
+			INELECOD,
+			DTYPE,
+			DMAXLEN,
+			DMINLEN,
+			ISNUL,
+			IOTYPE,
+			EXPELECOD,
+			INPELECOD,
+			STA,
+			TRNTYP)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.chnlcod,jdbcType=VARCHAR},
+    #{item.intrncod,jdbcType=VARCHAR},
+    #{item.outelecod,jdbcType=VARCHAR},
+    #{item.inelecod,jdbcType=VARCHAR},
+    #{item.dtype,jdbcType=VARCHAR},
+    #{item.dmaxlen,jdbcType=VARCHAR},
+    #{item.dminlen,jdbcType=VARCHAR},
+    #{item.isnul,jdbcType=VARCHAR},
+    #{item.iotype,jdbcType=VARCHAR},
+    #{item.expelecod,jdbcType=VARCHAR},
+    #{item.inpelecod,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR},
+    #{item.trntyp,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGREF_INOUTELE 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

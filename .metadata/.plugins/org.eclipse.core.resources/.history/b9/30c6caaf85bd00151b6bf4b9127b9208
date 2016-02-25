@@ -1,0 +1,51 @@
+package com.sinoway.mcp.service.yimei.task;
+
+import java.util.Scanner;
+import java.util.TimerTask;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.mcp.service.yimei.testws.HDGetAccessToken;
+import com.sinoway.mcp.service.yimei.testws.HDGetAccessTokenSoap;
+
+/**
+ * token在两小时内调用一次
+ * @author zhangyanwei
+ *
+ */
+public class TokenTask extends TimerTask {
+
+	public void run() {
+		//隔两个小时调一次 token
+		HDGetAccessToken accessToken = new HDGetAccessToken();
+		HDGetAccessTokenSoap hdGetAccessTokenSoap = accessToken.getHDGetAccessTokenSoap();
+		String json = hdGetAccessTokenSoap.getACCESSTOKEN("8AC20B7CW6D98W4369WB876WCCA3E36EDB3B", "32C82793L7B2CL41FFL9F67L6D75BF2CC46D", "4F0DF96BH6608H4C14H9867HC801263B1304");
+		JSONObject obj =(JSONObject) JSONObject.parse(json);
+		
+		System.out.println("-----------"+obj);
+		
+		
+		
+		
+	}
+ 
+	
+	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
+
+		System.out.print("Enter base directory (e.g. /usr/local/jdk5.0/src): ");
+
+		　String directory = in.nextLine();
+
+		System.out.print("Enter keyword (e.g. volatile): ");
+
+		　　String keyword = in.nextLine();
+
+		　　final int FILE_QUEUE_SIZE = 10;// 阻塞队列大小
+
+		　　final int SEARCH_THREADS = 100;// 关键字搜索线程个数
+
+		
+
+	}
+}

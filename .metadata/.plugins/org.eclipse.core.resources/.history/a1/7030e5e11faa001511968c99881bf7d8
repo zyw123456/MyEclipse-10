@@ -1,0 +1,5 @@
+package com.sinoway.base.action;
+
+public class HttpTest extends HttpServlet {
+
+}

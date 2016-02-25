@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+      <!--查询异常预警  -->
+	<sql-query name="WrnDao.queryAbnormalWarns"
+		cacheable="true">
+		<return-scalar column="warnid" type="string"/>
+		<return-scalar column="prsnnam" type="string"/>
+		<return-scalar column="prsncod" type="string"/>
+		<return-scalar column="warntim" type="string"/>
+		<return-scalar column="loantyp" type="string"/>
+		<return-scalar column="trnNam" type="string"/>
+		<![CDATA[
+			select  warn.warnid,warn.prsnnam,warn.prsncod,warn.warntim,warn.loantyp,warnDtel.trnNam
+			from WF_DAT_CERDITWARNDTEL warnDtel,WF_DAT_CERDITWARN warn, WF_DAT_CERDITWARNDTELREF warnDtelRef
+			where warnDtel.warnDtlJrn = warnDtelRef.warnDtlJrn
+			and warn.WARNID = warnDtelRef.warnId
+			and warn.prsnnam like :prsnnam
+			and warn.prsncod like :prsncod
+			and warn.warntim like :warntim
+			and warnDtel.trnNam like :trnnam
+		]]>
+	</sql-query>
+	<!-- 根据用户的peoplecode查找策略（产品） -->
+	<sql-query name="WarnProductDao.findPrdDetil"  cacheable="true">
+	<return-scalar column="prdcod" type="string"/>
+	<return-scalar column="prdnam" type="string"/>
+		<![CDATA[
+		
+			select distinct prdcod,prdnam,appcod from 
+				(select wcp.prdcod,wcp.prdnam ,wcc.peoplecode ,appcod
+				from WF_CFGDEF_PRDINFO wcp , WF_CFGREF_COMPUSRPRD wcc
+				where  wcp.prdcod=wcc.prdcod)  
+			where peoplecode=:peoplecode and appcod=:appcod
+		]]>
+	</sql-query>
+	
+
+	 <!-- 查询监控人员名单 -->
+	<sql-query name="warnMonitorDao.findMonitorNameList"
+		cacheable="true">
+		<return-scalar column="prsnnam" type="string"/>
+		<return-scalar column="prsncod" type="string"/>
+		<return-scalar column="loansrtdte" type="string"/>
+		<return-scalar column="loantyp" type="string"/>
+		<return-scalar column="warncount" type="string"/>
+		<return-scalar column="id" type="string"/>
+		<return-scalar column="prdcod" type="string"/>
+		<return-scalar column="prdnam" type="string"/>
+		<![CDATA[
+			select wcp.prsnnam,wcp.prsncod,wcp.loansrtdte||'-'||wcp.loanenddte loansrtdte,
+			wcp.loantyp,( select count(1) from WF_DAT_CERDITWARNDTEL wcw where wcp.prsnnam=wcw.prsnnam and wcp.prsncod=wcw.credtno) 
+			warncount,id,prdcod,prdnam from WF_DAT_CERDITPRSN wcp  where instr(wcp.prsnnam,:prsnnam)>0
+			and instr(wcp.prsncod,:prsncod)>0
+			and instr(wcp.loansrtdte,:loansrtdte)>0
+			and instr(wcp.loanenddte,:loanenddte)>0
+		]]>
+		
+	</sql-query>
+	
+	<!-- 查询监控模块原交易 -->	
+	<sql-query name="warnMonitorDao.findWCPrdtrnList"
+		cacheable="true">
+		<return-scalar column="trncod" type="string"/>
+		<return-scalar column="trnnam" type="string"/>
+		<![CDATA[
+			select  trncod,trnnam from WF_CFGDEF_PRDTRN
+		]]>
+	</sql-query>
+	
+
+	<!-- 修改监控人员 -->
+	<sql-query name="warnMonitorDao.updateMonitorName">
+		<![CDATA[
+			update WF_DAT_CERDITPRSN set sta=:sta where id = :id
+		]]>
+	</sql-query>
+	
+	<!-- 增加监控人员 -->
+	<sql-query name="warnMonitorDao.addMonitorName">
+		<![CDATA[
+			insert into WF_DAT_CERDITPRSN 
+			  (id,prsnnam,credtyp,credtno,prsncod,loantyp,loanamt,loanlmt,prdcod,prdnam,loansrtdte,loanenddte,peoplecode,orgno,parntcode,sta,usrid,p_usrid,corgno,cporgno) 
+      		  (select :id,prsnnam,credtyp,credtno,prsncod,loantyp,loanamt,loanlmt,:prdcod,:prdnam,loansrtdte,loanenddte,:peoplecode,:orgno,:parntcode,:sta,:usrid,:p_usrid,:corgno,:cporgno from WF_DAT_CERDITPRSN wdc where wdc.id=:weid)
+		]]>
+	</sql-query>
+	
+	<!-- 增加预警人员 -->
+	<sql-query name="warnPersonDao.addWranPerson">
+		<![CDATA[
+			insert into WF_DAT_CERDITPRSN 
+			(id,prsnnam,prsncod,loantyp,loanamt,loanlmt,telno,repaydte,repaytyp,repayamt,prdcod,prdnam,loansrtdte,loanenddte,peoplecode,orgno,parntcode,sta,usrid,p_usrid,corgno,cporgno)
+	values (:id,:prsnnam,:prsncod,:loantyp,:loanamt,:loanlmt,:telno,:repaydte,:repaytyp,:repayamt,:prdcod,:prdnam,:loansrtdte,:loanenddte,:peoplecode,:orgno,:parntcode,:sta,:usrid,:p_usrid,:corgno,:cporgno)
+		]]>
+	</sql-query>
+	
+	<!-- 查询产品名称 -->	
+	<sql-query name="WarnProductDao.findPrdnamByprdcod"
+		cacheable="true">
+		<return-scalar column="prdnam" type="string"/>
+		<![CDATA[
+			select  prdnam from WF_CFGDEF_PRDINFO where prdcod=:prdcod and sta=:sta and appcod=:appcod
+		]]>
+	</sql-query>
+	
+</hibernate-mapping>

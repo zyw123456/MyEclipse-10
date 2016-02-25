@@ -1,0 +1,279 @@
+package com.sinoway.common.util;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public final class UFormat
+{
+  public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+  public static final String CHAR_CRLF = "\r\n";
+
+
+ 
+
+  public static final String obj2str(Object _object, Boolean _needHLoad)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "obj2str", new Object[] { _needHLoad });
+
+    if (_object == null) return null;
+
+    Class _sourceClass = _object.getClass();
+
+    if (_sourceClass == String.class) return _object.toString();
+
+    if (_sourceClass == Date.class) return date2str((Date)_object, DF_DATE.FORMAT01.getFormat());
+
+    if (_sourceClass == Timestamp.class) return date2str(new Date(((Timestamp)_object).getTime()), DF_DATE.FORMAT00.getFormat());
+
+    if ((_sourceClass == Boolean.class) || (_sourceClass == Boolean.TYPE)) return _object.toString();
+
+    if ((_sourceClass == Short.class) || (_sourceClass == Short.TYPE) || (_sourceClass == Integer.class) || (_sourceClass == Integer.TYPE) || (_sourceClass == Long.class) || (_sourceClass == Long.TYPE)) return number2str(_object, DF_NUMBER.FORMAT00.getFormat());
+    if ((_sourceClass == Float.class) || (_sourceClass == Float.TYPE) || (_sourceClass == Double.class) || (_sourceClass == Double.TYPE)) return number2str(_object, DF_NUMBER.FORMAT30.getFormat());
+
+    return null;
+  }
+
+  public static final String obj2str(Object _object)
+    throws Exception
+  {
+    return obj2str(_object, Boolean.valueOf(false));
+  }
+
+  public static final Boolean isEmptyStr(String _targetString)
+  {
+    if ((_targetString != null) && (!_targetString.trim().equals(""))) return Boolean.valueOf(false); return Boolean.valueOf(true);
+  }
+
+  public static final String formatEmptyStr(String _targetString)
+  {
+    return isEmptyStr(_targetString).booleanValue() ? "" : _targetString;
+  }
+
+  public static final void checkEmptyParam(String _className, String _methodName, Object[] _params)
+    throws Exception
+  {
+    if ((isEmptyStr(_className).booleanValue()) || (isEmptyStr(_methodName).booleanValue())) {
+      throw new Exception("UFormat : No class or method name, failed to checkEmptyParam");
+    }
+    if ((_params == null) || (_params.length == 0)) {
+      throw new Exception(buf2str(new String[] { _className, " : No param, failed to ", _methodName }));
+    }
+    for (Object obj : _params)
+      if ((obj == null) || ((obj.getClass().equals(String.class)) && (isEmptyStr((String)obj).booleanValue())))
+        throw new Exception(buf2str(new String[] { _className, " : Param is empty, failed to ", _methodName }));
+  }
+
+  public static final String buf2str(String[] _targetStrings)
+    throws Exception
+  {
+    if ((_targetStrings == null) || (_targetStrings.length == 0)) {
+      throw new Exception("UFormat : Param is empty, failed to buf2str");
+    }
+    StringBuffer buf = new StringBuffer(_targetStrings[0]);
+    for (int i = 1; i < _targetStrings.length; i++)
+      buf.append(_targetStrings[i]);
+    return buf.toString();
+  }
+
+  public static final String date2str(Date _date, String _dateFormat)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "date2str", new Object[] { _date, _dateFormat });
+
+    return new SimpleDateFormat(_dateFormat).format(_date);
+  }
+
+  public static final Date str2date(String _dateStr, String _dateFormat)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "str2date", new Object[] { _dateStr, _dateFormat });
+
+    return new SimpleDateFormat(_dateFormat).parse(_dateStr);
+  }
+
+  
+  public static final String long2datestr(Long _timemillis)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "long2datestr", new Object[] { _timemillis });
+
+    return date2str(new Date(_timemillis.longValue()), DF_DATE.FORMAT00.getFormat());
+  }
+
+  public static final String number2str(Object _number, String _decimalFormat)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "number2str", new Object[] { _number, _decimalFormat });
+
+    return new DecimalFormat(_decimalFormat).format(_number);
+  }
+
+  public static final Number str2number(String _numberStr, String _decimalFormat)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "str2number", new Object[] { _numberStr, _decimalFormat });
+
+    return new DecimalFormat(_decimalFormat).parse(_numberStr);
+  }
+
+  public static final String byte2hex(byte _byte)
+  {
+    char[] _digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+    char[] _targetChars = new char[2];
+    _targetChars[0] = _digit[(_byte >>> 4 & 0xF)];
+    _targetChars[1] = _digit[(_byte & 0xF)];
+    return new String(_targetChars);
+  }
+
+  public static final String byte2hex(byte[] _bytes)
+    throws Exception
+  {
+    if ((_bytes == null) || (_bytes.length == 0)) {
+      throw new Exception("UFormat : Param is empty, failed to byte2hex");
+    }
+    StringBuffer _stringBuffer = new StringBuffer("");
+    for (int i = 0; i < _bytes.length; i++)
+      _stringBuffer.append(byte2hex(_bytes[i]));
+    return _stringBuffer.toString();
+  }
+
+  public static final String str2hex(String _source)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "str2hex", new Object[] { _source });
+
+    return byte2hex(_source.getBytes(DEFAULT_CHARSET));
+  }
+
+  public static final String obj2json(Object _object)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "obj2json", new Object[] { _object });
+
+    return new ObjectMapper().writeValueAsString(_object);
+  }
+
+  public static final <T> T json2obj(String _str, Class<T> _class)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "json2obj", new Object[] { _str, _class });
+
+    return new ObjectMapper().readValue(_str, _class);
+  }
+
+ 
+
+  public static final String str2html(String _string)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "str2html", new Object[] { _string });
+
+    StringBuffer _stringBuffer = new StringBuffer("");
+    int j = _string.length();
+    for (int i = 0; i < j; i++) {
+      char c = _string.charAt(i);
+      switch (c) { case '<':
+        _stringBuffer.append("&lt;"); break;
+      case '>':
+        _stringBuffer.append("&gt;"); break;
+      case '&':
+        _stringBuffer.append("&amp;"); break;
+      case '"':
+        _stringBuffer.append("&quot;"); break;
+      case '©':
+        _stringBuffer.append("&copy;"); break;
+      case '®':
+        _stringBuffer.append("&reg;"); break;
+      case '¥':
+        _stringBuffer.append("&yen;"); break;
+      case '€':
+        _stringBuffer.append("&euro;"); break;
+      case '™':
+        _stringBuffer.append("&#153;"); break;
+      case '\\':
+        if ((i < j - 1) && (_string.charAt(i + 1) == 'n')) { _stringBuffer.append("<br>"); i++; } break;
+      case '\r':
+        if ((i < j - 1) && (_string.charAt(i + 1) == '\n')) { _stringBuffer.append("<br>"); i++; } break;
+      case ' ':
+        if ((i < j - 1) && (_string.charAt(i + 1) == ' ')) { _stringBuffer.append(" &nbsp;"); i++; } break;
+      default:
+        _stringBuffer.append(c);
+      }
+    }
+    return _stringBuffer.toString();
+  }
+
+  
+
+  public static final String pkg2path(String _packageName)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "pkg2path", new Object[] { _packageName });
+
+    return _packageName.replace(".", File.separator);
+  }
+
+  public static final String pkg2url(String _packageName)
+    throws Exception
+  {
+    checkEmptyParam("UFormat", "pkg2url", new Object[] { _packageName });
+
+    return _packageName.replace(".", "/");
+  }
+
+  public static final String array2str(Object[] _array)
+    throws Exception
+  {
+    StringBuffer sb = new StringBuffer();
+    Object[] arrayOfObject = _array; int j = _array.length; for (int i = 0; i < j; i++) { Object obj = arrayOfObject[i];
+      sb.append(obj.toString()).append(",");
+    }
+    String targetStr = sb.toString();
+    return isEmptyStr(targetStr).booleanValue() ? "" : targetStr.substring(0, targetStr.length() - 1);
+  }
+
+  public static enum DF_DATE
+  {
+    FORMAT00("yyyy-MM-dd HH:mm:ss"), 
+    FORMAT01("yyyy-MM-dd"), 
+    FORMAT10("MM/dd/yyyy HH:mm:ss"), 
+    FORMAT11("MM/dd/yyyy"), 
+    FORMAT20("yyyyMMdd HHmmss"), 
+    FORMAT21("yyyyMMdd"), 
+    FORMAT30("yyyy年MM月dd日 HH时mm分ss秒"), 
+    FORMAT31("yyyy年MM月dd日");
+
+    private final String format;
+
+    private DF_DATE(String _format) { this.format = _format; } 
+    public final String getFormat() { return this.format; }
+  }
+
+  public static enum DF_NUMBER {
+    FORMAT00("###0"), 
+    FORMAT01("#,##0"), 
+    FORMAT30("#.00"), 
+    FORMAT31("#,###.00"), 
+    FORMAT80("0.00%"), 
+    FORMAT81("#,##0.00%"), 
+    FORMAT90("#.#####E0");
+
+    private final String format;
+
+    private DF_NUMBER(String _format) { this.format = _format; } 
+    public final String getFormat() { return this.format; }
+
+  }
+}

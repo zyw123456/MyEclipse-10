@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<!--查询用户产品信息-->
+	<query name="PrdDao.queryUserPrdsWithNoPeopleCode"
+		cacheable="true">
+		<![CDATA[
+			select new map(usrprd.id as usrprdid, usrprd.peoplecode as peoplecode, usrprd.usrtype as usrtype, usrprd.isdisp as isdisp, usrprd.sta as sta,prd.prdcod as prdcod, prd.prdnam as prdnam, prd.appcod as appcod, prd.appnam as appnam, prd.prdtyp as prdtyp, prd.isdefult as isdefult, prd.parntcod as parntcod, prd.cretday as cretday) 
+			from WfCfgrefCompusrprd as usrprd,WfCfgdefPrdinfo as prd 
+			where prd.prdcod = usrprd.prdcod
+			and prd.prdcod = :prdcod
+			and prd.appcod = :appcod
+			and prd.sta = :sta
+		]]>
+	</query>
+	
+	<query name="PrdDao.queryUserPrdsWithNoPrdcod"
+		cacheable="true">
+		<![CDATA[
+			select new map(usrprd.id as usrprdid, usrprd.peoplecode as peoplecode, usrprd.usrtype as usrtype, usrprd.isdisp as isdisp, usrprd.sta as sta,prd.prdcod as prdcod, prd.prdnam as prdnam, prd.appcod as appcod, prd.appnam as appnam, prd.prdtyp as prdtyp, prd.isdefult as isdefult, prd.parntcod as parntcod, prd.cretday as cretday) 
+			from WfCfgrefCompusrprd as usrprd,WfCfgdefPrdinfo as prd 
+			where prd.prdcod = usrprd.prdcod
+			and usrprd.peoplecode = :peoplecode
+			and prd.appcod = :appcod
+			and usrprd.sta = :sta
+		]]>
+	</query>
+	
+	<query name="PrdDao.queryUserPrds"
+		cacheable="true">
+		<![CDATA[
+			select new map(usrprd.id as usrprdid, usrprd.peoplecode as peoplecode, usrprd.usrtype as usrtype, usrprd.isdisp as isdisp, usrprd.sta as sta,prd.prdcod as prdcod, prd.prdnam as prdnam, prd.appcod as appcod, prd.appnam as appnam, prd.prdtyp as prdtyp, prd.isdefult as isdefult, prd.parntcod as parntcod, prd.cretday as cretday) 
+			from WfCfgrefCompusrprd as usrprd,WfCfgdefPrdinfo as prd 
+			where prd.prdcod = usrprd.prdcod
+			and usrprd.peoplecode = :peoplecode
+			and prd.appcod = :appcod
+			and prd.prdcod = :prdcod
+			and prd.sta = :sta
+		]]>
+	</query>
+	
+	<!-- 查询机构人员信息 -->
+	<query name="PrdDao.queryPoByPrdcod"
+		cacheable="true">
+		<![CDATA[
+			select new map(p.peopleCode as peopleCode,p.peopleName as peopleName,o.orgNo as orgNo,o.orgName as orgName,o.sid as organizeInfo) 
+			from PeopleInfo p,OrganizeInfo o,WfCfgrefCompusrprd usrprd
+			where usrprd.peoplecode = p.peopleCode 
+			and o.sid = p.organizeInfo 
+			and usrprd.prdcod = :prdcod 
+			and usrprd.sta = :sta
+		]]>
+	</query>
+	
+	
+	<!-- 查询产品明细信息-->
+	<query name="PrdDao.queryPrdTrns"
+		cacheable="true">
+		<![CDATA[
+			select new map(prdd.id as prddid,prdd.prdcod as prdcod, prdd.prdnam as prdnam, prdd.trncod as trncod, prdd.dayexpcnt as dayexpcnt, prdd.monexpcnt as monexpcnt, prdd.mon3expcnt as mon3expcnt, prdd.warnfreq as warnfreq, trn.trnnature as trnnature, trn.trncod as trncod, trn.trnnam as trnnam) 
+			from WfCfgrefPrddetil as prdd,WfCfgdefPrdtrn as trn
+			where  prdd.trncod = trn.trncod 
+			and prdd.prdcod = :prdcod 
+			and trn.sta = :trnsta
+			and prdd.sta = :prddsta 
+		]]>
+	</query>
+	
+	<!-- 查询产品明细信息 -->
+	<query name="PrdDao.queryPrddetailWithNoTrncod"
+		cacheable="true">
+		<![CDATA[
+			select new map(prdd.id as prddid, prdd.prdcod as prdcod, prdd.prdnam as prdnam, prdd.trncod as trncod, prdd.dayexpcnt as dayexpcnt, prdd.monexpcnt as monexpcnt, prdd.mon3expcnt as mon3expcnt, prdd.warnfreq as warnfreq, prdd.sta as sta)
+			from WfCfgrefPrddetil as prdd
+			where prdd.prdcod = :prdcod 
+			and prdd.sta = :prddsta 
+		]]>
+	</query>
+	
+	<!-- 查询产品明细信息 -->
+	<query name="PrdDao.queryPrddetail"
+		cacheable="true">
+		<![CDATA[
+			select new map(prdd.id as prddid, prdd.prdcod as prdcod, prdd.prdnam as prdnam, prdd.trncod as trncod, prdd.dayexpcnt as dayexpcnt, prdd.monexpcnt as monexpcnt, prdd.mon3expcnt as mon3expcnt, prdd.warnfreq as warnfreq, prdd.sta as sta)
+			from WfCfgrefPrddetil as prdd
+			where prdd.prdcod = :prdcod
+			and prdd.trncod = :trncod
+			and prdd.sta = :prddsta
+		]]>
+	</query>
+	
+	<!-- 根据 产品编码查询产品信息-->
+	<query name="PrdDao.queryPrdInfo"
+		cacheable="true">
+		<![CDATA[
+			select prd 
+			from WfCfgdefPrdinfo as prd
+			where  prd.prdcod = :prdcod
+			and prd.sta = :prdsta 
+		]]>
+	</query>
+	
+	<!-- 修改产品状态 -->
+	<query name="PrdDao.updateUsrprd" cacheable="true">
+		<![CDATA[
+			update com.yzj.wf.plat.entity.WfCfgrefCompusrprd 
+			set sta = :sta 
+			where prdcod = :prdcod 
+			and peoplecode = :peoplecode
+		]]>
+	</query>
+	
+	<!-- 修改产品状态没有人员编码的情况下 -->
+	<query name="PrdDao.updateUsrprdWithNoPeoplecode" cacheable="true">
+		<![CDATA[
+			update com.yzj.wf.plat.entity.WfCfgrefCompusrprd 
+			set sta = :sta 
+			where prdcod = :prdcod
+		]]>
+	</query>
+	
+	<!-- 根据产品编码查询产品 -->
+	<query name="PrdDao.queryByPrdcod" cacheable="true">
+		<![CDATA[
+		select wcp.trncod from com.yzj.wf.plat.entity.WfCfgrefPrddetil wcp where wcp.sta= :sta and wcp.prdcod= :prdcod
+		]]>
+	</query>
+	<!-- 根据产品明细id查询产品明细 -->
+	<query name="PrdDao.queryPrddetailById" cacheable="true">
+		<![CDATA[
+		select wcp from com.yzj.wf.plat.entity.WfCfgrefPrddetil wcp where wcp.id= :id
+		]]>
+	</query>
+</hibernate-mapping>

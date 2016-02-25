@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- Uncomment if you are using the logback plugin for eclipse
+	<consolePlugin/>
+	-->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{ISO8601} %-5level [%thread] \(%logger\) - %msg%n</pattern>
+		</encoder>		
+	</appender>
+	
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">   
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
+     		<fileNamePattern>log/%d{yyyyMMdd}_info.log</fileNamePattern>    
+    	</rollingPolicy>
+    	<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      		<level>info</level>
+    	</filter> 
+    	<encoder>
+       		<pattern>%d{ISO8601} [%thread] %-5level %logger{35} - %msg%n</pattern>   
+     	</encoder>   
+   	</appender>
+   	
+	
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+<!-- 	<logger name="org.springframework"> -->
+<!-- 		<level value="INFO" /> -->
+<!-- 	</logger> -->
+<!-- 	<logger name="org.apache"> -->
+<!-- 		<level value="INFO" /> -->
+<!-- 	</logger> -->
+<!-- 	<logger name="ch.qos"> -->
+<!-- 		<level value="WARN" /> -->
+<!-- 	</logger> -->
+</configuration>

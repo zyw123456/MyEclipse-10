@@ -1,0 +1,6 @@
+metadata.broker.list=master\:9092,slaver1\:9092,slaver2\:9092
+serializer.class=kafka.serializer.StringEncoder
+partitioner.class=com.sinoway.mcp.queue.producer.CustomizePartitioner
+message.send.max.retries=1
+request.required.acks=0
+request.timeout.ms=2000

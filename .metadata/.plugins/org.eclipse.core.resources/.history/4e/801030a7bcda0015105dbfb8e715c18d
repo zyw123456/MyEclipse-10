@@ -1,0 +1,182 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<base href="<%=basePath%>">
+<form id="myForm">
+	<div class="top-margin-20">
+		<div class="col-md-4 col-sm-4 form-group">
+			<div class="input-group">
+				<span class="input-group-addon">姓名</span> <input
+					class="form-control" id="name" name="name" type="text" placeholder="请输入姓名">
+			</div>
+		</div>
+		<div class="col-md-1 col-sm-1 form-group"></div>
+		<div class="col-md-4 col-sm-4 form-group">
+			<div class="input-group">
+				<span class="input-group-addon">身份证号</span> 
+				<input class="form-control" id="cardid" name="cardid" type="text"
+					placeholder="1552****5898">
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 form-group"></div>
+		<div class="col-md-4 col-sm-4 form-group">
+			<div class="input-group">
+				<span class="input-group-addon">报告号</span> <input
+					class="form-control" type="text"
+					placeholder="1552****5898">
+			</div>
+		</div>
+		<div class="col-md-1 col-sm-1 form-group"></div>
+		<div class="col-md-4 col-sm-4 form-group">
+			<div class="input-group">
+				<span class="input-group-addon">报告更新时间</span> <input
+					class="form-control" type="text" placeholder="20125">
+			</div>
+		</div>
+
+		<div class="col-md-3 col-sm-3 form-group text-right">
+			<button class="btn btn-primary" type="button">搜索</button>
+		</div>
+
+	</div>
+</form>
+<table id="reportdata" class="display" cellspacing="0" width="100%">
+	<thead>
+		<tr>
+			<th colspan="7"><input id="checkAll" type="checkbox" /> <img
+				alt="" src="sinoway/dk3/images/remove.png" width="14" height="16" /> <a
+				href="javascript:void(0);" id="button">删除报告</a> 
+			</th>
+		</tr>
+		<tr>
+			<th></th>
+			<th>报告更新时间</th>
+			<th>报告号</th>
+			<th>姓名</th>
+			<th>身份证号</th>
+			<th></th>
+			<th style="text-align:left;">操作</th>
+
+		</tr>
+	</thead>
+	
+</table>
+<script src="sinoway/dk3/js/datatables/jquery-1.12.0.min.js"></script>
+<script src="sinoway/dk3/js/card.js"></script>
+<script src="sinoway/dk3/js/jquery.validate.js"></script>
+<script src="sinoway/dk3/js/additional-methods.js"></script>
+<!-- datatable js库 -->
+ <script src="datatables/lib/jquery-1.11.3.min.js"></script>
+ <script src="datatables/lib/dataTables-1.10.7/media/js/jquery.dataTables.js"></script>
+ <script src="datatables/js/table-constant.js"></script>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function(){
+            $("#myForm").validate({
+            submitHandler: function() {
+                //验证通过后 的js代码写在这里
+            },
+            rules: {
+                name: {
+                    isCN:true,
+                    minlength:2,
+                    maxlength:4,
+                },
+                cardid:{
+                   // required: true,
+                    isIdCardNo:true,
+                },
+            },
+            messages: {
+                name: {
+                    minlength:"2~4位",
+                    maxlength:"2~4位",
+                    isCN:"必须为汉字",
+                },
+                cardid: {
+                    //required: "必填",
+                    isIdCardNo: "身份证号错误"
+                }
+            },
+            errorPlacement: function(error, element) {
+                if ( element.is(":radio") )
+                    error.appendTo( element.parent().next().next());
+                else if ( element.is(":checkbox") )
+                    error.appendTo ( element.next() );
+                else
+                    error.appendTo( element.parent().parent().next());
+            }
+        });
+        var table = $('#reportdata').DataTable( {
+            //是否允许用户自定义显示数量
+            "columnDefs":[{orderable:false,targets:0},{orderable:false,targets:2},{orderable:false,targets:3},{orderable:false,targets:4},{orderable:false,targets:5},{orderable:false,targets:6}
+            ],
+           // searching:false,
+            pageLength: 13,
+            "ordering": true,
+            "lengthChange": false,
+            "language": {
+                "lengthMenu": "_MENU_ 条记录每页",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)",
+                "paginate": {
+                    "previous": " < ",
+                    "next": ">"
+                }
+            },
+            initComplete: function () {
+                this.api().columns(5).every( function () {
+                    // debugger;
+                    var column = this;
+                    var select = $('<select><option value="">数据来源</option></select>')
+                            .appendTo( $(column.header()).empty() )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                );
+                                column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                $("#reportdata thead tr").next().children(0).removeClass("sorting_asc");
+                            } );
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } );
+            }
+
+        } );
+        $("#reportdata thead tr").next().children(0).removeClass("sorting_asc");
+
+       // debugger;
+        //checkbox全选
+        $("#checkAll").on("click", function () {
+            if ($(this).prop("checked") === true) {
+                $("input[name='checkList']").prop("checked", $(this).prop("checked"));
+                $('#reportdata tbody tr').addClass('selected');
+            } else {
+                $("input[name='checkList']").prop("checked", false);
+                $('#reportdata tbody tr').removeClass('selected');
+            }
+        });
+
+        $('#button').click(function () {
+            table.row('.selected').remove().draw(false);
+        });
+    });
+        //选中当前行
+        $('#reportdata tbody tr').on("click",function(){
+            $(this).toggleClass('selected');
+            if($(this).hasClass('selected') == true)
+            {
+                $(this).children().first().children().prop("checked", true);
+            }else
+            {
+                $(this).children().first().children().prop("checked", false);
+            }
+        })
+</script>
+

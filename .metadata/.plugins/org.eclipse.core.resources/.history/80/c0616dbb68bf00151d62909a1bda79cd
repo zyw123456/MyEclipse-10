@@ -1,0 +1,45 @@
+package com.sinoway.common.parse;
+
+import javax.xml.transform.TransformerException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.sinoway.common.exception.DomParseException;
+import com.sinoway.common.service.parse.GeneralJsonTradeMsgTransfer;
+import com.sinoway.common.util.DocumentUtil;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+public class TestTradeParseP000002 {
+
+	
+	public void  in (){
+		GeneralJsonTradeMsgTransfer f = new GeneralJsonTradeMsgTransfer();
+		
+		try {
+			Document dom = DocumentUtil.filePToDomByDecode("E:/XML_IBankServerMapsTemplate1.xml", "utf-8");
+			Element el = (Element) XPathAPI.selectNodeIterator(dom, "/TRADETEMPLATE/TRADE[@ID='P0000002']/MESSAGE[TYPE='1']");
+			
+		} catch (DomParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+
+	}
+
+}

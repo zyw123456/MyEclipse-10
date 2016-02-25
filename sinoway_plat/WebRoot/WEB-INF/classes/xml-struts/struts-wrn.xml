@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="fmnl" namespace="/" extends="json-default">
+		<!-- 查询监控人员名单 -->
+		<action name="findMonitorNameList" class="WarnMonitorAction" method="findMonitorNameList">
+			<result type="json"></result>
+		</action>
+		
+		<!-- 查询监控模块 -->
+		<action name="findWCPrdtrnList" class="WarnMonitorAction" method="findWCPrdtrnList">
+			<result>/sinoway/wrn/wrnPersonList.jsp</result>
+		</action>
+		
+		<!-- 修改监控人员 -->
+		<action name="updateMonitorName" class="WarnMonitorAction" method="updateMonitorName">
+			<result type="json"></result>
+		</action>
+		
+		<!-- 终止监控人员 -->
+		<action name="stopMonitorName" class="WarnMonitorAction" method="stopMonitorName">
+			<result type="json"></result>
+		</action>	
+		
+		<!-- 添加监控人员 -->
+		<action name="addMonitor" class="WarnMonitorAction" method="addMonitor">
+			<result type="json"></result>
+		</action>	
+		
+		<!-- 异常预警查询  -->
+		<action name="searchAbnormalWarns" class="WrnManagerAction" method="searchAbnormalWarns">
+			<result type="json"></result> 
+		</action>
+		<!-- 原交易名称列表查询 -->
+		<action name="queryTrnNameList" class="WrnManagerAction" method="queryTrnNameList">
+			<result type="json"></result> 
+		</action>
+		<!-- 原交易信息列表查询 -->
+		<action name="queryTrnList" class="WrnManagerAction" method="queryTrnList">
+			<result type="json"></result> 
+		</action>
+		<!-- 预警详情列表内容 -->
+		<action name="queryWarnDetailContent" class="WrnManagerAction" method="queryWarnDetailContent">
+			<result type="json"></result>
+		</action>
+		
+		<!--加载用户的监控策略--><!--在页面加载时启动  -->
+		<action name="loadPrdcod" class="WarnPersonAction" method="loadPrdcod">
+			<result type="json"></result>
+		</action>	
+		
+		<!-- 添加预警对象 -->
+		<action name="addWarnPerson" class="WarnPersonAction" method="addWarnPerson">
+		<result type="json"></result>
+<!-- 			<result name="success">/sinoway/wrn/addWrnPerson.jsp</result> -->
+		</action>	
+		<!-- 待监控人员补充信息-->
+		<action name="suppleWarnWaitingPeople" class="WaitingMonitorAction" method="suppleWarnWaitingPeople">
+			<result>/sinoway/wrn/preWrnPersonList.jsp</result>
+		</action>
+		<!-- 查询预警报告查询人员的天警云模板-->
+		<action name="queryWarnPrds" class="WaitingMonitorAction" method="queryWarnPrds">
+			<result>/sinoway/wrn/preWrnPersonList.jsp</result>
+		</action>
+		<!-- 更换预警报告查询人员的天警云模板-->
+		<action name="changeWarnPrds" class="WaitingMonitorAction" method="changeWarnPrds">
+			<result>/sinoway/wrn/preWrnPersonList.jsp</result>
+		</action>
+		<!-- 开启监控-->
+		<action name="startMonitor" class="WaitingMonitorAction" method="startMonitor">
+			<result>/sinoway/wrn/preWrnPersonList.jsp</result>
+		</action>
+		<!-- 待监控人员名单查询-->
+		<action name="queryWarnWaitingPeople" class="WaitingMonitorAction" method="queryWarnWaitingPeople">
+			<result>/sinoway/wrn/preWrnPersonList.jsp</result>
+		</action>
+		<action name="findAllWfDatCerditWarndtel" class="WfDatCerditWarndtelAction" method="findAllWfDatCerditWarndtel">
+ 			<result>/sinoway/wrn/cloudWrnHomePage.jsp</result>
+		</action>
+	</package>	
+</struts>    

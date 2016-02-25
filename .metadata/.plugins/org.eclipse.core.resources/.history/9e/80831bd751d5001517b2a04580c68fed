@@ -1,0 +1,220 @@
+//时间升序功能
+function sheng(){
+	url = "rptQuery.action";
+	rptStr = JSON.stringify({prsnnam:searchObj.prsnnam,prsncod:searchObj.prsncod,rptid:searchObj.rptid,rptmodsrtdte:searchObj.rptmodsrtdte,rptmodenddte:searchObj.rptmodenddte,datcmitori:searchObj.datcmitori,timeOrder:'up'});
+	data={rptStr:rptStr};
+	show();
+} 
+//时间降序功能
+function jiang(){
+	url = "rptQuery.action";
+	rptStr = JSON.stringify({prsnnam:searchObj.prsnnam,prsncod:searchObj.prsncod,rptid:searchObj.rptid,rptmodsrtdte:searchObj.rptmodsrtdte,rptmodenddte:searchObj.rptmodenddte,datcmitori:searchObj.datcmitori,timeOrder:'down'});
+	data={rptStr:rptStr};
+	show();
+}
+//页面初始化
+$(function(){
+	rptContFlow();
+    	data = "";
+    	searchObj = null;
+    	searchParam = "";
+    	url = "rptQuery.action";
+    	show();
+    	setInterval("changeHeight()",200);
+    	//全选和全不选
+		$("#xuan").click(function(){
+			var bb=$("input:checkbox");
+			if($("#xuan").attr("checked")){
+				bb.each(function(i){
+					$(this).attr("checked",true);
+				});
+			}else{
+				bb.each(function(i){
+					$(this).removeAttr("checked");
+				});
+			}
+		})
+		//确认删除
+	  $("#dd").click(function(){
+			if($("input:checked").size()>0){
+							if(confirm("确定要删除报告？")){
+								del();
+							}
+			}else{
+				alert("请选择要删除的报告");
+			}
+		})
+		$("#search").click(function(){
+			search();
+		});
+		
+		hpcountFlow(); //个人征信报告流量统计
+	});
+//模糊查询
+function search(){
+	$("select option:selected").removeAttr("selected");
+	url = "rptQuery.action";
+	var rptStr = JSON.stringify({prsnnam:$("#prsnnam").val(),prsncod:$("#prsncod").val(),rptid:$("#rptid").val(),rptmodsrtdte:$("#rptmodsrtdte").val(),rptmodenddte:$("#rptmodenddte").val()});
+	data = {rptStr:rptStr};
+	show();
+}
+//展示报告列表
+function show(){
+	$.ajax({
+		url : url,
+		type : "post",
+		data : data,
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : true,
+		success : function(data, textStatus) {
+				if (data !=null) {
+					var tbody = "";
+					var obj = JSON.parse(data);
+				    var frontObj = JSON.parse(obj.frontObjStr);
+				    if(frontObj != null){
+				    	for(var i=0;i<frontObj.length;i++){
+				    		tbody += "<tr class='tr1'><td><input type='checkbox' name='box' value='"+frontObj[i].rptid+"'/></td><td>"+frontObj[i].rptmodtim+"</td><td>"+
+				    		frontObj[i].rptid+"</td><td>"+frontObj[i].prsnnam+"</td><td>" + frontObj[i].prsncod + "</td><td>" +frontObj[i].datcmitori +"</td><td>";
+				    		if(frontObj[i].rptsta == '1'){
+				    			tbody +="&nbsp;"
+				    		}else{
+				    			tbody +="<a href=javascript:querydetail('"+frontObj[i].rptid+"');>查看</a>";
+				    		}
+				    		tbody +="</td></tr>";
+				    	}
+				    	$("tr").remove(".tr1");
+				    	$("#tb1").append(tbody);
+				    	var Ptr = $("#tab > tr");
+				    	for (i=1;i<Ptr.length+1;i++) { 
+				    	    Ptr[i-1].style.backgroundColor = (i%2>0)?"#eee":"#fff"; 
+				    	    }
+				    	bindChangeColor();
+				    	var pageObj = JSON.parse(obj.pageStr);
+				    	//alert(pageObj.count);
+				    	if(pageObj.count == 0){
+				    		$("#kkpager").html("");
+				    	}else{
+				    		kkpager.generPageHtml({
+				    			pno : pageObj.nowPage,
+				    			//总页码
+				    			total : pageObj.totalPage,
+				    			//总数据条数
+				    			totalRecords : pageObj.count,
+				    			isShowTotalPage 	: false, //是否显示总页数
+				    			isShowCurrPage		: false,//是否显示当前页
+				    			isShowTotalRecords 	: false, //是否显示总记录数
+				    			isGoPage 			: false,	//是否显示页码跳转输入框
+				    			mode : 'click',//默认值是link，可选link或者click
+				    			click : function(n){
+				    				// do something
+				    				//手动选中按钮
+				    				selectPage(n);
+				    				return false;
+				    			}
+				    		},true);
+				    	}
+				    	searchObj = JSON.parse(obj.rptStr);
+				    	searchParam = obj.rptStr;
+				    }
+				}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+function querydetail(rptid){
+	window.open('sinoway/rpt/rptDetail.jsp?rptid="'+rptid+'"', 'newwindow', 'height="100%", width="100%", top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')  
+}
+function selectPage(n){
+	url = "rptQuery.action";
+	var pageStr = JSON.stringify({nowPage:n});
+	data = {pageStr:pageStr,rptStr:searchParam};
+	show();
+}
+//数据来源筛选
+function sel(){
+	//alert($("select option:selected").val());
+	url = "rptQuery.action";
+	rptStr = JSON.stringify({prsnnam:searchObj.prsnnam,prsncod:searchObj.prsncod,rptid:searchObj.rptid,rptmodsrtdte:searchObj.rptmodsrtdte,rptmodenddte:searchObj.rptmodenddte,datcmitori:$("select option:selected").val()});
+	data={rptStr:rptStr};
+	show();
+}
+//报告删除
+function del(){
+	var ids=new Array();
+	url = "rptDelete.action";
+	var j=0;
+	var checkbox = $("input[name=box]");
+	for(var i=0;i<checkbox.length;i++){
+		if(checkbox[i].checked){
+			ids[j] = checkbox[i].value;
+			j++;
+		}
+	}
+	data={ids:ids.join(",")};
+	show();
+}
+<<<<<<< .mine
+
+/**
+ * 个人征信报告统计
+*/
+   function hpcountFlow(){
+		$.ajax({
+			url : "hpCache_hpcountFlow.action",
+			type : "post",s
+			data : '',
+			beforeSend : function(XMLHttpRequest) {
+				XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+			async : true,
+			success : function(data, textStatus) {
+				if (data != null) {
+					var obj = JSON.parse(data);
+					 window.parent.bottom.$("#platUploadFlow").html(obj.data.platUploadFlow);
+					 window.parent.bottom.$("#interUploadFlow").html(obj.data.interUploadFlow);
+					 window.parent.bottom.$("#emsUploadFlow").html(obj.data.emsUploadFlow);
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("加载信息erro:" + textStatus + errorThrown);
+			},
+			complete : function(XMLHttpRequest, textStatus) {
+			}
+		});
+   } 
+
+=======
+function rptContFlow(){
+	$.ajax({
+		url : "hpCache_personalReportFlowStatistics.action",
+		type : "post",
+		data : '',
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : true,
+		success : function(data, textStatus) {
+			if (data != null) {
+				var obj = JSON.parse(data);
+				var platformUploadRpt = obj.data.platformUploadRpt;
+				var interfaceUploadRpt = obj.data.interfaceUploadRpt;
+				var publicUploadRpt = obj.data.publicUploadRpt;
+				 window.parent.bottom.$("#platformUploadRpt").html(platformUploadRpt);
+				 window.parent.bottom.$("#interfaceUploadRpt").html(interfaceUploadRpt);
+				 window.parent.bottom.$("#publicUploadRpt").html(publicUploadRpt);
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+>>>>>>> .r3181

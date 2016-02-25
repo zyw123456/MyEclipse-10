@@ -1,0 +1,64 @@
+#tpiMainDiv {
+	width: 99%;
+}
+
+#searchDiv {
+	padding: 5px;
+	width: 100%;
+	height: 50px;
+	border: #32c8a3 infotext thin;
+}
+
+#listHeadDiv #listHeadTable tr th {
+	height: 20px;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+#listDiv {
+	width: 100%;
+	height: auto;
+	overflow: auto;
+	max-height: 385px;
+}
+
+.tablefont {
+	font-size: 12px;
+	text-align: center;
+}
+
+.btn {
+	width: 80px;
+	height: 25px;
+}
+
+#reserveForm {
+	width: 100%;
+}
+
+#reserveTable th {
+	text-align: right;
+}
+
+#reserveTable td {
+	text-align: left;
+}
+
+.tpi_input {
+	width: 180px;
+	height: 20px;
+}
+
+#supervisePeopleNo {
+	width: 184px;
+	height: 25px;
+}
+
+#revicePeopleNo {
+	width: 184px;
+	height: 25px;
+}
+
+#msg {
+	color: red;
+}

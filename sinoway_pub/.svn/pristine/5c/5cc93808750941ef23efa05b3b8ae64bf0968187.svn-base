@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgrefCompusrprd" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgrefCompusrprd" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- USRID -->
+    <result column="USRID" property="usrid" jdbcType="VARCHAR" />
+    <!-- PRDCOD -->
+    <result column="PRDCOD" property="prdcod" jdbcType="VARCHAR" />
+    <!-- 企业用户：200 -->
+    <result column="USRTYPE" property="usrtype" jdbcType="VARCHAR" />
+    <!-- 0、不显示
+1、显示明细 -->
+    <result column="ISDISP" property="isdisp" jdbcType="VARCHAR" />
+    <!-- STA -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			USRID,
+			PRDCOD,
+			USRTYPE,
+			ISDISP,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="usrid != null" >	  USRID = #{usrid,jdbcType=VARCHAR},	</if>
+    <if test="prdcod != null" >	  PRDCOD = #{prdcod,jdbcType=VARCHAR},	</if>
+    <if test="usrtype != null" >	  USRTYPE = #{usrtype,jdbcType=VARCHAR},	</if>
+    <if test="isdisp != null" >	  ISDISP = #{isdisp,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="usrid != null" >
+		  and USRID = #{usrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdcod != null" >
+		  and PRDCOD = #{prdcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrtype != null" >
+		  and USRTYPE = #{usrtype,jdbcType=VARCHAR}
+		</if>
+	    <if test="isdisp != null" >
+		  and ISDISP = #{isdisp,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_COMPUSRPRD
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgrefCompusrprd" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_COMPUSRPRD
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_COMPUSRPRD
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgrefCompusrprd" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_COMPUSRPRD
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGREF_COMPUSRPRD (ID,
+			USRID,
+			PRDCOD,
+			USRTYPE,
+			ISDISP,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{usrid,jdbcType=VARCHAR},
+    #{prdcod,jdbcType=VARCHAR},
+    #{usrtype,jdbcType=VARCHAR},
+    #{isdisp,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgrefCompusrprd" >
+    insert into B_CFGREF_COMPUSRPRD (ID,
+			USRID,
+			PRDCOD,
+			USRTYPE,
+			ISDISP,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{usrid,jdbcType=VARCHAR},
+    #{prdcod,jdbcType=VARCHAR},
+    #{usrtype,jdbcType=VARCHAR},
+    #{isdisp,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGREF_COMPUSRPRD
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgrefCompusrprd">
+  	delete from B_CFGREF_COMPUSRPRD 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGREF_COMPUSRPRD 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgrefCompusrprd">
+  	update B_CFGREF_COMPUSRPRD 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	USRID = #{usrid}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGREF_COMPUSRPRD (ID,
+			USRID,
+			PRDCOD,
+			USRTYPE,
+			ISDISP,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.usrid,jdbcType=VARCHAR},
+    #{item.prdcod,jdbcType=VARCHAR},
+    #{item.usrtype,jdbcType=VARCHAR},
+    #{item.isdisp,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGREF_COMPUSRPRD 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

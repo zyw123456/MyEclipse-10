@@ -1,0 +1,29 @@
+package com.sinoway.common.parse;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.sinoway.common.exception.DomParseException;
+import com.sinoway.common.util.DocumentUtil;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+public class TestTradeParseP000004 {
+
+	
+	public  static void in(){
+	 try {
+		Document dom = DocumentUtil.filePToDomByDecode("E/:XML_IBankServerMapsTemplate1.xml", "UTF-8");
+		
+		Element el = XPathAPI.selectSingleNode(dom, "/TRADETEMPLATE/TRADE[@ID='P0000004']/MESSAGE[@TYPE='1']/OBJ");
+		
+	} catch (DomParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+	}
+	public static void main(String[] args) {
+		
+	}
+
+}

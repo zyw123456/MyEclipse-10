@@ -1,0 +1,33 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sinoway.base.service.BCfgdefOrginfoService;
+import com.sinoway.common.frame.ServiceImpl;
+import com.sinoway.common.service.cfg.CommonOrganService;
+
+
+@Service("commonDefOrganService")
+public class CommonDefOrganService extends ServiceImpl implements CommonOrganService {
+
+	@Autowired
+	private BCfgdefOrginfoService bCfgdefOrginfoService;
+	
+	@Override
+	public Object addOrganInfo(Object OrganInfo) throws Exception {
+		
+		return bCfgdefOrginfoService.insert("BCfgdefOrginfo.insertByEntity", OrganInfo);
+	}
+
+	@Override
+	public Object editOrganInfo(Object OrganInfo) throws Exception {
+		return bCfgdefOrginfoService.update("BCfgdefOrginfo.updateByEntity", OrganInfo);
+	}
+
+	@Override
+	public Object delOrganInfo(Object OrganInfo) throws Exception {
+		return bCfgdefOrginfoService.delete("BCfgdefOrginfo.deleteByEntity", OrganInfo);
+	}
+
+}

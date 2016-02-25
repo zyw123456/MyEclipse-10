@@ -1,0 +1,7 @@
+package com.sinoway.test;
+
+import com.yzj.wf.base.action.BaseAction;
+
+public class TestAction xtends BaseAction{
+
+}

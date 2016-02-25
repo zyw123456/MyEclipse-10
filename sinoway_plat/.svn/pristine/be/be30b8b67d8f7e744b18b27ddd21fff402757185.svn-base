@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="stmManager" namespace="/" extends="json-default">
+		<action name="findCurUserPrdsAction" class="StmManagerAction" method="findCurUserPrds">
+			<result type="json"></result>
+		</action>
+		<action name="saveOrUpdatePrdAction" class="StmManagerAction" method="saveOrUpdatePrd">
+			<result type="json"></result>
+		</action>
+		<action name="delPrdAction" class="StmManagerAction" method="delPrd">
+			<result type="json"></result>
+		</action>
+				
+		<!--查询登录父账号下的所有团队  -->
+		<action name="queryChildOrganizes" class="StmManagerAction" method="queryChildOrganizes">
+			<result type="json"></result>
+		</action>
+		<!--根据团队id查找当前机构下的所有人员 -->
+		<action name="queryPeoplesByOrgId" class="StmManagerAction" method="queryPeoplesByOrgId">
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>    

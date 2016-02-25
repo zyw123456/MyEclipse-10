@@ -1,0 +1,36 @@
+package com.sinoway.common.parse;
+
+import org.junit.Test;
+
+import junit.framework.TestCase;
+import net.sf.json.JSONObject;
+
+import com.sinoway.common.service.consumer.LogRecordConsumerService;
+
+public class TestLogService extends TestCase{
+
+	
+	private LogRecordConsumerService logRecordConsumerService;
+	
+	@Test
+	public void queryOverdue(){
+		JSONObject json = new JSONObject();
+		json.put("regid", "1234");
+		json.put("fromip", "234");
+		json.put("logtype", "0");
+		json.put("expreason", "2342");
+		json.put("reqmsg", "23423");
+		json.put("launch", "23423");
+		json.put("retrnto", "234234");
+		logRecordConsumerService.doMsg(json.toString())	;
+	}
+	public LogRecordConsumerService getLogRecordConsumerService() {
+		return logRecordConsumerService;
+	}
+	public void setLogRecordConsumerService(
+			LogRecordConsumerService logRecordConsumerService) {
+		this.logRecordConsumerService = logRecordConsumerService;
+	}
+	
+	
+}

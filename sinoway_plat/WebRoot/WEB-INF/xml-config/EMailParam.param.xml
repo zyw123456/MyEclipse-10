@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configs>
+	<!-- 邮件发送配置 -->
+	<ParamGroup name="EMAIL_PARAM" memo="邮件发送配置参数">
+		<Param name="smtp" type="String">smtpcom.263xmail.com</Param>
+		<Param name="username" type="String">ad@yinzhijie.com</Param>
+		<Param name="password" type="String">info8888</Param>
+		<Param name="port" type="Integer">25</Param>
+		<Param name="auth" type="String">true</Param>
+		<Param name="timeout" type="String">25000</Param>
+		<Param name="mailSubject" type="String">【提醒】密码重置</Param>
+		<Param name="mailText" type="String">您好,{username},您的系统登录密码已经重置,新密码为{password},请及时登录系统修改密码!
+		</Param>
+	</ParamGroup>
+</Configs>

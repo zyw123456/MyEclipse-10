@@ -1,0 +1,121 @@
+package com.sinoway.common.util;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import com.sun.org.apache.bcel.internal.generic.SIPUSH;
+
+public class DateUtil {
+	
+	private static SimpleDateFormat sdf_date = new  SimpleDateFormat("yyyyMMdd");
+
+	private static SimpleDateFormat sdf_time = new SimpleDateFormat("HHmmssSSS");
+	/**
+	 * 根据传入日期返回上一天日期
+	 * @param date
+	 * @return
+	 */
+	public static Date getPrevDay(Date date) {  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.setTime(date);  
+        calendar.add(Calendar.DAY_OF_MONTH, -1);  
+        date = calendar.getTime();  
+        return date;  
+    }  
+	/**
+	 * 将时间转换为指定格式字符串
+	 * @param date 时间  默认为当前之间，format 字符串格式（默认格式yyyy-MM-dd HH:mm:ss）
+	 * @return 
+	 * @Description
+	 */
+	//Date--> String
+	public static String dateToString(Date  date,String format){
+		
+		if(date==null){
+			date=new Date();
+		}
+		
+		if(format==null){
+			format="yyyy-MM-dd HH:mm:ss";
+		}
+		
+		DateFormat  timeFormate=new  SimpleDateFormat(format);
+		
+		return timeFormate.format(date);
+	
+	} 
+	/**
+	 * 到分钟
+	 * @param date
+	 * @param pattern
+	 * @return
+	 * @throws Exception
+	 */
+	public  static  String getDateToPath(Date date)  throws  Exception{
+		
+		Calendar  ca=Calendar.getInstance();
+		ca.setTime(date);
+		
+		int  year=ca.get(Calendar.YEAR);
+		int  month=ca.get(Calendar.MONTH)+1;   //1月返回0
+		int  day=ca.get(Calendar.DAY_OF_MONTH);
+		int  hour=ca.get(Calendar.HOUR_OF_DAY);
+		int min = ca.get(Calendar.MINUTE);
+		
+		StringBuffer buString = new StringBuffer();
+		buString.append(year).append(File.separator).append(month).append(File.separator).append(day).append(File.separator).append(hour).append(File.separator).append(min);
+		
+		return   buString.toString();
+	}
+	
+	
+	/**
+	 * 根据传入日期返回下一天日期
+	 * @param date
+	 * @return
+	 */
+	public static Date getNextDay(Date date) {  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.setTime(date);  
+        calendar.add(Calendar.DAY_OF_MONTH, -1);  
+        date = calendar.getTime();  
+        return date;  
+    } 
+	
+	/**
+	 * 日期格式化为yyyyMMdd
+	 * @param date
+	 * @return
+	 */
+	public static String dateToStr(Date date){
+		return sdf_date.format(date).toString();
+	}
+	
+	
+	/**
+	 * 时间格式化为HHmmss
+	 * @param date
+	 * @return
+	 */
+	public static String timeToStr(Date date){
+		return sdf_time.format(date).toString();
+	}
+	
+	/**
+	 * 时间转换日期
+	 * @param dataStr
+	 * @param formart
+	 * @return
+	 * @throws ParseException 
+	 */
+	public static Date timeToData(String dataStr,String formart) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat(formart);
+		return sdf.parse(dataStr);
+		
+	}
+	
+}

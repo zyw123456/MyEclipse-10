@@ -1,0 +1,30 @@
+#COMMON
+
+#DB2-----------------
+#dev
+#jdbc.driver = com.sybase.jdbc4.jdbc.SybDriver
+#jdbc.url=jdbc:sybase:Tds:10.6.14.155:5000/svm
+#jdbc.username=svm
+#jdbc.password=svm
+
+
+#prd
+#jdbc.driver = com.ibm.db2.jcc.DB2Driver
+#jdbc.url=jdbc:db2://168.1.6.12:50000/hrbb
+#jdbc.username=cwgx
+#jdbc.password=db2cwgx
+
+#LOC
+jdbc.driver = com.ibm.db2.jcc.DB2Driver
+jdbc.url=jdbc\:db2\://127.0.0.1\:50000/toolsdb\:currentSchema\=PUB;
+jdbc.username=db2admin
+jdbc.password=db2admin
+#jdbc.username=HDZX
+#jdbc.password=hdzx
+
+
+
+
+
+
+

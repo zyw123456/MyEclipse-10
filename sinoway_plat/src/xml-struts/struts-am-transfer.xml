@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.ui.templateDir" value="template" />
+	<constant name="struts.ui.templateSuffix" value="ftl" />
+	<package name="am-transfer" namespace="/" extends="json-default">
+		<!-- 转授权Action -->
+		<action name="transferPowerInfoAction_*" class="transferPowerInfoAction"
+			method="{1}">
+			<result name="showListPage">/windforce/am/transfer/list.jsp</result>
+			<result name="showReservePage">/windforce/am/transfer/reserve.jsp
+			</result>
+		</action>
+	</package>
+</struts>    

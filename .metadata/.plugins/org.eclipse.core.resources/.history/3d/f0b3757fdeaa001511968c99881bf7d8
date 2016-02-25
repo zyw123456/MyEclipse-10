@@ -1,0 +1,30 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.sinoway.base.service.BCfgdefPrdinfoService;
+import com.sinoway.common.service.cfg.CommonProductService;
+
+
+public class CommonDefProductService implements CommonProductService{
+
+	@Autowired
+	private BCfgdefPrdinfoService bCfgdefPrdinfoService;
+	
+	public Object addprdInfo(Object prdInfo) throws Exception {
+		bCfgdefPrdinfoService.insert("insertByEntity", prdInfo);
+		return null;
+	}
+
+	public Object editprdInfo(Object prdInfo) throws Exception {
+		bCfgdefPrdinfoService.update("updateByEntity", prdInfo);
+		return null;
+	}
+
+	@Override
+	public Object delprdInfo(Object prdInfo) throws Exception {
+		bCfgdefPrdinfoService.delete("deleteByEntity", prdInfo);
+		return null;
+	}
+
+}

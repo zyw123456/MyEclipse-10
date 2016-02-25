@@ -1,0 +1,39 @@
+package com.sinoway.test.service.impl;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sinoway.rpt.dao.RptDao;
+import com.sinoway.rpt.entity.WfDatCreditrptUtil;
+import com.sinoway.test.service.ITestDemoService;
+
+public class TestDemoService implements ITestDemoService {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	private RptDao rptDao;
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public List findCreditrptList() {
+		List<WfDatCreditrptUtil> list = null;
+		try {
+		 String compno= "P1000000002016020252a000030000";
+		 list = (List<WfDatCreditrptUtil>)rptDao.findCreadItRpt("SQCW","002");
+		
+		} catch (Exception e) {
+			logger.error("查询报告列表错误");
+			e.printStackTrace();
+		}
+	   return list;
+	}
+	public RptDao getRptDao() {
+		return rptDao;
+	}
+	public void setRptDao(RptDao rptDao) {
+		this.rptDao = rptDao;
+	}
+
+	
+}

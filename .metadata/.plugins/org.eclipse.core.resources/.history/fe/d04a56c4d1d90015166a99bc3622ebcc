@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<!--查询业务流水号 -->
+	<!-- sql 查询当前用户所拥有的产品信息 -->
+	<sql-query name="findCreditrptList"
+		cacheable="true">
+		<![CDATA[
+			select {usrprd.*}  from WF_CFGDEF_COMPINFO  usrprd
+			where usrprd.COMPNO = :compid
+		]]>
+		<return alias="usrprd" class="com.sinoway.acc.entity.WfCfgdefCompinfo"/>
+	</sql-query>
+	<!--新增公司基本信息资料 -->
+	<sql-query name="accountDao.createCompanyInfo"  >
+		<![CDATA[
+			insert into WF_CFGDEF_COMPINFO (id,compno,compnam,compaddr,prsnnam,phnone,strdte,enddte,
+									     comptyp,sta)
+							      values (:id,:compno,:compnam,:compaddr,:prsnnam,:phnone,:strdte,:enddte,
+									     :comptyp,:sta)
+		]]>	
+		
+		
+	</sql-query>
+	<!-- 更新公司基本资料信息 -->
+	<sql-query name="accountDao.updateCompanyInfo"  >
+		<![CDATA[
+		update com.sinoway.acc.entity.WfCfgdefCompinfo wdc 
+			    set 
+		        wdc.compno   = :compno ,
+				wdc.compnam  = :compnam,
+				wdc.compnam  = :compnam,
+				wdc.compaddr = :compaddr,
+				wdc.prsnnam  = :prsnnam,
+				wdc.phnone   = :phnone,
+				wdc.strdte   = :strdte,
+				wdc.enddte   = :enddte,
+				wdc.comptyp  = :comptyp,
+				wdc.sta      = :sta
+			where  wdc.id = :id
+		]]>	
+		
+		
+	</sql-query>
+</hibernate-mapping>

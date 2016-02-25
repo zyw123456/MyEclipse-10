@@ -1,0 +1,17 @@
+package com.sinoway.test.action;
+
+import com.yzj.wf.base.action.BaseAction;
+/**
+ * 测试demo
+ * @author zhangyanwei
+ *
+ */
+public class TestAction extends BaseAction{
+	
+	public String findCreditrptList(){
+		
+		
+		return SUCCESS;
+	}
+
+}

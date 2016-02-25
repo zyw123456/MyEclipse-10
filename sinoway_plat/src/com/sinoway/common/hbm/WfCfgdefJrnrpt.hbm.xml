@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.common.entity.WfCfgdefJrnrpt" table="WF_CFGDEF_JRNRPT">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="syscod" type="string">
+            <column name="SYSCOD" length="1" />
+        </property>
+        <property name="jrndte" type="string">
+            <column name="JRNDTE" length="8" />
+        </property>
+        <property name="jrnval" type="string">
+            <column name="JRNVAL" length="8" />
+        </property>
+        <property name="sta" type="string">
+            <column name="STA" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

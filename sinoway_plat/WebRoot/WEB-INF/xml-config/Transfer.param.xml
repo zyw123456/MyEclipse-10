@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configs>
+	<!-- 转授权配置 -->
+	<ParamGroup name="TRANSFER_PARAM" memo="转授权配置参数">
+	    <!-- 接受转授权权限记录sid -->
+		<Param name="receiveTransferPower" type="String">00000000000get_transfer_power_id</Param>
+	</ParamGroup>
+</Configs>

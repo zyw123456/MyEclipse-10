@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<package name="bizlog" namespace="/" extends="json-default">
+		<action name="businessLog_*" class="simpleLogAction" method="{1}">
+			<result name="initPage">/windforce/bizlog/bizlog_simplelog.jsp</result>
+			<result name="success" type="json">
+				<param name="ignoreHierarchy">false</param>
+			</result>
+		</action>
+		<action name="logLogin_*" class="logLoginAction" method="{1}">
+			<result name="initPage">/windforce/bizlog/bizlog_logLogin.jsp</result>
+			<result name="success" type="json">
+			</result>
+		</action>
+		<action name="logOrgManage_*" class="logOrgManageAction" method="{1}">
+			<result name="initPage">/windforce/bizlog/bizlog_logOrgManage.jsp</result>
+			<result name="success" type="json">
+			</result>
+		</action>
+		<action name="logPeopleManage_*" class="logPeopleManageAction" method="{1}">
+			<result name="initPage">/windforce/bizlog/bizlog_logPeopleManage.jsp</result>
+			<result name="success" type="json">
+			</result>
+		</action>
+		<!-- 转授权操作日志 -->
+		<action name="logTransferPowerInfo_*" class="logTransferPowerInfo" method="{1}">
+			<result name="initPage">/windforce/bizlog/bizlog_logTransferPowerInfo.jsp</result>
+			<result name="success" type="json">
+			</result>
+		</action>
+		
+		<action name="logDataSource" class="logDataSource" method="findParamList">
+			<result type="json">
+				<param name="root">paramList</param>
+			</result>
+		</action>
+		<action name="testSimpleLog" class="testSimpleLog">
+			<result name="success" type="json"></result>
+		</action>
+	</package>
+</struts>

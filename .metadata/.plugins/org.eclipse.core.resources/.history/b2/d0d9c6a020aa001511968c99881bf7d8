@@ -1,0 +1,29 @@
+package com.sinoway.base.action;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import com.opensymphony.xwork2.ActionSupport;
+
+/***
+ * 策略管理交易接口
+ * @author zhangyanwei
+ *
+ */
+public class RptInterAction extends ActionSupport{
+	/** 
+	* @Title: reqCordInterface
+	* @Description: (请求核心接口) 
+	* @return JSON     
+	* @throws zhangyanwei
+	*/
+	public String reqCordInterface(){
+		
+	}
+	
+}

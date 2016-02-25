@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefFntsrvport" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefFntsrvport" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- PORTCOD -->
+    <result column="PORTCOD" property="portcod" jdbcType="VARCHAR" />
+    <!-- SERVCOD -->
+    <result column="SERVCOD" property="servcod" jdbcType="VARCHAR" />
+    <!-- PORT -->
+    <result column="PORT" property="port" jdbcType="VARCHAR" />
+    <!-- CONTYPE -->
+    <result column="CONTYPE" property="contype" jdbcType="VARCHAR" />
+    <!-- 0-默认 1-非默认 -->
+    <result column="LOGCHKTYPE" property="logchktype" jdbcType="VARCHAR" />
+    <!-- TMOUTLEN -->
+    <result column="TMOUTLEN" property="tmoutlen" jdbcType="VARCHAR" />
+    <!-- MAXCONNUM -->
+    <result column="MAXCONNUM" property="maxconnum" jdbcType="VARCHAR" />
+    <!-- 0-请求接收  1-结果接收 -->
+    <result column="PROTTYPE" property="prottype" jdbcType="VARCHAR" />
+    <!-- 0-停用 1-启用 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+    <!-- BEANNAM -->
+    <result column="BEANNAM" property="beannam" jdbcType="VARCHAR" />
+    <!-- MEMO -->
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			PORTCOD,
+			SERVCOD,
+			PORT,
+			CONTYPE,
+			LOGCHKTYPE,
+			TMOUTLEN,
+			MAXCONNUM,
+			PROTTYPE,
+			STA,
+			BEANNAM,
+			MEMO
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="portcod != null" >	  PORTCOD = #{portcod,jdbcType=VARCHAR},	</if>
+    <if test="servcod != null" >	  SERVCOD = #{servcod,jdbcType=VARCHAR},	</if>
+    <if test="port != null" >	  PORT = #{port,jdbcType=VARCHAR},	</if>
+    <if test="contype != null" >	  CONTYPE = #{contype,jdbcType=VARCHAR},	</if>
+    <if test="logchktype != null" >	  LOGCHKTYPE = #{logchktype,jdbcType=VARCHAR},	</if>
+    <if test="tmoutlen != null" >	  TMOUTLEN = #{tmoutlen,jdbcType=VARCHAR},	</if>
+    <if test="maxconnum != null" >	  MAXCONNUM = #{maxconnum,jdbcType=VARCHAR},	</if>
+    <if test="prottype != null" >	  PROTTYPE = #{prottype,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR},	</if>
+    <if test="beannam != null" >	  BEANNAM = #{beannam,jdbcType=VARCHAR},	</if>
+    <if test="memo != null" >	  MEMO = #{memo,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="portcod != null" >
+		  and PORTCOD = #{portcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="servcod != null" >
+		  and SERVCOD = #{servcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="port != null" >
+		  and PORT = #{port,jdbcType=VARCHAR}
+		</if>
+	    <if test="contype != null" >
+		  and CONTYPE = #{contype,jdbcType=VARCHAR}
+		</if>
+	    <if test="logchktype != null" >
+		  and LOGCHKTYPE = #{logchktype,jdbcType=VARCHAR}
+		</if>
+	    <if test="tmoutlen != null" >
+		  and TMOUTLEN = #{tmoutlen,jdbcType=VARCHAR}
+		</if>
+	    <if test="maxconnum != null" >
+		  and MAXCONNUM = #{maxconnum,jdbcType=VARCHAR}
+		</if>
+	    <if test="prottype != null" >
+		  and PROTTYPE = #{prottype,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+	    <if test="beannam != null" >
+		  and BEANNAM = #{beannam,jdbcType=VARCHAR}
+		</if>
+	    <if test="memo != null" >
+		  and MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_FNTSRVPORT
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntsrvport" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_FNTSRVPORT
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_FNTSRVPORT
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefFntsrvport" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_FNTSRVPORT
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_FNTSRVPORT (ID,
+			PORTCOD,
+			SERVCOD,
+			PORT,
+			CONTYPE,
+			LOGCHKTYPE,
+			TMOUTLEN,
+			MAXCONNUM,
+			PROTTYPE,
+			STA,
+			BEANNAM,
+			MEMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{portcod,jdbcType=VARCHAR},
+    #{servcod,jdbcType=VARCHAR},
+    #{port,jdbcType=VARCHAR},
+    #{contype,jdbcType=VARCHAR},
+    #{logchktype,jdbcType=VARCHAR},
+    #{tmoutlen,jdbcType=VARCHAR},
+    #{maxconnum,jdbcType=VARCHAR},
+    #{prottype,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{beannam,jdbcType=VARCHAR},
+    #{memo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntsrvport" >
+    insert into B_CFGDEF_FNTSRVPORT (ID,
+			PORTCOD,
+			SERVCOD,
+			PORT,
+			CONTYPE,
+			LOGCHKTYPE,
+			TMOUTLEN,
+			MAXCONNUM,
+			PROTTYPE,
+			STA,
+			BEANNAM,
+			MEMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{portcod,jdbcType=VARCHAR},
+    #{servcod,jdbcType=VARCHAR},
+    #{port,jdbcType=VARCHAR},
+    #{contype,jdbcType=VARCHAR},
+    #{logchktype,jdbcType=VARCHAR},
+    #{tmoutlen,jdbcType=VARCHAR},
+    #{maxconnum,jdbcType=VARCHAR},
+    #{prottype,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{beannam,jdbcType=VARCHAR},
+    #{memo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_FNTSRVPORT
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntsrvport">
+  	delete from B_CFGDEF_FNTSRVPORT 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_FNTSRVPORT 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntsrvport">
+  	update B_CFGDEF_FNTSRVPORT 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_FNTSRVPORT (ID,
+			PORTCOD,
+			SERVCOD,
+			PORT,
+			CONTYPE,
+			LOGCHKTYPE,
+			TMOUTLEN,
+			MAXCONNUM,
+			PROTTYPE,
+			STA,
+			BEANNAM,
+			MEMO)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.portcod,jdbcType=VARCHAR},
+    #{item.servcod,jdbcType=VARCHAR},
+    #{item.port,jdbcType=VARCHAR},
+    #{item.contype,jdbcType=VARCHAR},
+    #{item.logchktype,jdbcType=VARCHAR},
+    #{item.tmoutlen,jdbcType=VARCHAR},
+    #{item.maxconnum,jdbcType=VARCHAR},
+    #{item.prottype,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR},
+    #{item.beannam,jdbcType=VARCHAR},
+    #{item.memo,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_FNTSRVPORT 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

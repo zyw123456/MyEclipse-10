@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="dataSource_wf" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" lazy-init="default" autowire="default">
+		<property name="driverClass">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>driverClass</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="jdbcUrl">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>jdbcUrl</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="user">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>user</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="password">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>password</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="initialPoolSize">
+			<value>10</value>
+		</property>
+		<property name="minPoolSize">
+			<value>10</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>100</value>
+		</property>
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="acquireIncrement">
+			<value>3</value>
+		</property>
+		<!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+		<property name="acquireRetryAttempts">
+			<value>30</value>
+		</property>
+
+	</bean>
+
+	<bean id="sessionFactory_wf"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource_wf" />
+		</property>
+		<property name="hibernateProperties[hibernate.dialect]">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>dialect</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="hibernateProperties[hibernate.show_sql]">   
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>show_sql</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="hibernateProperties[hibernate.hbm2ddl.auto]">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WFDB</value>
+						<value>hbm2ddl.auto</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property
+			name="hibernateProperties[hibernate.cache.use_second_level_cache]">
+			<value>true</value>
+		</property>
+		<property name="hibernateProperties[hibernate.connection.release_mode]">
+			<value>auto</value>
+		</property>
+		<property name="hibernateProperties[hibernate.cache.provider_class]">
+			<value>org.hibernate.cache.EhCacheProvider</value>
+		</property>
+		<property name="hibernateProperties[hibernate.cache.use_query_cache]">
+			<value>true</value>
+		</property>
+		<property name="hibernateProperties[hibernate.query.factory_class]">
+			<value>org.hibernate.hql.ast.ASTQueryTranslatorFactory</value>
+		</property>
+		<property name="configLocations">
+			<list>
+				<value>WEB-INF/xml-flow/bpm-lwe-hibernate.cfg.xml</value>
+			</list>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<!-- 机构人员 -->
+				<value>com/yzj/wf/po/hbm/CurrentLogin.hbm.xml</value>
+ 				<value>com/yzj/wf/po/hbm/OrganizeInfo_v1.5.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/PeopleInfo_v1.5.hbm.xml</value> 
+				<!--<value>com/yzj/wf/po/hbm/OrganizeInfo.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/PeopleInfo.hbm.xml</value>-->
+				<value>com/yzj/wf/po/hbm/OrgType.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/OrgTypeRelate.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/RoleGroupPeople.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/Area.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/AreaType.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/AreaTypeRelates.hbm.xml</value>
+				<value>com/yzj/wf/poam/hbm/PoamOperateLogInfo.hbm.xml</value>
+ 				<value>com/yzj/wf/po/hbm/hibernate-queries_v1.5.hbm.xml</value> 
+				<!--<value>com/yzj/wf/po/hbm/hibernate-queries.hbm.xml</value>-->
+				<!-- 权限 -->
+				<value>com/yzj/wf/am/hbm/RoleGroupInfo.hbm.xml</value>
+				<value>com/yzj/wf/am/hbm/RoleInfo.hbm.xml</value>
+				<value>com/yzj/wf/am/hbm/PowerInfo.hbm.xml</value>
+				<value>com/yzj/wf/am/hbm/hibernate-queries.hbm.xml</value>
+				<!-- 转授权 -->
+				<value>com/yzj/wf/am/transfer/common/hbm/TransferPowerInfo.hbm.xml
+				</value>
+				<value>com/yzj/wf/am/transfer/common/hbm/TransferPowerInfoLog.hbm.xml
+				</value>
+				<value>com/yzj/wf/am/transfer/common/hbm/hibernate-queries.hbm.xml
+				</value>
+				<!-- 模块 -->
+				<value>com/yzj/wf/mm/hbm/ModuleInfo.hbm.xml</value>
+				<value>com/yzj/wf/mm/hbm/hibernate-queries.hbm.xml</value>
+				<!-- 参数 -->
+				<value>com/yzj/wf/dk/hbm/Param_ModuleFlow.hbm.xml</value>
+				<!-- 工作流 -->
+				<value>com/yzj/wf/bpm/lwe/hbm/LightweightTaskLog.hbm.xml</value>
+				<!-- 业务日志 -->
+				<value>com/yzj/wf/bizlog/hbm/simplelogInfo.hbm.xml</value>
+				<!-- 参数管理日志 -->
+				<value>com/yzj/wf/bizlog/hbm/pamlogInfo.hbm.xml</value>
+				<value>com/yzj/wf/pam/hbm/BaseParam.hbm.xml</value>
+				<value>com/yzj/wf/pam/hbm/SystemUniversalParam.hbm.xml</value>
+				<value>com/yzj/wf/pam/hbm/ParamVersion.hbm.xml</value>
+				
+				<!-- 缓存 -->
+				<value>com/yzj/wf/cache/hbm/CacheMark.hbm.xml</value>
+
+				<!-- 机构人员日志 -->
+				<value>com/yzj/wf/po/hbm/LogLogin.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/LogOrgManage.hbm.xml</value>
+				<value>com/yzj/wf/po/hbm/LogPeopleManage.hbm.xml</value>
+				
+				<!-- 机构工作时间 -->
+				<value>com/yzj/wf/wt/hbm/OrgWorkingTime.hbm.xml</value>
+				
+				<!-- 通用配置 -->
+				<value>com/sinoway/common/hbm/hibernate-queries.hbm.xml</value>
+				
+				<!-- 策略管理 -->
+				<value>com/sinoway/stm/hbm/hibernate-queries.hbm.xml</value>
+				
+				<!-- 报告流水表 -->
+				<value>com/sinoway/common/hbm/WfCfgdefJrnrpt.hbm.xml</value>
+				
+				<!-- 报告信息表 -->
+				<value>com/sinoway/rpt/hbm/WfDatCreditrpt.hbm.xml</value>
+				
+				<!-- 反欺诈报告查询 -->
+				<value>com/sinoway/fad/hbm/hibernate-queries.hbm.xml</value>
+				
+				<!-- 报告类型表 -->
+				<value>com/sinoway/rpt/hbm/WfCfgdefRpttyp.hbm.xml</value>
+				
+				<!-- 企业信息表 -->
+				<value>com/sinoway/acc/hbm/WfCfgdefCompinfo.hbm.xml</value>
+				<value>com/sinoway/acc/hbm/hibernate-queries.hbm.xml</value>
+				<value>com/sinoway/acc/hbm/hibernate-queries-accChild.hbm.xml</value>
+				<!-- 人员信息表-密码修改 -->
+				<value>com/sinoway/acc/hbm/WfCfgdefPwd.hbm.xml</value>
+			
+				
+				<!-- xiehao plat 2015.12.24 -->
+				<!-- 通用配置 -->
+				<value>com/yzj/wf/plat/hbm/hibernate-queries.hbm.xml</value>
+				<!-- 策略管理 -->
+				<value>com/yzj/wf/plat/hbm/WfCfgdefPrdinfo.hbm.xml</value>
+				<value>com/yzj/wf/plat/hbm/WfCfgdefPrdtrn.hbm.xml</value>
+				<value>com/yzj/wf/plat/hbm/WfCfgrefPrddetil.hbm.xml</value>
+				<!-- 应用管理 -->
+				<value>com/yzj/wf/plat/hbm/WfCfgdefAppinfo.hbm.xml</value>
+				<value>com/yzj/wf/plat/hbm/WfCfgrefApptrn.hbm.xml</value>
+				<!-- 账户信息表 -->
+				<value>com/yzj/wf/plat/hbm/WfCfgrefCompusrprd.hbm.xml</value>
+				<!-- 天警云监控人员配置表 -->
+				<value>com/sinoway/wrn/hbm/hibernate-queries.hbm.xml</value>
+				<value>com/sinoway/wrn/hbm/WfDatCerditwarn.hbm.xml</value>
+				<value>com/sinoway/wrn/hbm/WfDatCerditprsn.hbm.xml</value>
+				<value>com/sinoway/wrn/hbm/WfDatCerditWarnDtel.hbm.xml</value>
+				<value>com/sinoway/wrn/hbm/hibernate-queries-waitingMonitor.hbm.xml</value>
+				<!-- 个人征信报告上传 -->
+				<value>com/sinoway/rpt/hbm/hibernate-queries.hbm.xml</value>
+				<!--输入要素表 -->
+				<value>com/sinoway/common/hbm/WfCfgrefTrninele.hbm.xml</value>
+				<!-- 测试queries -->
+			</list>
+
+		</property>
+	</bean>
+
+	<!-- 事务管理配置 -->
+	<bean id="transactionManager_wf"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true">
+	</aop:aspectj-autoproxy>
+
+	<context:component-scan base-package="com.yzj.*" />
+	<context:component-scan base-package="com.sinoway.*" />
+
+	<tx:annotation-driven transaction-manager="transactionManager_wf"
+		order="2000" />
+	<!-- 参数管理 -->
+	<bean id="dbParamDao" class="com.yzj.wf.pam.dao.DBParamDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="paramVersionDao" class="com.yzj.wf.pam.dao.ParamVersionDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 模块管理 -->
+	<bean id="dao_mm" class="com.yzj.wf.mm.dao.ModuleInfoDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 机构人员管理 -->
+	<bean id="OrganizeInfoDao" class="com.yzj.wf.po.dao.OrganizeInfoDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="OrgTypeDao" class="com.yzj.wf.po.dao.OrgTypeDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="OrgTypeRelateDao" class="com.yzj.wf.po.dao.OrgTypeRelateDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="PeopleInfoDao" class="com.yzj.wf.po.dao.PeopleInfoDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="RoleGroupPeopleDao" class="com.yzj.wf.po.dao.RoleGroupPeopleDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="CurrentLoginDao" class="com.yzj.wf.po.dao.CurrentLoginDao">
+		<property name="sessionFactory" ref="sessionFactory_wf"></property>
+	</bean>
+	<bean id="OperateLogInfoDao" class="com.yzj.wf.common.db.dao.BaseDao">
+		<property name="sessionFactory" ref="sessionFactory_wf"></property>
+	</bean>
+	
+	<!-- 区域管理 -->
+	<bean id="areaDao" class="com.yzj.wf.po.dao.AreaDao">
+		<property name="sessionFactory" ref="sessionFactory_wf"/>
+	</bean>
+	<bean id="areaTypeDao" class="com.yzj.wf.po.dao.AreaTypeDao">
+		<property name="sessionFactory" ref="sessionFactory_wf"/>
+	</bean>
+	<bean id="basePageDao" class="com.yzj.wf.base.dao.BasePageDao">
+		<property name="sessionFactory" ref="sessionFactory_wf"/>
+	</bean>
+	
+	<!-- 权限管理 -->
+	<bean id="RoleGroupDao" class="com.yzj.wf.am.dao.RoleGroupDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="RoleDao" class="com.yzj.wf.am.dao.RoleDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="PowerDao" class="com.yzj.wf.am.dao.PowerDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<!-- 工作流 -->
+	<bean id="taskLogDao" class="com.yzj.wf.bpm.lwe.dao.TaskLogDao">
+		<property name="sessionFactory">
+			<ref local="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="taskDao" class="com.yzj.wf.bpm.lwe.dao.TaskDao">
+		<property name="sessionFactory">
+			<ref local="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<!-- 业务日志管理 -->
+	<bean id="SimpleCurrLogDao" class="com.yzj.wf.bizlog.dao.SimpleCurrLogDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<!-- 参数管理日志 -->
+	<bean id="PamCurrLogDao" class="com.yzj.wf.bizlog.dao.PamCurrLogDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<bean id="cacheMarkDao" class="com.yzj.wf.cache.dao.CacheMarkDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<!-- 机构人员业务日志 -->
+	<bean id="logLoginDAO" class="com.yzj.wf.po.dao.LogLoginDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="logOrgManageDAO" class="com.yzj.wf.po.dao.LogOrgManageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<bean id="logPeopleManageDAO" class="com.yzj.wf.po.dao.LogPeopleManageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean> 
+	
+	<!-- 转授权DAO -->
+	<bean id="transferPowerInfoDao" class="com.yzj.wf.am.transfer.dao.TransferPowerInfoDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+		<property name="searchOrderCondition">
+			<value><![CDATA[ order by tpi.startDate desc,tpi.startTime desc,tpi.status]]>
+			</value>
+		</property>
+	</bean>
+	<!-- 转授权日志DAO -->
+	<bean id="transferPowerInfoLogDao" class="com.yzj.wf.am.transfer.dao.TransferPowerInfoLogDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 机构工作时间设置DAO -->
+	<bean id="orgWorkingTimeDAO" class="com.yzj.wf.wt.dao.OrgWorkingTimeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 应用管理Dao -->
+	<bean id="appDao" class="com.sinoway.app.dao.AppDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 策略管理Dao -->
+	<bean id="PrdDao" class="com.sinoway.stm.dao.PrdDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 报告管理Dao -->
+	<bean id="CreditrptDao" class="com.sinoway.rpt.dao.WfDatCreditrptDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 报告流水表 -->
+	<bean id="jrnrptDao" class="com.sinoway.stm.dao.PrdDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+
+	<bean id="hPDao" class="com.sinoway.common.dao.HPDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 个人征信报告Dao -->
+	<bean id="rptDao" class="com.sinoway.rpt.dao.RptDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	<!-- 天警云监控人员Dao -->
+	<bean id="WarnMDao" class="com.sinoway.wrn.dao.WarnMonitorDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 异常预警管理 -->
+	<bean id="WrnDao" class="com.sinoway.wrn.dao.WrnDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+		<!-- 天警云待监控人员 -->
+	<bean id="WaitingMonitorDao" class="com.sinoway.wrn.dao.WaitingMonitorDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 用户编码加载产品（策略）的Dao -->
+	<bean id="WarnProductDao" class="com.sinoway.wrn.dao.WarnProductDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	
+	 <!-- 监控人员Dao -->
+	<bean id="WarnPersonDao" class="com.sinoway.wrn.dao.WarnPersonDao">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory_wf" />
+		</property>
+	</bean>
+	<!-- 加载报告模板xml -->
+	<bean id="loadmodel" factory-method="getInstance"  class="com.sinoway.common.util.LoadModel">
+	</bean>
+	</beans>

@@ -1,0 +1,155 @@
+package com.sinoway.common.constant;
+
+
+public class Constant {
+	
+	/**
+	 * 报文响应的状态
+	 * @author miles
+	 *
+	 */
+	public enum ResponseStatus{
+		/**
+		 * 响应状态成功
+		 */
+		RESPONSE_STATUS_SUCCESS("1"),
+		/**
+		 * 响应状态失败
+		 */
+		RESPONSE_STATUS_FAILURE("0");
+		
+		private String value;
+		
+		private ResponseStatus(String value){
+			this.value = value;
+		}
+		
+		public String getValue(){
+			return value;
+		}
+	}
+	
+
+	/**
+	 * 报文操作类型
+	 * @author xiehao
+	 *
+	 */
+	public enum MsgCode{
+		MSGCODE_ADDPRD("addPrd","001"),
+		MSGCODE_DELPRD("delPrd","002"),
+		MSGCODE_UPDATEPRD("updatePrd","003"),//最后一行常量的末尾为分号,其他为逗号
+		MSGCODE_ADDCHILDACC("addChildAcc","004"),//新增子账号
+		MSGCODE_UPDATECHILDACC("updateChildAcc","005"),//修改子账号
+		MSGCODE_DELETECHILDACC("deleteChildAcc","006"),//删除子账号
+		MSGCODE_ADDORGTEAM("addOrgTeam","007"),//团队新增
+		MSGCODE_UPDATEORGTEAM("updateOrgTeam","008"),//团队修改
+		MSGCODE_DELETEORGTEAM("deleteOrgTeam","009"),//团队删除
+		MSGCODE_UPDATEPWD("updatepwd","0010");       //密码修改
+		
+		private String code;
+		
+		private String value;
+		
+		private MsgCode(String code, String value){
+			this.code = code;
+			this.value = value;
+			
+		}
+
+		public String getCode(){
+			return code;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * Http请求的类型常量字段用于保存
+	 * @author miles
+	 *
+	 */
+	public enum MsgType{
+		/**
+		 * 请求报文
+		 */
+		MESSAGE_TYPE_REQUEST("req","1"),
+		/**
+		 * 响应报文
+		 */
+		MESSAGE_TYPE_RESPONSE("res","2"),
+		/**
+		 * 交易请求即时响应报文 
+		 */
+		MESSAGE_TYPE_REQ_INSTANT_RESPONSE("req_inst","3"),
+		
+		/**
+		 * 交易响应即时响应报文
+		 */
+		MESSAGE_TYPE_RES_INSTANT_RESPONSE("res_inst","4"),
+		/**
+		 * 结果获取报文
+		 */
+		MESSAGE_TYPE_RESULT("reslut","5"),
+		/**
+		 * 重发报文
+		 */
+		MESSAGE_TYPE_RESEND("resend","8");
+		
+		private String code;
+		
+		private String value;
+		
+		private MsgType(String code, String value){
+			this.code = code;
+			this.value = value;
+			
+		}
+
+		public String getCode(){
+			return code;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+		
+	}
+	/**
+	 * 响应状态
+	 * @author yuhui
+	 *
+	 */
+	public enum HttpStatus{
+		
+		/**
+		 * 响应成功
+		 */
+		STATIS_SUCCESS("1"),
+		
+		/**
+		 * 响应失败
+		 */
+		STATIS_FAIL("0");
+		
+		private HttpStatus(String code){
+			this.code = code;
+		}
+		
+		private String code;
+		
+		public String getCode(){
+			return code;
+		}
+		
+		
+	}
+	
+	
+
+}

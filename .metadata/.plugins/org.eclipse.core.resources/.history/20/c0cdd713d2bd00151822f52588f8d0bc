@@ -1,0 +1,56 @@
+package com.sinoway.mcp.service.strade.imate.token;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class TokenSington {
+
+   private static TokenSington instance = null ;
+	
+   private Map<String,String> map = new HashMap<String,String>();
+    
+	 private TokenSington (){
+		  try{
+			init ();  
+		  }catch(Exception e){
+			  e.printStackTrace();
+		  }
+	  }
+	  
+	  private static TokenSington getInstance(){
+		  
+		  if(instance == null){
+			  instance = new TokenSington();
+			  
+		  }
+		  
+		  
+		  return instance;
+		  
+	  }
+	  
+	  
+	  
+	  public synchronized  void  init(){
+		  if(instance == null){
+			
+		  }
+		  
+	  }
+		
+		public static void main(String[] args) {
+			
+			
+			TokenSington  instesce = TokenSington.getInstance();
+
+
+			
+			
+
+		}
+
+	
+	
+
+}

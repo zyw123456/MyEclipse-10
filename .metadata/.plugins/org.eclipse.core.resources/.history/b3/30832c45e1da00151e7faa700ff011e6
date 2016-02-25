@@ -1,0 +1,4 @@
+zookeeper.connect=master\:2181,salver1\:2181,hd-db02\:2181
+zookeeper.session.timeout.ms=30000
+zookeeper.sync.time.ms=2000
+auto.commit.interval.ms=1000

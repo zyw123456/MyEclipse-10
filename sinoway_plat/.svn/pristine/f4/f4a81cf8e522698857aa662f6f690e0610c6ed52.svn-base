@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="OrganizeInfoAdm" class="com.yzj.wf.po.impl.OrganizeInfoAdm">
+		<property name="organizeInfoDao">
+			<ref bean="OrganizeInfoDao" />
+		</property>
+		<property name="orgTypeDao">
+			<ref bean="OrgTypeDao" />
+		</property>
+		<property name="operateObservers" ref="operateObservers" />
+	</bean>
+	<bean id="PeopleInfoAdm" class="com.yzj.wf.po.impl.PeopleInfoAdm">
+		<property name="peopleInfoDao" ref="PeopleInfoDao" />
+		<property name="roleGroupPeopleAdm" ref="RoleGroupPeopleAdm" />
+		<property name="organizeInfoAdm" ref="OrganizeInfoAdm" />
+		<property name="operateObservers" ref="operateObservers" />
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="isCascade" value="true" />
+		<property name="isCascadeOrg" value="true" />
+		<property name="enableOfflineApproveFun">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOfflineApproveFun</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="RoleGroupPeopleAdm" class="com.yzj.wf.po.impl.RoleGroupPeopleAdm">
+		<property name="roleGroupPeopleDao">
+			<ref bean="RoleGroupPeopleDao" />
+		</property>
+		<property name="peopleInfoAdm">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupAdm">
+			<ref bean="RoleGroupAdm" />
+		</property>
+	</bean>
+	<!-- 机构人员管理访问权限控制器之能访问所有机构的控制器 -->
+	<bean id="SuperPOPowerControl" class="com.yzj.wf.po.powercontrol.SuperPOPowerCotrol">
+	</bean>
+	<bean id="CurrentLoginAdm" class="com.yzj.wf.po.impl.CurrentLoginAdm">
+		<property name="currentLoginDao" ref="CurrentLoginDao"></property>
+	</bean>
+	<bean id="PeopleInfoFactory" class="com.yzj.wf.po.factory.PeopleInfoFactory">
+		<property name="organizeInfoAdm" ref="OrganizeInfoAdm"></property>
+	</bean>
+	<bean id="POService" class="com.yzj.wf.po.impl.POService">
+		<property name="defaultPassword">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>defaultPassword</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="passwordRecordsLength">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>passwordRecordsLength</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="organizeInfoAdm">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="peopleInfoAdm">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupAdm">
+			<ref bean="RoleGroupAdm" />
+		</property>
+		<property name="roleGroupPeopleAdm">
+			<ref bean="RoleGroupPeopleAdm" />
+		</property>
+		<property name="roleAdm">
+			<ref bean="RoleAdm" />
+		</property>
+		<property name="powerAdm">
+			<ref bean="PowerAdm" />
+		</property>
+		<property name="currentLoginAdm" ref="CurrentLoginAdm" />
+		<property name="amService">
+			<ref bean="AMService" />
+		</property>
+		<property name="poExportConfig">
+			<ref bean="poExportConfig" />
+		</property>
+		<property name="operateLog">
+			<ref bean="OperateLogInfoAdm" />
+		</property>
+		<property name="operateObservers" ref="operateObservers" />
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="enableRandomPwdForResetPwd">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableRandomPwdForResetPwd</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="mailSubject">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>EMAIL_PARAM</value>
+						<value>mailSubject</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="mailText">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>EMAIL_PARAM</value>
+						<value>mailText</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableManageTransferPeople">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableManageTransferPeople</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="receiveTransferPowerSid">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>TRANSFER_PARAM</value>
+						<value>receiveTransferPower</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="loginAuthorizePowerSid" value="00000000login_authorize_power_id" />
+		<property name="enableOrgNameRepeat">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOrgNameRepeat</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableOfflineApproveFun">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOfflineApproveFun</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableMigrateParentOrg">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableMigrateParentOrg</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="amExtendServices" ref="amExtendServices" />
+		<property name="orgTypeMap">
+			<ref bean="orgTypeMap" />
+		</property>
+	</bean>
+	<!-- 配置机构类型信息 -->
+	<bean id="orgTypeMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="总行" value="65A2D56EDB3E4C14AF8858AF2C80188C" />
+				<entry key="省级分行" value="D51E99BE443892600D643F09F63F_001" />
+				<entry key="支行" value="DB009F5340209EF5DDEE83AEC206_002" />
+				<entry key="营业部" value="D5AFC14640D3A4A0496D7E46D0E7_003" />
+				<entry key="网点" value="49E4BD36442189FAA2EF4CC1EF2F_004" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<!-- 操作日志实现 -->
+	<bean id="OperateLogInfoAdm" class="com.yzj.wf.poam.impl.OperateLogAdm">
+		<property name="logInfoDao" ref="OperateLogInfoDao"></property>
+		<property name="logLoginDAO" ref="logLoginDAO"></property>
+		<property name="logOrgManageDAO" ref="logOrgManageDAO"></property>
+		<property name="logPeopleManageDAO" ref="logPeopleManageDAO"></property>
+		<property name="enableLogTrigger">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableLogTrigger</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- OrgTypeCache缓存 -->
+	<bean id="orgTypeCache" class="com.yzj.wf.po.cache.OrgTypeCache"
+		factory-method="getInstance" init-method="init">
+		<property name="orgTypeDao">
+			<ref bean="OrgTypeDao" />
+		</property>
+		<property name="cacheEnabled" value="true" />
+	</bean>
+	<!-- PeopleInfoCache缓存 -->
+	<bean id="peopleInfoCache" class="com.yzj.wf.po.cache.PeopleInfoCache"
+		factory-method="getInstance" init-method="init">
+		<property name="peopleInfoAdm">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupPeopleCache">
+			<ref bean="roleGroupPeopleCache" />
+		</property>
+		<property name="organizeInfoCache">
+			<ref bean="organizeInfoCache" />
+		</property>
+		<!-- 加载策略 random,org -->
+		<property name="loadStrategy" value="random" />
+		<property name="defaultSize" value="500" />
+		<property name="cacheEnabled" value="true" />
+	</bean>
+	<!-- OrganizeInfoCache缓存 -->
+	<bean id="organizeInfoCache" class="com.yzj.wf.po.cache.OrganizeInfoCache"
+		factory-method="getInstance">
+		<property name="defaultSize" value="500" />
+		<property name="cacheEnabled" value="true" />
+	</bean>
+	<!-- RoleGroupPeopleCache缓存 -->
+	<bean id="roleGroupPeopleCache" class="com.yzj.wf.po.cache.RoleGroupPeopleCache"
+		factory-method="getInstance">
+		<property name="defaultSize" value="500" />
+		<property name="cacheEnabled" value="true" />
+	</bean>
+
+	<!-- Cache工厂 -->
+	<bean id="cacheFactory" class="com.yzj.wf.common.cache.CacheFactory">
+		<constructor-arg>
+			<map>
+				<entry key="com.yzj.wf.mm.cache.ModuleInfoCache" value-ref="moduleInfoCache"></entry>
+				<entry key="com.yzj.wf.am.cache.PowerInfoCache" value-ref="powerInfoCache"></entry>
+				<entry key="com.yzj.wf.am.cache.RoleGroupInfoCache" value-ref="roleGroupInfoCache"></entry>
+				<entry key="com.yzj.wf.am.cache.RoleInfoCache" value-ref="roleInfoCache"></entry>
+				<entry key="com.yzj.wf.po.cache.OrgTypeCache" value-ref="orgTypeCache"></entry>
+				<entry key="com.yzj.wf.po.cache.OrganizeInfoCache" value-ref="organizeInfoCache"></entry>
+				<entry key="com.yzj.wf.po.cache.PeopleInfoCache" value-ref="peopleInfoCache"></entry>
+				<entry key="com.yzj.wf.po.cache.RoleGroupPeopleCache"
+					value-ref="roleGroupPeopleCache"></entry>
+				<!-- plat xiehao 2015.12.14 -->
+				<entry key="com.yzj.wf.plat.cache.PrdInfoCache" value-ref="prdInfoCache"></entry>
+				<entry key="com.yzj.wf.plat.cache.CompusrPrdCache" value-ref="compusrPrdCache"></entry>
+				<entry key="com.yzj.wf.plat.cache.PrdDetilCache" value-ref="prdDetilCache"></entry>
+				<entry key="com.yzj.wf.plat.cache.PrdTrnCache" value-ref="prdTrnCache"></entry>
+				<entry key="com.yzj.wf.plat.cache.AppInfoCache" value-ref="appInfoCache"></entry>
+				<entry key="com.yzj.wf.plat.cache.AppTrnCache" value-ref="appTrnCache"></entry>
+			</map>
+		</constructor-arg>
+	</bean>
+	<!-- 配置人员显示视图 -->
+	<bean id="peopleInfoView" class="com.yzj.wf.po.util.PeopleInfoView">
+		<property name="peopleName" value="true" />
+		<property name="peopleCode" value="true" />
+		<property name="organizeInfo" value="true" />
+		<property name="organizeName" value="true" />
+		<property name="peopleGender" value="true" />
+		<property name="peopleState" value="true" />
+		<property name="roleGroupInfos" value="true" />
+	</bean>
+
+	<bean id="poAuthConfig" class="com.yzj.wf.po.util.POAuthConfig">
+		<property name="enableModifiedOwnInfo">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableModifiedOwnInfo</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableModifiedOwnOrg">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableModifiedOwnOrg</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableDeleteOwnOrg">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableDeleteOwnOrg</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableHeadManageBranchGeneralPeople">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableHeadManageBranchGeneralPeople</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="adminGroupList">
+			<!-- 管理员岗位列表清单 -->
+			<list>
+				<!-- <value>supergroup</value> -->
+			</list>
+		</property>
+		<property name="excludeGroupList">
+			<!-- 需要排除岗位列表清单 -->
+			<list>
+				<!-- <value>4C3F1CD5A8854336A433F838A6C25F7B</value> -->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="poExportConfig" class="com.yzj.wf.po.util.POExportConfig">
+		<!-- 导出文件名称 -->
+		<property name="fileName" value="机构人员岗位对照表" />
+		<!-- 导出文件标题 -->
+		<property name="title" value="机构人员岗位对照表" />
+		<property name="exportBeanConfig" ref="poExportBeanConfig" />
+	</bean>
+
+	<bean id="poExportBeanConfig" class="java.util.LinkedHashMap">
+		<constructor-arg>
+			<map>
+				<!-- 导出文件信息，规则：名称，列宽，是否导出 -->
+				<entry key="peopleCode" value="员工编号,20,true" />
+				<entry key="peopleName" value="员工姓名,20,true" />
+				<entry key="orgNo" value="所属机构号,20,true" />
+				<entry key="orgName" value="所属机构名,20,true" />
+				<entry key="roleGroupNo" value="岗位编号,40,false" />
+				<entry key="roleGroupName" value="岗位名称,20,true" />
+				<entry key="roleNo" value="角色编号,40,false" />
+				<entry key="roleName" value="角色名称,20,false" />
+				<entry key="createdCode" value="创建人,20,false" />
+				<entry key="createdTime" value="创建时间,30,false" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<!-- 回调操作列表 -->
+	<bean id="operateObservers" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!-- 添加实现com.yzj.wf.core.service.po.IOperateObserver接口的实现类的bean -->
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="areaManagerService" class="com.yzj.wf.po.impl.AreaManagerServiceImpl">
+		<property name="areaDao" ref="areaDao" />
+		<property name="areaTypeDao" ref="areaTypeDao" />
+	</bean>
+
+	<bean id="basePageService" class="com.yzj.wf.base.service.BasePageService">
+		<property name="basePageDao" ref="basePageDao" />
+	</bean>
+
+</beans>

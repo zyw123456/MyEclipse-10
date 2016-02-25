@@ -1,0 +1,111 @@
+package com.sinoway.common.service.parse;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+/**
+ * 通用json报文转换器(json转化为xml)
+ * 
+ * @author zhangyanwei
+ * @version 1.0 2016-01-04
+ */
+public class GeneralXmlTradeMsgTransferJson {
+
+	/**
+	 * 通过模板对JSONObject进行转换，转换输出xml
+	 * 
+	 * @param Document
+	 *            当前的xml报文
+	 * 
+	 * @param Element
+	 *            模板
+	 * 
+	 * @return 转换完成的JSON格式报文
+	 * @throws JsonMsgParseException
+	 *             TradeMsgTransfException Exception
+	 */
+
+	public JSONObject transfXmlMsgByJTempToJson(Document document, Element el)
+			throws JsonMsgParseException, TradeMsgTransfException, Exception {
+		if (document == null) {
+			throw new TradeMsgTransfException("xml报文转换异常：传过来的xml不能为空");
+		}
+
+		JSONObject json = new JSONObject();
+
+		// 解析这个document
+		Element currel = (Element) XPathAPI.selectSingleNode(document, "/head");
+		// 这是当前模版的节点集合
+		NodeList nodelist = el.getChildNodes();
+		for (int i = 0; i < nodelist.getLength(); i++) {
+			Node node = nodelist.item(i);
+			if (node.getNodeType() == 3) {
+				continue;
+			}
+			Element crel = (Element) node;
+
+			System.out.println(crel.getTextContent() + "-===============");
+
+			// 这是模板xml的节点list
+
+		  parseTransfXmltoJson(currel, crel,json);
+
+		}
+
+		return json;
+
+	}
+
+	/**
+	 * 递归报文的xml所有的子节点
+	 * @param crel
+	 *            当前的报文xml节点
+	 * @param node
+	 *            报文模板的xml节点
+	 * @return
+	 * @throws Exception
+	 */
+	public JSONObject parseTransfXmltoJson(Element crel, Element node,JSONObject textmap)
+			throws Exception {
+       //这个map 是将以模板的textcontext 为键 ， 报文的textcontext为值进行存储
+	
+		if (node != null || !node.equals("")) {
+			
+			//取得报文的子节点结合
+			NodeList curList = crel.getChildNodes();
+			for (int i = 0; i < curList.getLength(); i++) {
+			
+				//当前报文子节点
+				Node curnode = curList.item(i);
+				if(curnode.getNodeType()== 3){
+					continue;
+				}
+				Element curEl = (Element) curnode;
+			    //如果当前子节点值为空
+			  
+			if (textmap.containsKey(node.getTextContent().trim())) {
+						continue;
+					}
+					textmap.put(node.getTextContent().trim(), curEl.getTextContent());
+				}
+
+			}
+
+		
+
+		return textmap;
+	}
+
+}

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Clntest" >
+  <resultMap id="BaseResultMap" type="com.sinoway.mcp.entity.Clntest" >
+    <!-- CLNTJRN -->
+	<id column="CLNTJRN" property="clntjrn" jdbcType="VARCHAR" />
+
+
+    <!-- FNTJRN -->
+    <result column="FNTJRN" property="fntjrn" jdbcType="VARCHAR" />
+    <!-- NAME -->
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <!-- IDCARD -->
+    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+    <!-- SEX -->
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <!-- BIRTHDAY -->
+    <result column="BIRTHDAY" property="birthday" jdbcType="VARCHAR" />
+    <!-- CERTTYPE -->
+    <result column="CERTTYPE" property="certtype" jdbcType="VARCHAR" />
+    <!-- AGE -->
+    <result column="AGE" property="age" jdbcType="VARCHAR" />
+    <!-- CERTCOD -->
+    <result column="CERTCOD" property="certcod" jdbcType="VARCHAR" />
+    <!-- CERTORG -->
+    <result column="CERTORG" property="certorg" jdbcType="VARCHAR" />
+    <!-- TELLPHONE -->
+    <result column="TELLPHONE" property="tellphone" jdbcType="VARCHAR" />
+    <!-- TRNDATE -->
+    <result column="TRNDATE" property="trndate" jdbcType="VARCHAR" />
+    <!-- TRNTM -->
+    <result column="TRNTM" property="trntm" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    CLNTJRN,
+			FNTJRN,
+			NAME,
+			IDCARD,
+			SEX,
+			BIRTHDAY,
+			CERTTYPE,
+			AGE,
+			CERTCOD,
+			CERTORG,
+			TELLPHONE,
+			TRNDATE,
+			TRNTM
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="fntjrn != null" >	  FNTJRN = #{fntjrn,jdbcType=VARCHAR},	</if>
+    <if test="name != null" >	  NAME = #{name,jdbcType=VARCHAR},	</if>
+    <if test="idcard != null" >	  IDCARD = #{idcard,jdbcType=VARCHAR},	</if>
+    <if test="sex != null" >	  SEX = #{sex,jdbcType=VARCHAR},	</if>
+    <if test="birthday != null" >	  BIRTHDAY = #{birthday,jdbcType=VARCHAR},	</if>
+    <if test="certtype != null" >	  CERTTYPE = #{certtype,jdbcType=VARCHAR},	</if>
+    <if test="age != null" >	  AGE = #{age,jdbcType=VARCHAR},	</if>
+    <if test="certcod != null" >	  CERTCOD = #{certcod,jdbcType=VARCHAR},	</if>
+    <if test="certorg != null" >	  CERTORG = #{certorg,jdbcType=VARCHAR},	</if>
+    <if test="tellphone != null" >	  TELLPHONE = #{tellphone,jdbcType=VARCHAR},	</if>
+    <if test="trndate != null" >	  TRNDATE = #{trndate,jdbcType=VARCHAR},	</if>
+    <if test="trntm != null" >	  TRNTM = #{trntm,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="clntjrn != null" >
+		 and CLNTJRN = #{clntjrn,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="fntjrn != null" >
+		  and FNTJRN = #{fntjrn,jdbcType=VARCHAR}
+		</if>
+	    <if test="name != null" >
+		  and NAME = #{name,jdbcType=VARCHAR}
+		</if>
+	    <if test="idcard != null" >
+		  and IDCARD = #{idcard,jdbcType=VARCHAR}
+		</if>
+	    <if test="sex != null" >
+		  and SEX = #{sex,jdbcType=VARCHAR}
+		</if>
+	    <if test="birthday != null" >
+		  and BIRTHDAY = #{birthday,jdbcType=VARCHAR}
+		</if>
+	    <if test="certtype != null" >
+		  and CERTTYPE = #{certtype,jdbcType=VARCHAR}
+		</if>
+	    <if test="age != null" >
+		  and AGE = #{age,jdbcType=VARCHAR}
+		</if>
+	    <if test="certcod != null" >
+		  and CERTCOD = #{certcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="certorg != null" >
+		  and CERTORG = #{certorg,jdbcType=VARCHAR}
+		</if>
+	    <if test="tellphone != null" >
+		  and TELLPHONE = #{tellphone,jdbcType=VARCHAR}
+		</if>
+	    <if test="trndate != null" >
+		  and TRNDATE = #{trndate,jdbcType=VARCHAR}
+		</if>
+	    <if test="trntm != null" >
+		  and TRNTM = #{trntm,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from CLNTEST
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.mcp.entity.Clntest" resultType="java.lang.Integer" >
+    select count(*) from CLNTEST
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from CLNTEST
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.mcp.entity.Clntest" >
+    select 
+    <include refid="base_column_list" />
+    from CLNTEST
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into CLNTEST (CLNTJRN,
+			FNTJRN,
+			NAME,
+			IDCARD,
+			SEX,
+			BIRTHDAY,
+			CERTTYPE,
+			AGE,
+			CERTCOD,
+			CERTORG,
+			TELLPHONE,
+			TRNDATE,
+			TRNTM)
+    values (
+	#{clntjrn,jdbcType=VARCHAR},
+
+
+    #{fntjrn,jdbcType=VARCHAR},
+    #{name,jdbcType=VARCHAR},
+    #{idcard,jdbcType=VARCHAR},
+    #{sex,jdbcType=VARCHAR},
+    #{birthday,jdbcType=VARCHAR},
+    #{certtype,jdbcType=VARCHAR},
+    #{age,jdbcType=VARCHAR},
+    #{certcod,jdbcType=VARCHAR},
+    #{certorg,jdbcType=VARCHAR},
+    #{tellphone,jdbcType=VARCHAR},
+    #{trndate,jdbcType=VARCHAR},
+    #{trntm,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.mcp.entity.Clntest" >
+    insert into CLNTEST (CLNTJRN,
+			FNTJRN,
+			NAME,
+			IDCARD,
+			SEX,
+			BIRTHDAY,
+			CERTTYPE,
+			AGE,
+			CERTCOD,
+			CERTORG,
+			TELLPHONE,
+			TRNDATE,
+			TRNTM)
+    values (
+	#{clntjrn,jdbcType=VARCHAR},
+
+
+    #{fntjrn,jdbcType=VARCHAR},
+    #{name,jdbcType=VARCHAR},
+    #{idcard,jdbcType=VARCHAR},
+    #{sex,jdbcType=VARCHAR},
+    #{birthday,jdbcType=VARCHAR},
+    #{certtype,jdbcType=VARCHAR},
+    #{age,jdbcType=VARCHAR},
+    #{certcod,jdbcType=VARCHAR},
+    #{certorg,jdbcType=VARCHAR},
+    #{tellphone,jdbcType=VARCHAR},
+    #{trndate,jdbcType=VARCHAR},
+    #{trntm,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from CLNTEST
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.mcp.entity.Clntest">
+  	delete from CLNTEST 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update CLNTEST 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	CLNTJRN = #{clntjrn}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.mcp.entity.Clntest">
+  	update CLNTEST 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	CLNTJRN = #{clntjrn}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into CLNTEST (CLNTJRN,
+			FNTJRN,
+			NAME,
+			IDCARD,
+			SEX,
+			BIRTHDAY,
+			CERTTYPE,
+			AGE,
+			CERTCOD,
+			CERTORG,
+			TELLPHONE,
+			TRNDATE,
+			TRNTM)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.clntjrn,jdbcType=VARCHAR},
+
+
+    #{item.fntjrn,jdbcType=VARCHAR},
+    #{item.name,jdbcType=VARCHAR},
+    #{item.idcard,jdbcType=VARCHAR},
+    #{item.sex,jdbcType=VARCHAR},
+    #{item.birthday,jdbcType=VARCHAR},
+    #{item.certtype,jdbcType=VARCHAR},
+    #{item.age,jdbcType=VARCHAR},
+    #{item.certcod,jdbcType=VARCHAR},
+    #{item.certorg,jdbcType=VARCHAR},
+    #{item.tellphone,jdbcType=VARCHAR},
+    #{item.trndate,jdbcType=VARCHAR},
+    #{item.trntm,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from CLNTEST 
+  	where 
+  	CLNTJRN
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.clntjrn,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

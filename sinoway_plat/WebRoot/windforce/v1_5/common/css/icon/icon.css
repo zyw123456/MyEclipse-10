@@ -1,0 +1,39 @@
+
+.icon_edit {
+	background: url("image/edit.png") no-repeat 1px 1px;
+	width: 18px;
+	height: 18px;
+	margin-left: 5px;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.icon_edit:HOVER {
+	background-color: #AED0EA;
+}
+
+.icon_delete {
+	background: url("image/delete.gif") no-repeat 1px 1px;
+	width: 18px;
+	height: 18px;
+	margin-left: 5px;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.icon_delete:HOVER {
+	background-color: #AED0EA;
+}
+
+.icon_search {
+	background: url("image/search.gif") no-repeat 1px 1px;
+	width: 18px;
+	height: 18px;
+	margin-left: 5px;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.icon_search:HOVER {
+	background-color: #AED0EA;
+}

@@ -1,0 +1,127 @@
+/*#top {
+	background: url(../image/topbg.jpg) repeat-x;
+	color: #333;
+}
+
+#top a {
+	color: #000000;
+}
+
+#footer {
+	background-color: #ededff;
+	color: #333;
+}
+
+div.maincontainer {
+	background-color: #FFFFFF;
+}
+
+#leftindex {
+	background-color: #FFFFFF;
+}
+*/
+.left_search_text {
+	color: #a5a5a5;
+	background: url(../image/search_input.png) no-repeat;
+}
+
+.left_search_btn {
+	background: url(../image/search_btn.png);
+}
+
+#expandindex {
+	border-left: 1px solid #CFCFCF;
+	background-color: #F0F0F0;
+}
+
+.leftbiznav {
+	border: 1px solid #E3E3E3;
+}
+/*
+.lefttaskmenu .title {
+	color: #fff;
+}
+
+.lefttaskmenu a {
+	color: #000000;
+}
+*/
+img {
+	border:0px;
+}
+/*
+div.taskdiv {
+	border-color: #E3E3E3;
+}
+*/
+/*内容区布局结束*/
+.customFolderOpenedIcon {
+	background-image: url('../image/open.png');
+}
+
+.customFolderClosedIcon {
+	background-image: url('../image/close.png');
+}
+
+.customLeafIcon {
+	background-image: url('../image/leaf.png');
+}
+
+/*预加载等待框*/
+#preLoader {
+	background: #fff url('../image/loading.gif') no-repeat center center;
+}
+
+.claro .dijitSplitContainer-dijitContentPane,.claro .dijitBorderContainer-dijitContentPane
+	{
+	background-color: #fff;
+	/* override background-color setting on parent .dijitBorderContainer */
+}
+
+.claro .dijitSplitContainer-child,.claro .dijitBorderContainer-child {
+	border: 1px #b5bcc7 solid;
+}
+
+/**窗体
+#showPageDiv {
+	border: 1px solid #87D3ED;
+}
+*/
+/**窗体的标题
+#showPageTitle {
+	background-color: #87D3ED;
+	color: white;
+}
+*/
+/*提示框
+#msgDiv {
+	border: 1px solid #87D3ED;
+}
+*/
+/*提示的标题
+#msgTitle {
+	background-color: #87D3ED;
+	color: white;
+}
+*/
+/*进度条：需替换 WebRoot\common\images\process.jpg
+#processDiv {
+	border: 1px solid #87D3ED;
+}
+*/
+/*进度条的标题
+#processtitle {
+	background-color: #87D3ED;
+	color: white;
+}
+*/
+/**授权框
+#authDiv {
+	background-color: #87D3ED;
+	border: 1px solid #87D3ED;
+}
+
+#authTitle {
+	background-color: #87D3ED;
+	color: white;
+}*/

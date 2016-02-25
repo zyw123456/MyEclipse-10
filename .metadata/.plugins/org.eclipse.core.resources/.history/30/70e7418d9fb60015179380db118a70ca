@@ -1,0 +1,68 @@
+package com.sinoway.common.service.parse;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+/**
+ * 通用json报文转换器(json转化为xml)
+ * 
+ * @author zhangyanwei
+ * @version 1.0 2016-01-04
+ */
+public class GeneralXmlTradeMsgTransferJson {
+
+	/**
+	 * 通过模板对JSONObject进行转换，转换输出xml
+	 * 
+	 * @param Document
+	 *            当前的xml报文
+	 * 
+	 * @param Element
+	 *            模板
+	 * 
+	 * @return 转换完成的JSON格式报文
+	 * @throws JsonMsgParseException
+	 *             TradeMsgTransfException Exception
+	 */
+
+	public String transfXmlMsgByJTempToJson(Element currel, Element el)
+			throws JsonMsgParseException, TradeMsgTransfException, Exception {
+		  JSONObject obj = new JSONObject();  
+        //这个map 是将以模板的textcontext 为键 ， 报文的textcontext为值进行存储
+		  Element root = doc.getDocumentElement();  
+          obj.put(root.getTagName(), iterateElement(root));  
+          return obj.toString();  
+	}
+
+	/**
+	 * 递归报文的xml所有的子节点
+	 * @param crel
+	 *            当前的报文xml节点
+	 * @param node
+	 *            报文模板的xml节点
+	 * @return
+	 * @throws Exception
+	 */
+	public String  parseTransfXmltoJson(Element crel, Element node,JSONObject textmap)
+			throws Exception {
+		 JSONObject obj = new JSONObject();  
+       //这个map 是将以模板的textcontext 为键 ， 报文的textcontext为值进行存储
+		 Element root = doc.getDocumentElement();  
+         obj.put(root.getTagName(), iterateElement(root));  
+         return obj.toString();  
+	
+	}
+
+}

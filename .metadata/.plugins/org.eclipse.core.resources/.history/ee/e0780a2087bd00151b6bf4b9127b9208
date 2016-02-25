@@ -1,0 +1,5 @@
+package com.sinoway.mcp.service.yimei.task;
+
+public class TestQueue {
+
+}

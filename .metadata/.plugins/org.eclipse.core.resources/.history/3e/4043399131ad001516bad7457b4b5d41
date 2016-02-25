@@ -1,0 +1,29 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.sinoway.common.service.cfg.CommonOrganService;
+
+
+@Service("commonDefOrganService")
+public class CommonDefOrganService implements CommonOrganService{
+
+	@Override
+	public Object addOrganInfo(Object OrganInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object editOrganInfo(Object OrganInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object delOrganInfo(Object OrganInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

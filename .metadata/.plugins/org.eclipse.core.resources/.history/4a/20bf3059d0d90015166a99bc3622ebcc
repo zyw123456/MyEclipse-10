@@ -1,0 +1,20 @@
+package com.sinoway.test.action;
+
+import com.yzj.wf.base.action.BaseAction;
+/**
+ * 测试demo
+ * @author zhangyanwei
+ *
+ */
+public class TestAction extends BaseAction{
+	private static final long serialVersionUID = 481077790366808497L;
+	
+	
+	public String findCreditrptList(){
+		
+		
+		
+		return SUCCESS;
+	}
+
+}

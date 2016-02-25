@@ -1,0 +1,36 @@
+package com.sinoway.common.que;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class TestCatchPool {
+
+	
+	
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args){
+		   // 解码，然后将字节转换为文件
+	 
+		
+		FileInputStream  in = null;
+		
+		InputStreamReader isr= null;
+		
+		BufferedReader br = null;
+		try{
+			
+			
+			
+		}catch(Exception e){
+		  e.printStackTrace();	
+			
+		}
+		
+		
+}
+}

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgrefPrddetil" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgrefPrddetil" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- PRDCOD -->
+    <result column="PRDCOD" property="prdcod" jdbcType="VARCHAR" />
+    <!-- PRDNAM -->
+    <result column="PRDNAM" property="prdnam" jdbcType="VARCHAR" />
+    <!-- TRNCOD -->
+    <result column="TRNCOD" property="trncod" jdbcType="VARCHAR" />
+    <!-- 验证类产品；异常查询类产品；报告信息类；金融类数据监测
+；电商类数据监测；个人被查询类数据监测
+；公共信息类数据监测
+ -->
+    <result column="PRDTYP" property="prdtyp" jdbcType="VARCHAR" />
+    <!-- 预警的阀值设置 -->
+    <result column="DAYEXPCNT" property="dayexpcnt" jdbcType="VARCHAR" />
+    <!-- 预警的阀值设置 -->
+    <result column="MONEXPCNT" property="monexpcnt" jdbcType="VARCHAR" />
+    <!-- 预警的阀值设置 -->
+    <result column="MON3EXPCNT" property="mon3expcnt" jdbcType="VARCHAR" />
+    <!-- 本次预警信息更新的频率，（天、周、月） -->
+    <result column="WARNFREQ" property="warnfreq" jdbcType="VARCHAR" />
+    <!-- STA -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			PRDTYP,
+			DAYEXPCNT,
+			MONEXPCNT,
+			MON3EXPCNT,
+			WARNFREQ,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="prdcod != null" >	  PRDCOD = #{prdcod,jdbcType=VARCHAR},	</if>
+    <if test="prdnam != null" >	  PRDNAM = #{prdnam,jdbcType=VARCHAR},	</if>
+    <if test="trncod != null" >	  TRNCOD = #{trncod,jdbcType=VARCHAR},	</if>
+    <if test="prdtyp != null" >	  PRDTYP = #{prdtyp,jdbcType=VARCHAR},	</if>
+    <if test="dayexpcnt != null" >	  DAYEXPCNT = #{dayexpcnt,jdbcType=VARCHAR},	</if>
+    <if test="monexpcnt != null" >	  MONEXPCNT = #{monexpcnt,jdbcType=VARCHAR},	</if>
+    <if test="mon3expcnt != null" >	  MON3EXPCNT = #{mon3expcnt,jdbcType=VARCHAR},	</if>
+    <if test="warnfreq != null" >	  WARNFREQ = #{warnfreq,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="prdcod != null" >
+		  and PRDCOD = #{prdcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdnam != null" >
+		  and PRDNAM = #{prdnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="trncod != null" >
+		  and TRNCOD = #{trncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdtyp != null" >
+		  and PRDTYP = #{prdtyp,jdbcType=VARCHAR}
+		</if>
+	    <if test="dayexpcnt != null" >
+		  and DAYEXPCNT = #{dayexpcnt,jdbcType=VARCHAR}
+		</if>
+	    <if test="monexpcnt != null" >
+		  and MONEXPCNT = #{monexpcnt,jdbcType=VARCHAR}
+		</if>
+	    <if test="mon3expcnt != null" >
+		  and MON3EXPCNT = #{mon3expcnt,jdbcType=VARCHAR}
+		</if>
+	    <if test="warnfreq != null" >
+		  and WARNFREQ = #{warnfreq,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_PRDDETIL
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrddetil" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_PRDDETIL
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_PRDDETIL
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgrefPrddetil" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_PRDDETIL
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGREF_PRDDETIL (ID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			PRDTYP,
+			DAYEXPCNT,
+			MONEXPCNT,
+			MON3EXPCNT,
+			WARNFREQ,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{trncod,jdbcType=VARCHAR},
+    #{prdtyp,jdbcType=VARCHAR},
+    #{dayexpcnt,jdbcType=VARCHAR},
+    #{monexpcnt,jdbcType=VARCHAR},
+    #{mon3expcnt,jdbcType=VARCHAR},
+    #{warnfreq,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrddetil" >
+    insert into B_CFGREF_PRDDETIL (ID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			PRDTYP,
+			DAYEXPCNT,
+			MONEXPCNT,
+			MON3EXPCNT,
+			WARNFREQ,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{trncod,jdbcType=VARCHAR},
+    #{prdtyp,jdbcType=VARCHAR},
+    #{dayexpcnt,jdbcType=VARCHAR},
+    #{monexpcnt,jdbcType=VARCHAR},
+    #{mon3expcnt,jdbcType=VARCHAR},
+    #{warnfreq,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGREF_PRDDETIL
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrddetil">
+  	delete from B_CFGREF_PRDDETIL 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGREF_PRDDETIL 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrddetil">
+  	update B_CFGREF_PRDDETIL 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+  
+   <update id="deleteByEntityForPrdcod" parameterType="com.sinoway.base.entity.BCfgrefPrddetil">
+  	update B_CFGREF_PRDDETIL 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	PRDCOD = #{prdcod}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGREF_PRDDETIL (ID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			PRDTYP,
+			DAYEXPCNT,
+			MONEXPCNT,
+			MON3EXPCNT,
+			WARNFREQ,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.prdcod,jdbcType=VARCHAR},
+    #{item.prdnam,jdbcType=VARCHAR},
+    #{item.trncod,jdbcType=VARCHAR},
+    #{item.prdtyp,jdbcType=VARCHAR},
+    #{item.dayexpcnt,jdbcType=VARCHAR},
+    #{item.monexpcnt,jdbcType=VARCHAR},
+    #{item.mon3expcnt,jdbcType=VARCHAR},
+    #{item.warnfreq,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGREF_PRDDETIL 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

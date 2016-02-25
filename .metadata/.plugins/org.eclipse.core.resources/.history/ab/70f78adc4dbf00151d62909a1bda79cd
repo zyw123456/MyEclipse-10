@@ -1,0 +1,15 @@
+package com.sinoway.common.que;
+
+public class TestCatchPool {
+
+	
+	
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		   // 解码，然后将字节转换为文件
+		
+}
+}

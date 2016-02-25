@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+
+	<!-- sql 查询当前用户所拥有的产品信息 -->
+	<sql-query name="rtpservice.findRtpAdrrByRptId"   cacheable="true">
+	<return-scalar column="rtpadrr" type="string"/>
+	<![CDATA[
+		select wd.RTPADRR  from WF_DAT_CREDITRPT wd WHERE wd.RPTID = (
+			select wdc.REDORPTID  from 
+			WF_DAT_CREDITRPT wdc WHERE wdc.RPTID=:rptid
+		)
+	]]>	
+	</sql-query>
+	<!-- sql 查询当前用户所拥有的产品信息去掉已经做过的产品 -->
+	<sql-query name="rtpservice.findCreadItRptOld"   cacheable="true">
+	<return-scalar column="prdcod" type="string"/>
+	<return-scalar column="prdnam" type="string"/>
+	<return-scalar column="prdtyp" type="string"/>
+	<return-scalar column="isdefult" type="string"/>
+	<![CDATA[
+		select prd.prdcod,prd.prdnam,prd.prdtyp,prd.isdefult
+			from WF_CFGREF_COMPUSRPRD compu,WF_CFGDEF_PRDINFO prd 
+			where compu.prdcod = prd.prdcod 
+			and compu.prdcod != :oldprdcod
+			and compu.peoplecode = :peoplecode
+			and instr(prd.appcod,:appcod)>0
+			and compu.sta = :sta
+			order by prd.prdcod asc
+	]]>	
+	</sql-query>
+
+  	<!-- sql 查询当前用户所拥有的产品信息 -->
+	<sql-query name="rtpservice.findCreadItRpt"   cacheable="false">
+	<return-scalar column="prdcod" type="string"/>
+	<return-scalar column="prdnam" type="string"/>
+	<return-scalar column="prdtyp" type="string"/>
+	<return-scalar column="isdefult" type="string"/>
+	<![CDATA[
+		select prd.prdcod,prd.prdnam,prd.prdtyp,prd.isdefult
+			from WF_CFGREF_COMPUSRPRD compu,WF_CFGDEF_PRDINFO prd 
+			where compu.prdcod = prd.prdcod 
+			and compu.peoplecode = :peoplecode
+			and instr(prd.appcod,:appcod)>0
+			and compu.sta = :sta
+			order by prd.prdcod asc
+	]]>	
+	</sql-query>
+	<!-- sql 个人征信报告上传 -->
+	<sql-query name="rtpservice.addRpt">
+		<![CDATA[
+			insert into WF_DAT_CREDITRPT (rptid,redorptid,prsnnam,prsncod,telno,prdcod,prdnam,rptdte,rpttim,
+									     peoplecode,orgno,parntcode,reqadrr,credtyp,rpttyp,rptnam,fntjrn,rptsta,
+									     usrid,p_usrid,corgno,cporgno,rptmoddte,rptmodtim,datcmitori)
+							      values (:rptid,:redorptid,:prsnnam,:prsncod,:telno,:prdcod,:prdnam,:rptdte,:rpttim,
+									     :peoplecode,:orgno,:parntcode,:reqadrr,:credtyp,:rpttyp,:rptnam,:fntjrn,:rptsta,
+									     :usrid,:pusrid,:corgno,:cporgno,:rptmoddte,:rptmodtim,:datcmitori)
+		]]>	
+	</sql-query>
+
+	
+</hibernate-mapping>

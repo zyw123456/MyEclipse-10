@@ -1,0 +1,244 @@
+package com.sinoway.rpt.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sinoway.common.entity.PageModel;
+import com.sinoway.common.util.Constant;
+import com.sinoway.common.util.datatables.entity.TableReqParams;
+import com.sinoway.common.util.datatables.entity.TableSearchParam;
+import com.sinoway.rpt.dao.WfDatCreditrptDao;
+import com.sinoway.rpt.entity.RptSearch;
+import com.sinoway.rpt.entity.WfDatCreditrpt;
+import com.sinoway.rpt.service.IWfDatCreditrptService;
+import com.yzj.wf.common.WFException;
+import com.yzj.wf.common.db.dao.BaseDao;
+import com.yzj.wf.core.model.po.wrapper.XPeopleInfo;
+
+public class WfDatCreditrptService implements IWfDatCreditrptService {
+	private BaseDao baseDao;
+	private WfDatCreditrptDao wfDatCreditrptDao;
+	
+
+	public WfDatCreditrptDao getWfDatCreditrptDao() {
+		return wfDatCreditrptDao;
+	}
+
+	public void setWfDatCreditrptDao(WfDatCreditrptDao wfDatCreditrptDao) {
+		this.wfDatCreditrptDao = wfDatCreditrptDao;
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * 当前登录人个人征信报告模糊查询加分页
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public List<WfDatCreditrpt> query(TableReqParams params, PageModel pageModel,XPeopleInfo curPeople) {
+		List<WfDatCreditrpt> list = null;
+		StringBuffer hql = new StringBuffer();
+		hql.append(" from WfDatCreditrpt where rptsta !='"+Constant.RptStatus.STATIS_DELETE.getCode()+"' and rpttyp= '"+Constant.RptTyp.RPTTYP_PRSN_CREDIT.getCode()+"' ");
+		hql.append(" and corgno in (" + this.getCurOrgAndChildOrg(curPeople)+")");
+		if(null == params){
+			params = new TableReqParams();
+		}
+		if(null == pageModel){
+			pageModel = new PageModel();
+		}
+		param.searchParams.push(prsnnam);
+		param.searchParams.push(prsncod);
+		param.searchParams.push(rptid);
+		param.searchParams.push(rptmodsrtdte);
+		param.searchParams.push(rptmodenddte);
+		List<TableSearchParam>  searchList  = params.getSearchParams();
+		
+		Map<String,String>  map = new HashMap<String,String>();
+		for(TableSearchParam param : searchList){
+			map.put(param.getName(), param.getValue());
+		}
+		if (map.get("prsncod") != null && !StringUtils.isBlank(map.get("prsncod").toString())) {
+			
+			hql.append(" and prsncod= '" + map.get("prsncod").toString() + "'");
+		}
+		if (map.get("prsnnam") != null && !StringUtils.isBlank(map.get("prsnnam").toString())) {
+			
+			hql.append(" and prsnnam like '%" + map.get("prsnnam").toString() + "%'");
+		}
+		if (map.get("rptid") != null && !StringUtils.isBlank(map.get("rptid").toString())) {
+			
+			hql.append(" and rptid = '" + map.get("rptid").toString() + "'");
+		}
+		if (map.get("rptmodsrtdte") != null && !StringUtils.isBlank(map.get("rptmodsrtdte").toString())) {
+			
+			hql.append(" and rptmoddte >='" + map.get("rptmodsrtdte").toLowerCase().replace("-", "")  + "'");
+		}
+		if (map.get("rptmodenddte").toString() != null && !StringUtils.isBlank(map.get("rptmodenddte").toString())) {
+			hql.append(" and rptmoddte <='" + rptSearch.getRptmodenddte() + "'");
+		}
+		if (rptSearch.getDatcmitori() != null && !"".equals(rptSearch.getDatcmitori()) && !StringUtils.isBlank(rptSearch.getDatcmitori())) {
+			hql.append(" and datcmitori = '" + rptSearch.getDatcmitori() + "'");
+		}
+		if ("up".equals(rptSearch.getTimeOrder())) {
+			hql.append(" order by rptmoddte,rptmodtim");
+		} else {
+			hql.append(" order by rptmoddte desc,rptmodtim desc");
+		}
+		try {
+			list = (List<WfDatCreditrpt>) baseDao.findbyPage(hql.toString(), pageModel.getStart(), pageModel.getPageSize());
+			for (int i = 0; i < list.size(); i++) {
+				WfDatCreditrpt rpt = list.get(i);
+				String prsncod = rpt.getPrsncod();
+				if(prsncod.length()>4){
+					prsncod = prsncod.substring(0, 3)+"***********"+prsncod.substring(prsncod.length()-4);
+				}
+				rpt.setPrsncod(prsncod);
+				String time = rpt.getRptmodtim().substring(0, 6);
+				String hour = time.substring(0, 2);
+				String min = time.substring(2, 4);
+				String second = time.substring(4);
+				time = hour + ":" + min + ":" + second;
+				String date = rpt.getRptmoddte();
+				rpt.setRptmodtim(date + " " + time);
+				if(Constant.DatCmitori.DatCmitori_PLANT.getCode().equals(rpt.getDatcmitori())){
+					rpt.setDatcmitori(Constant.DatCmitori.DatCmitori_PLANT.getValue());
+				}else if(Constant.DatCmitori.DatCmitori_INTERFACE.getCode().equals(rpt.getDatcmitori())){
+					rpt.setDatcmitori(Constant.DatCmitori.DatCmitori_INTERFACE.getValue());
+				}else if(Constant.DatCmitori.DatCmitori_APP.getCode().equals(rpt.getDatcmitori())){
+					rpt.setDatcmitori(Constant.DatCmitori.DatCmitori_APP.getValue());
+				}else if(Constant.DatCmitori.DatCmitori_WECHAT.getCode().equals(rpt.getDatcmitori())){
+					rpt.setDatcmitori(Constant.DatCmitori.DatCmitori_WECHAT.getValue());
+				}
+			}
+		} catch (WFException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * 模糊查询总条数
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public int count(RptSearch rptSearch,XPeopleInfo curPeople) {
+		int result = 0;
+		StringBuffer hql = new StringBuffer();
+		hql.append(" select count(rptid) from WfDatCreditrpt where rptsta !='"+Constant.RptStatus.STATIS_DELETE.getCode()+"' and rpttyp= '"+Constant.RptTyp.RPTTYP_PRSN_CREDIT.getCode()+"' ");
+		hql.append(" and corgno in (" + this.getCurOrgAndChildOrg(curPeople)+")");
+		if(null == rptSearch){
+			rptSearch = new RptSearch();
+		}
+		if (rptSearch.getPrsncod() != null && !StringUtils.isBlank(rptSearch.getPrsncod())) {
+			rptSearch.setPrsncod(rptSearch.getPrsncod().trim());
+			hql.append(" and prsncod='" + rptSearch.getPrsncod() + "'");
+		}
+		if (rptSearch.getPrsnnam() != null && !StringUtils.isBlank(rptSearch.getPrsnnam())) {
+			rptSearch.setPrsnnam(rptSearch.getPrsnnam().trim());
+			hql.append(" and prsnnam like '%" + rptSearch.getPrsnnam() + "%'");
+		}
+		if (rptSearch.getRptid() != null && !StringUtils.isBlank(rptSearch.getRptid())) {
+			rptSearch.setRptid(rptSearch.getRptid().trim());
+			hql.append(" and rptid = '" + rptSearch.getRptid() + "'");
+		}
+		if (rptSearch.getRptmodsrtdte() != null && !StringUtils.isBlank(rptSearch.getRptmodsrtdte())) {
+			rptSearch.setRptmodsrtdte(rptSearch.getRptmodsrtdte().trim());
+			rptSearch.setRptmodsrtdte(rptSearch.getRptmodsrtdte().replace("-", ""));
+			hql.append(" and rptmoddte >='" + rptSearch.getRptmodsrtdte() + "'");
+		}
+		if (rptSearch.getRptmodenddte() != null && !StringUtils.isBlank(rptSearch.getRptmodenddte())) {
+			rptSearch.setRptmodenddte(rptSearch.getRptmodenddte().trim());
+			rptSearch.setRptmodenddte(rptSearch.getRptmodenddte().replace("-", ""));
+			hql.append(" and rptmoddte <='" + rptSearch.getRptmodenddte() + "'");
+		}
+		if (rptSearch.getDatcmitori() != null && !"".equals(rptSearch.getDatcmitori()) && !StringUtils.isBlank(rptSearch.getDatcmitori())) {
+			hql.append(" and datcmitori = '" + rptSearch.getDatcmitori() + "'");
+		}
+		try {
+			long count = (Long) baseDao.find(hql.toString()).get(0);
+			result = (int) count;
+		} catch (WFException e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+
+	/**
+	 * 批量删除
+	 * @throws WFException 
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = false, rollbackFor = Exception.class)
+	public Object delete(String[] ids) throws WFException {
+		/*StringBuffer hql = new StringBuffer();
+		hql.append("from WfDatCreditrpt where rptid in (");
+		for (int i = 0; i < ids.length; i++) {
+			if (i < ids.length - 1) {
+				hql.append(ids[i] + ",");
+			} else {
+				hql.append(ids[i] + ")");
+			}
+		}
+		try {
+			List<WfDatCreditrpt> list = (List<WfDatCreditrpt>) baseDao.find(hql.toString());
+			for (int i = 0; i < list.size(); i++) {
+				WfDatCreditrpt w = list.get(i);
+				w.setRptsta(Constant.CreditReportStats.CREDIT_REPORT_STATUS_DELETE.getValue());
+			}
+			baseDao.batchUpdate(list);
+		} catch (WFException e) {
+			e.printStackTrace();
+		}*/
+		return wfDatCreditrptDao.deleteByRptids(ids);
+
+	}
+	/**
+	 * 查询当前登录人所在机构及其子机构的机构号拼接而成的字符串
+	 */
+	@SuppressWarnings("unchecked")
+	public String getCurOrgAndChildOrg(XPeopleInfo curPeople){
+		String orgnoStr= "";
+		StringBuffer hql = new StringBuffer();
+		hql.append("with org(corgno,sid,parentorg,orgname) as (select corgno,sid,parentorg,orgname from po_organizeinfo where parentorg='"+curPeople.getOrganizeSid()+"' union all select a.corgno,a.sid,a.parentorg,");
+		hql.append("a.orgname from po_organizeinfo a,org b where a.parentorg = b.sid ) select corgno,orgname,sid from org");
+		try {
+			List<Map<String,String>> list = (List<Map<String,String>>)baseDao.execSqlQuery(hql.toString());
+			for (int i = 0; i < list.size(); i++) {
+					orgnoStr += "'"+list.get(i).get("CORGNO") + "',";
+			}
+		} catch (WFException e) {
+			e.printStackTrace();
+		}
+		orgnoStr += "'" +curPeople.getCorgNo()+"'";
+		return orgnoStr;
+	}
+
+	public BaseDao getBaseDao() {
+		return baseDao;
+	}
+
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+
+	/**
+	 * 根据前置流水号查找报告
+	 * @throws WFException 
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public WfDatCreditrpt getWfDatCreditrptByFntjrn(String fntjrn) throws WFException {
+		return (WfDatCreditrpt) baseDao.loadByKey(WfDatCreditrpt.class, "fntjrn", fntjrn, false);
+	}
+	
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = false, rollbackFor = Exception.class)
+	public void saveOrUpdateWfDatCreditrptByfntjrn(WfDatCreditrpt creditrpt) throws WFException {
+		baseDao.saveOrUpdate(WfDatCreditrpt.class.getName(), creditrpt);
+	}
+	
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public WfDatCreditrpt findRedorptByRptId(String rptId) throws WFException  {
+		return (WfDatCreditrpt) baseDao.loadByKey(WfDatCreditrpt.class, "rptid", rptId, false);
+	}
+}

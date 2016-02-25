@@ -1,0 +1,42 @@
+var flag =0;
+var idArrayPeople;
+var isTeam = false;
+var delOrgId = null;
+var isFuzzyQuery = false;
+/**
+ * 展示子账户列表
+ */
+function creditrptList() {
+
+	$.ajax({
+		url : "findCreditrptList.action",
+		type : "post",
+		data : "",
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : true,
+		success : function(data, textStatus) {
+				if (data != null) {
+					var obj = JSON.parse(data);
+					alert(obj.trns.length);
+					if(obj != null){
+						
+					}
+				}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+
+/**
+ * 页面初始化
+ */
+$(document).ready(function() {
+	alert('');
+	creditrptList();
+});

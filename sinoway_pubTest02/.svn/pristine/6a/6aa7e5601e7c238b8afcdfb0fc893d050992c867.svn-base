@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ 
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="basecrud" namespace="/" extends="struts-default">
+		<action name="*_roleInfo" class="BCfgdefRoleinfoAction" method="{1}">
+			<result name="input">/index.jsp</result>
+			<result name="roleInfoList">/roleInfoList.jsp</result>
+			<result name="addRoleInfo">/index.jsp</result>
+			<result name="updateRoleInfo">/roleInfoUpdate.jsp</result>
+		</action>
+	</package>
+	
+	<package name="Commconfig" namespace="/" extends="struts-default">
+		<action name="insertProductInfo" class="CommonConfigAction" method="insertProductInfo">
+			<result name="success"></result>
+		</action>
+	</package>
+</struts>

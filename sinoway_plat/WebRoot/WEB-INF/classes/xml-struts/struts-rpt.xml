@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="rpt" namespace="/" extends="json-default">
+		<!-- 新增报告库 -->
+		<action name="addRptAction" class="RptAction" method="addCredItRpt">
+			<result type="json"></result>
+		</action>
+		<!-- 查询产品 -->
+		<action name="findCredItRpt" class="RptAction" method="findCredItRpt">
+			<result type="json"></result>
+		</action>
+		<!--查询产品数据去掉原有产品 -->
+		<action name="findCredItRptOld" class="RptAction" method="findCredItRptOld">
+			<result type="json"></result>
+		</action>
+		<!-- 报告文件上传 -->
+		<action name="rtpFileUpload" class="RptAction" method="rtpFileUpload">
+			   <result type="json" name="success">  
+                <param name="contentType">  
+                    text/html  
+                </param>  
+            </result>  
+            <result type="json" name="error">  
+                <param name="contentType">  
+                    text/html  
+                </param>  
+            </result>  
+		</action>
+		<!-- 验证报告库人员信息 -->
+		<action name="verifUploadInfo" class="RptAction" method="verifUploadInfo">
+			<result type="json"></result>
+		</action>
+
+		<!-- 模糊查询加分页 -->
+		<action name="rptQuery" class="rptAction" method="query">
+			<result type="json"></result>
+		</action>
+		<!-- 批量删除-->
+		<action name="rptDelete" class="rptAction" method="delete">
+			<result type="json"></result>
+		</action>
+		<!-- 查询银行 -->
+		<action name="queryBank" class="RptAction" method="queryBank">
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>    

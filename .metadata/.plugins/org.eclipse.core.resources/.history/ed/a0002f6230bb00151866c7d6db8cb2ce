@@ -1,0 +1,96 @@
+
+package com.sinoway.mcp.service.yimei.testws;
+
+import javax.xml.bind.annotation.XmlRegistry;
+
+
+/**
+ * This object contains factory methods for each 
+ * Java content interface and Java element interface 
+ * generated in the com.sinoway.mcp.service.yimei.testws package. 
+ * <p>An ObjectFactory allows you to programatically 
+ * construct new instances of the Java representation 
+ * for XML content. The Java representation of XML 
+ * content can consist of schema derived interfaces 
+ * and classes representing the binding of schema 
+ * type definitions, element declarations and model 
+ * groups.  Factory methods for each of these are 
+ * provided in this class.
+ * 
+ */
+@XmlRegistry
+public class ObjectFactory {
+
+
+    /**
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.sinoway.mcp.service.yimei.testws
+     * 
+     */
+    public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverdueArrearsResponse }
+     * 
+     */
+    public GetBeOverdueArrearsResponse createGetBeOverdueArrearsResponse() {
+        return new GetBeOverdueArrearsResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverdueArrears }
+     * 
+     */
+    public GetBeOverdueArrears createGetBeOverdueArrears() {
+        return new GetBeOverdueArrears();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverdueResponse }
+     * 
+     */
+    public GetBeOverdueResponse createGetBeOverdueResponse() {
+        return new GetBeOverdueResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverdue }
+     * 
+     */
+    public GetBeOverdue createGetBeOverdue() {
+        return new GetBeOverdue();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverduePlatform }
+     * 
+     */
+    public GetBeOverduePlatform createGetBeOverduePlatform() {
+        return new GetBeOverduePlatform();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverduePlatformDetailResponse }
+     * 
+     */
+    public GetBeOverduePlatformDetailResponse createGetBeOverduePlatformDetailResponse() {
+        return new GetBeOverduePlatformDetailResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverduePlatformDetail }
+     * 
+     */
+    public GetBeOverduePlatformDetail createGetBeOverduePlatformDetail() {
+        return new GetBeOverduePlatformDetail();
+    }
+
+    /**
+     * Create an instance of {@link GetBeOverduePlatformResponse }
+     * 
+     */
+    public GetBeOverduePlatformResponse createGetBeOverduePlatformResponse() {
+        return new GetBeOverduePlatformResponse();
+    }
+
+}

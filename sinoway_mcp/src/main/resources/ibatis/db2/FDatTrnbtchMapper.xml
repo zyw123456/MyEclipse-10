@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FDatTrnbtch" >
+  <resultMap id="BaseResultMap" type="com.sinoway.mcp.entity.FDatTrnbtch" >
+    <!-- TRNBTCHID -->
+	<id column="TRNBTCHID" property="trnbtchid" jdbcType="VARCHAR" />
+
+
+    <!-- PRDCOD -->
+    <result column="PRDCOD" property="prdcod" jdbcType="VARCHAR" />
+    <!-- PRDNAM -->
+    <result column="PRDNAM" property="prdnam" jdbcType="VARCHAR" />
+    <!-- TRNCOD -->
+    <result column="TRNCOD" property="trncod" jdbcType="VARCHAR" />
+    <!-- TRNNAM -->
+    <result column="TRNNAM" property="trnnam" jdbcType="VARCHAR" />
+    <!-- 指下游客户发起报告请求的前端：
+1、平台提交
+2、底层接口
+3、微信
+4、APP -->
+    <result column="DATORI" property="datori" jdbcType="VARCHAR" />
+    <!-- BTCHDTE -->
+    <result column="BTCHDTE" property="btchdte" jdbcType="VARCHAR" />
+    <!-- BTCHTIM -->
+    <result column="BTCHTIM" property="btchtim" jdbcType="VARCHAR" />
+    <!-- PRSNSUM -->
+    <result column="PRSNSUM" property="prsnsum" jdbcType="VARCHAR" />
+    <!-- SUBUSRID -->
+    <result column="SUBUSRID" property="subusrid" jdbcType="VARCHAR" />
+    <!-- ORGNO -->
+    <result column="ORGNO" property="orgno" jdbcType="VARCHAR" />
+    <!-- MAINUSRID -->
+    <result column="MAINUSRID" property="mainusrid" jdbcType="VARCHAR" />
+    <!-- 0-未处理 1-处理中 2-处理完成 3-超时 4-异常 -->
+    <result column="BTCHSTA" property="btchsta" jdbcType="VARCHAR" />
+    <!-- DONENUM -->
+    <result column="DONENUM" property="donenum" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    TRNBTCHID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			TRNNAM,
+			DATORI,
+			BTCHDTE,
+			BTCHTIM,
+			PRSNSUM,
+			SUBUSRID,
+			ORGNO,
+			MAINUSRID,
+			BTCHSTA,
+			DONENUM
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="prdcod != null" >	  PRDCOD = #{prdcod,jdbcType=VARCHAR},	</if>
+    <if test="prdnam != null" >	  PRDNAM = #{prdnam,jdbcType=VARCHAR},	</if>
+    <if test="trncod != null" >	  TRNCOD = #{trncod,jdbcType=VARCHAR},	</if>
+    <if test="trnnam != null" >	  TRNNAM = #{trnnam,jdbcType=VARCHAR},	</if>
+    <if test="datori != null" >	  DATORI = #{datori,jdbcType=VARCHAR},	</if>
+    <if test="btchdte != null" >	  BTCHDTE = #{btchdte,jdbcType=VARCHAR},	</if>
+    <if test="btchtim != null" >	  BTCHTIM = #{btchtim,jdbcType=VARCHAR},	</if>
+    <if test="prsnsum != null" >	  PRSNSUM = #{prsnsum,jdbcType=VARCHAR},	</if>
+    <if test="subusrid != null" >	  SUBUSRID = #{subusrid,jdbcType=VARCHAR},	</if>
+    <if test="orgno != null" >	  ORGNO = #{orgno,jdbcType=VARCHAR},	</if>
+    <if test="mainusrid != null" >	  MAINUSRID = #{mainusrid,jdbcType=VARCHAR},	</if>
+    <if test="btchsta != null" >	  BTCHSTA = #{btchsta,jdbcType=VARCHAR},	</if>
+    <if test="donenum != null" >	  DONENUM = #{donenum,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="trnbtchid != null" >
+		 and TRNBTCHID = #{trnbtchid,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="prdcod != null" >
+		  and PRDCOD = #{prdcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdnam != null" >
+		  and PRDNAM = #{prdnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="trncod != null" >
+		  and TRNCOD = #{trncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="trnnam != null" >
+		  and TRNNAM = #{trnnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="datori != null" >
+		  and DATORI = #{datori,jdbcType=VARCHAR}
+		</if>
+	    <if test="btchdte != null" >
+		  and BTCHDTE = #{btchdte,jdbcType=VARCHAR}
+		</if>
+	    <if test="btchtim != null" >
+		  and BTCHTIM = #{btchtim,jdbcType=VARCHAR}
+		</if>
+	    <if test="prsnsum != null" >
+		  and PRSNSUM = #{prsnsum,jdbcType=VARCHAR}
+		</if>
+	    <if test="subusrid != null" >
+		  and SUBUSRID = #{subusrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="orgno != null" >
+		  and ORGNO = #{orgno,jdbcType=VARCHAR}
+		</if>
+	    <if test="mainusrid != null" >
+		  and MAINUSRID = #{mainusrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="btchsta != null" >
+		  and BTCHSTA = #{btchsta,jdbcType=VARCHAR}
+		</if>
+	    <if test="donenum != null" >
+		  and DONENUM = #{donenum,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from F_DAT_TRNBTCH
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.mcp.entity.FDatTrnbtch" resultType="java.lang.Integer" >
+    select count(*) from F_DAT_TRNBTCH
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from F_DAT_TRNBTCH
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.mcp.entity.FDatTrnbtch" >
+    select 
+    <include refid="base_column_list" />
+    from F_DAT_TRNBTCH
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into F_DAT_TRNBTCH (TRNBTCHID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			TRNNAM,
+			DATORI,
+			BTCHDTE,
+			BTCHTIM,
+			PRSNSUM,
+			SUBUSRID,
+			ORGNO,
+			MAINUSRID,
+			BTCHSTA,
+			DONENUM)
+    values (
+	#{trnbtchid,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{trncod,jdbcType=VARCHAR},
+    #{trnnam,jdbcType=VARCHAR},
+    #{datori,jdbcType=VARCHAR},
+    #{btchdte,jdbcType=VARCHAR},
+    #{btchtim,jdbcType=VARCHAR},
+    #{prsnsum,jdbcType=VARCHAR},
+    #{subusrid,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{mainusrid,jdbcType=VARCHAR},
+    #{btchsta,jdbcType=VARCHAR},
+    #{donenum,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.mcp.entity.FDatTrnbtch" >
+    insert into F_DAT_TRNBTCH (TRNBTCHID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			TRNNAM,
+			DATORI,
+			BTCHDTE,
+			BTCHTIM,
+			PRSNSUM,
+			SUBUSRID,
+			ORGNO,
+			MAINUSRID,
+			BTCHSTA,
+			DONENUM)
+    values (
+	#{trnbtchid,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{trncod,jdbcType=VARCHAR},
+    #{trnnam,jdbcType=VARCHAR},
+    #{datori,jdbcType=VARCHAR},
+    #{btchdte,jdbcType=VARCHAR},
+    #{btchtim,jdbcType=VARCHAR},
+    #{prsnsum,jdbcType=VARCHAR},
+    #{subusrid,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{mainusrid,jdbcType=VARCHAR},
+    #{btchsta,jdbcType=VARCHAR},
+    #{donenum,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from F_DAT_TRNBTCH
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.mcp.entity.FDatTrnbtch">
+  	delete from F_DAT_TRNBTCH 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update F_DAT_TRNBTCH 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	TRNBTCHID = #{trnbtchid}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.mcp.entity.FDatTrnbtch">
+  	update F_DAT_TRNBTCH 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	TRNBTCHID = #{trnbtchid}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into F_DAT_TRNBTCH (TRNBTCHID,
+			PRDCOD,
+			PRDNAM,
+			TRNCOD,
+			TRNNAM,
+			DATORI,
+			BTCHDTE,
+			BTCHTIM,
+			PRSNSUM,
+			SUBUSRID,
+			ORGNO,
+			MAINUSRID,
+			BTCHSTA,
+			DONENUM)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.trnbtchid,jdbcType=VARCHAR},
+
+
+    #{item.prdcod,jdbcType=VARCHAR},
+    #{item.prdnam,jdbcType=VARCHAR},
+    #{item.trncod,jdbcType=VARCHAR},
+    #{item.trnnam,jdbcType=VARCHAR},
+    #{item.datori,jdbcType=VARCHAR},
+    #{item.btchdte,jdbcType=VARCHAR},
+    #{item.btchtim,jdbcType=VARCHAR},
+    #{item.prsnsum,jdbcType=VARCHAR},
+    #{item.subusrid,jdbcType=VARCHAR},
+    #{item.orgno,jdbcType=VARCHAR},
+    #{item.mainusrid,jdbcType=VARCHAR},
+    #{item.btchsta,jdbcType=VARCHAR},
+    #{item.donenum,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from F_DAT_TRNBTCH 
+  	where 
+  	TRNBTCHID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.trnbtchid,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

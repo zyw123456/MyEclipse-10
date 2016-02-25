@@ -1,0 +1,188 @@
+package com.sinoway.common.service.parse;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.parse.GeneralJsonMsgParser;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+
+/**
+ * 通用json报文转换器(json转化为xml)
+ * 
+ * @author zhangyanwei
+ * @version 1.0 2016-01-04
+ */
+public class GeneralXmlTradeMsgTransfer {
+	
+	public void transfJsonArrayByJtemp(Document document,Element el,JSONArray jsa,JSONObject rootJson) throws Exception{
+		NodeList nodes = el.getChildNodes();
+		
+		for(int i =0; i<nodes.getLength();i++){
+			Node curnode = nodes.item(i);
+			if (curnode.getNodeType() == 3) {
+				continue;
+			}
+			
+			// 字符节点处理
+			Element curEl = (Element) curnode;
+			
+			String from = curEl.getAttribute("FROM");
+			
+			if(from == null || "".equals(from)){
+				for(int j = 0; j <= jsa.size(); j++){
+					
+					JSONObject json = null; 
+					try{
+						json = (JSONObject)jsa.get(j-1);
+					}catch(Exception e){
+						e.printStackTrace();
+						throw new Exception();
+					}
+					
+					if(j == 0){
+						transfJsonMsgByJTemp(document,curEl,json,rootJson);
+					}else{
+						if(j == jsa.size()){
+							return;
+						}
+						Element newRow = (Element)curEl.cloneNode(true);
+						el.appendChild(newRow);
+						transfJsonMsgByJTemp(document,newRow,json,rootJson);
+					}
+						
+				}
+			}
+		}
+		
+	}
+	/**
+	 * 通过模板对JSONObject进行转换，转换输出xml
+	 * 
+	 * @param el
+	 *            模板节点
+	 * @param pJson
+	 *            当前json报文
+	 * @param rootJson
+	 *            整体Json报文
+	 * @return 转换完成的Json格式报文
+	 * @throws JsonMsgParseException
+	 *             TradeMsgTransfException Exception
+	 */
+
+	public Document transfJsonMsgByJTemp(Document document, Element el,
+			JSONObject pJson, JSONObject rootJson)
+			throws JsonMsgParseException, TradeMsgTransfException, Exception {
+
+		if (document.getChildNodes().getLength() == 0) {
+			el = (Element) el.cloneNode(true);
+			document.adoptNode(el);
+			document.appendChild(el);
+		}
+
+		// 获取模板中所有子节点，目前包含 key obj list
+		NodeList nodes = el.getChildNodes();
+
+		if (nodes != null && nodes.getLength() > 0) {
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				if (node.getNodeType() == 3) {
+					continue;
+				}
+
+				Element sEl = null;
+				// 获取当前节点名称
+				String nName = node.getNodeName();
+				// 字符节点处理
+				sEl = (Element) node;
+				
+				// 当前节点值获取表达式
+				String from = sEl.getAttribute("FROM");
+				
+				// 是否继承父节点 0-否 1-是，默认为否
+				String extend = sEl.getAttribute("EXTEND").equals("") ? "0"
+						: sEl.getAttribute("EXTEND");
+				String value = "";
+				// 判断如果没有子节点 ，没有extend
+				if (extend.equals("0") && node.getChildNodes().getLength() < 1) {
+					Object o = GeneralJsonMsgParser.getJsonValueByKey(pJson,
+							from);
+					if (o != null) {
+						try {
+							value = (String) o;
+
+							sEl.setTextContent(value);
+
+						} catch (Exception e) {
+							throw new TradeMsgTransfException(
+									"Json报文转换异常：字符节点值类型不匹配:key:" + nName
+											+ "，from:" + from);
+						}
+					}
+			    //循环多个row里面的节点
+				}else if (extend.equals("0") && node.getChildNodes().getLength() == 1){
+					Object o = GeneralJsonMsgParser.getJsonValueByKey(pJson,
+							from);
+					if (o != null) {
+						try {
+							value = (String) o;
+
+							sEl.setTextContent(value);
+
+						} catch (Exception e) {
+							throw new TradeMsgTransfException(
+									"Json报文转换异常：字符节点值类型不匹配:key:" + nName
+											+ "，from:" + from);
+						}
+					}
+			    }else {
+					JSONObject fromJson = null;
+                    JSONArray  fromArray = null;
+                	if(from == null || from.equals("")){
+    					transfJsonMsgByJTemp(document, sEl,pJson , rootJson);
+    				}
+					Object o = GeneralJsonMsgParser.getJsonValueByKey(pJson,from);
+					if(o instanceof JSONObject){
+						if (o != null) {
+							try {
+								fromJson = (JSONObject) o;
+							} catch (Exception e) {
+								throw new TradeMsgTransfException(
+										"Json报文转换异常：字符节点值类型不匹配:key:" + nName
+												+ "，from:" + from);
+							}
+							transfJsonMsgByJTemp(document, sEl, fromJson, rootJson);
+						}
+					}else if (o instanceof JSONArray ){
+						fromArray = (JSONArray)o;
+						transfJsonArrayByJtemp(document,sEl,fromArray,rootJson);
+					}
+
+				}
+
+			}
+		}
+		
+
+		System.out.println(":::::" + DocumentUtil.domToStrByDefDecode(document));
+
+              		return document;
+	}
+	
+	
+
+	
+
+}

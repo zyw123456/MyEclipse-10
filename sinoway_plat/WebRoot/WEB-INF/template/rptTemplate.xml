@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEMPLATE>
+  <TRADE id="P0000001" name="基本信息" chnlcod="" usrid="" >
+    <MOUDLE type="0" id="m1" name="个人信息" columnums="3" from="personalInf">
+      <KEY id="k1" name="姓名" width="" class="">prsnnam</KEY>
+      <KEY id="k2" name="性别" width="" class="">sex</KEY>
+	  <KEY id="k3" name="出生日期" width="" class="">birthday</KEY>
+	  <KEY id="k3" name="身份证号" width="" class="">idcard</KEY>
+	  <KEY id="k3" name="发证机关" width="" class="">cretOrg</KEY>
+	  <KEY id="k3" name="身份验证结果" width="" class="">idcradChkRes</KEY>
+    </MOUDLE>
+    <MOUDLE type="1" id="m2" order="200" name="学历信息" from="eduInf">
+      <LIST>
+        <KEY id="k3" name="毕业院校" width="" class="">eduSchool</KEY>
+        <KEY id="k4" name="学历" width="" class="">education</KEY>
+		<KEY id="k3" name="学历类型">eduLevel</KEY>
+        <KEY id="k4" name="专业" width="" class="">eduMajor</KEY>
+		<KEY id="k4" name="入学时间" width="" class="">enrolDte</KEY>
+		<KEY id="k4" name="毕业时间" width="" class="">gradDte</KEY>
+		<KEY id="k4" name="毕业结论" width="" class="">eduResult</KEY>
+      </LIST>
+    </MOUDLE>
+	<MOUDLE type="1" id="m2" name="职业资格证信息" from="professionInf">
+      <LIST>
+        <KEY id="k3" name="证书编号" width="" class="">certNo</KEY>
+        <KEY id="k4" name="证书名称" width="" class="">certNam</KEY>
+		<KEY id="k3" name="证书等级" width="" class="">certLevel</KEY>
+        <KEY id="k4" name="上报单位" width="" class="">reptUnit</KEY>
+		<KEY id="k4" name="笔试成绩" width="" class="">testMark</KEY>
+		<KEY id="k4" name="上机成绩" width="" class="">operaMark</KEY>
+		<KEY id="k4" name="证书颁证日期" width="" class="">certAwardDte</KEY>
+      </LIST>
+    </MOUDLE>
+
+  </TRADE>
+  <TRADE id="P0000002" name="反欺诈查询结果" chnlcod="" usrid="">
+    <MOUDLE type="0" id="m3" name="手机验证信息" from="mobileChkInf">
+      <KEY id="k1" name="手机验证结果" width="" class="">mobileChkRes</KEY>	
+    </MOUDLE>
+    <MOUDLE type="0" id="m3" name="银行卡验证信息" from="bnkcrdChkInf">
+      <KEY id="k2" name="银行卡验证结果" width="" class="">bnkcrdChkRes</KEY>
+    </MOUDLE>
+    <MOUDLE type="1" id="m4" name="涉诉信息" from="caseLawInf">
+      <LIST>
+        <KEY id="k7" name="涉诉数据类型" width="" class="">caseLawTyp</KEY>
+        <KEY id="k8" name="案例编号" width="" class="">caseNo</KEY>
+		<KEY id="k3" name="日期" width="" class="">regstrDate</KEY>
+        <KEY id="k4" name="涉诉摘要" width="" class="">caseLawMrk</KEY>
+        <KEY id="k1" name="匹配度" width="" class="">caseLawCret</KEY>
+      </LIST>
+    </MOUDLE>
+	<MOUDLE type="0" id="m3" name="传统高风险筛查" from="loanOvrChkInf">
+      <KEY id="k1" name="贷款逾期验证结果" width="" class="">loanOvrChkRes</KEY>
+      <KEY id="k2" name="贷款逾期验证可信度" width="" class="">loanOvrCert</KEY>
+    </MOUDLE>
+	<MOUDLE type="0" id="m3" name="互联网高风险筛查" from="highRiskPsnChkInf">
+      <KEY id="k1" name="高危人群验证结果" width="" class="">highRiskPsnRes</KEY>
+      <KEY id="k2" name="高危人群验证可信度" width="" class="">highRiskPsnCert</KEY>
+    </MOUDLE>
+  </TRADE>
+
+  <TRADE id="P0000003" name="航旅信息" chnlcod="" usrid="">
+    <MOUDLE type="0" id="m3" name="信息概要" from="airFlyInf" columnums="3">
+      <KEY id="k1" name="总飞行次数" width="" class="">airFlyAllCnt</KEY>
+      <KEY id="k2" name="最繁忙飞行月" width="" class="">airBusyMth</KEY>
+	  <KEY id="k2" name="最繁忙飞行月的飞行次数" width="" class="">airBusyMthCnt</KEY>
+	  <KEY id="k1" name="头等舱次数" width="" class="">airFstClasCnt</KEY>
+      <KEY id="k2" name="商务舱次数" width="" class="">airBusinessCnt</KEY>
+	  <KEY id="k2" name="经济舱次数" width="" class="">airCochClasCnt</KEY>
+	  <KEY id="k1" name="频繁起飞城市" width="" class="">airFreqFrmCity</KEY>
+      <KEY id="k2" name="频繁到达城市" width="" class="">airFreqArvCity</KEY>
+	  <KEY id="k2" name="乘坐最多航空公司" width="" class="">airCompRideMost</KEY>
+	  <KEY id="k1" name="国内飞行" width="" class="">airDomesticCnt</KEY>
+      <KEY id="k2" name="国际飞行" width="" class="">airInternalCnt</KEY>
+	  <KEY id="k2" name="飞行总里程" width="" class="">airAllMileage</KEY>
+      <KEY id="k2" name="平均机票价格" width="" class="">airPriceAvg</KEY>
+	  <KEY id="k2" name="免票次数" width="" class="">airFreePassCnt</KEY>
+	  <KEY id="k1" name="平均提前购票天数" width="" class="">airTickBefDayAvg</KEY>
+      <KEY id="k2" name="最近一次飞行时间" width="" class="">lstAirFlyDte</KEY>
+	  <KEY id="k2" name="最近一次起飞城市" width="" class="">lstAirFrmCity</KEY>
+	  <KEY id="k1" name="最近一次到达城市" width="" class="">lstAirArvCity</KEY>
+      <KEY id="k2" name="1年内平均折扣" width="" class="">airDis1YearAvg</KEY>
+	  <KEY id="k2" name="延误时间" width="" class="">airDelayTims</KEY>
+	  <KEY id="k2" name="平均延误时间" width="" class="">airDelayTimsAvg</KEY>
+    </MOUDLE>    
+  </TRADE>
+
+  <TRADE id="P0000004" name="个人对外投资信息" chnlcod="" usrid="">
+   <MOUDLE type="1" id="m3" name="法定代表人信息" from="lealpersonInf" >
+      <LIST>
+        <KEY id="k7" name="公司名称" width="" class="">compNam</KEY>
+        <KEY id="k8" name="公司注册号" width="" class="">compRegistNo</KEY>
+		<KEY id="k3" name="公司注册资本(万元)" width="" class="">compRegistCaptl</KEY>
+        <KEY id="k4" name="公司(机构)类型" width="" class="">compTyp</KEY>
+		<KEY id="k4" name="注册资金币种" width="" class="">cny</KEY>
+		<KEY id="k4" name="公司状态" width="" class="">compSta</KEY>
+      </LIST>
+    </MOUDLE>    
+	<MOUDLE type="1" id="m3" name="高管任职信息" from="executiveInf">
+      <LIST>
+        <KEY id="k7" name="公司名称" width="" class="">compNam</KEY>
+        <KEY id="k8" name="公司注册号" width="" class="">compRegistNo</KEY>
+		<KEY id="k3" name="公司注册资本(万元)" width="" class="">compRegistCaptl</KEY>
+        <KEY id="k4" name="公司(机构)类型" width="" class="">compTyp</KEY>
+		<KEY id="k4" name="注册资金币种" width="" class="">cny</KEY>
+		<KEY id="k4" name="公司状态" width="" class="">compSta</KEY>
+		<KEY id="k4" name="公司职务" width="" class="">compDuties</KEY>
+      </LIST>
+    </MOUDLE> 
+  </TRADE>
+
+ 
+</TEMPLATE>

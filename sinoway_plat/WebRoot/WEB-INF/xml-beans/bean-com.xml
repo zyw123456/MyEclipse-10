@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<!-- 默认IBank数据包装配服务 -->
+	<bean id="defaultIBankAssembleService" name="defaultIBankAssembleService"
+		class="com.yzj.wf.com.ibank.standard.DefaultIBankAssembleService" init-method="init"/>
+	
+	<!-- 默认通讯服务(基于SOCKET) -->
+	<bean id="defaultIBankSocketComm" name="defaultIBankSocketComm"
+		class="com.yzj.wf.com.ibank.standard.DefaultIBankSocketComm" init-method="init">
+	</bean>
+	
+	<!-- 默认本地账务流水表处理器服务 -->
+	<bean id="defaultIBankTallyFlowList" name="defaultIBankTallyFlowList"
+		class="com.yzj.wf.com.ibank.standard.DefaultIBankTallyFlowList" init-method="init">
+		<property name="tallyFlowListDao">
+			<ref bean="tallyFlowListDao"/>
+		</property>
+	</bean>
+	
+	<!-- 默认本地流水获取服务 -->
+	<bean id="defaultIBankSeqListService" name="defaultIBankSeqListService"
+		class="com.yzj.wf.com.ibank.standard.DefaultIBankSeqListService" init-method="init">
+		<property name="tallyFlowListService">
+			<ref bean="defaultIBankTallyFlowList"/>
+		</property>
+		<property name="ibankSeqListDao">
+			<ref bean="iBankSeqListDao" />
+		</property>
+	</bean>
+
+	<!-- IBank服务工厂映射MAP -->
+	<bean id="concurrentHashMap" class="java.util.concurrent.ConcurrentHashMap">
+		<constructor-arg>
+			<map>
+				<entry key="IBANKASSEMBLE" value-ref="defaultIBankAssembleService" />
+				<entry key="IBANKSOCKET" value-ref="defaultIBankSocketComm" />
+				<entry key="TALLYFLOWLIST" value-ref="defaultIBankTallyFlowList" />
+				<entry key="IBankSeqListService" value-ref="defaultIBankSeqListService" />
+				<!-- ****服务端服务映射**** -->
+				<!-- IBank服务端控制器 -->
+				<entry key="IBANKSERVER" value-ref="iBankServer" />
+			
+				<!-- IBank交易码获取器服务 -->
+				<entry key="IBANKTRADECODEGETTER" value-ref="NORMALTRADECODEGETTER" />
+				<!-- 样例处理服务 -->
+				<entry key="SampleProcess" value-ref="sampleProcess"/>
+				<!--  
+				<entry key="SEALPROCESS" value-ref="sealProcess" />
+				-->
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 服务工厂 -->
+	<!-- 在服务工厂中配置的服务可以根据特定交易配置文件中配置的服务标识符动态获取相关服务 -->
+	<bean id="serviceFactory" name="serviceFactory" class="com.yzj.wf.com.ibank.servicefactory.ServiceFactory"
+		init-method="init">
+		<property name="concurrentHashMap">
+			<ref bean="concurrentHashMap"/>
+		</property>
+		<property name="lazyStartTime">
+			<value>5</value>
+		</property>
+	</bean>
+	
+	<!-- 账务流水表服务配置 -->
+	<bean id="CTallyFlowListService" name="CTallyFlowListService" 
+		class="com.yzj.wf.com.ibank.databaseprocess.impl.CTallyFlowListService"	
+		init-method="init">
+		<property name="tallyFlowListDao">
+			<ref bean="tallyFlowListDao"/>
+		</property>
+	</bean>
+	
+	<!-- 前置流水表服务配置 -->
+	<bean id="CIBankSeqListService" name="CIBankSeqListService"
+		class="com.yzj.wf.com.ibank.databaseprocess.impl.CIBankSeqListService"
+		init-method="init">
+		<property name="ibankSeqListDao">
+			<ref bean="iBankSeqListDao" />
+		</property>
+	</bean>
+	
+	<!-- 模板工厂 -->	
+	<bean id="templateFactoryService" name="templateFactoryService"
+		class="com.yzj.wf.com.ibank.templatefactory.CTemplateFactory" init-method="init">
+		<!-- 如配置文件在/WEB-INF/IBankClientMapsTemplate.xml下，则可以配置形如 ../IBankServerMapsTemplate.xml的地址。../指的是当前类路径的上一级目录，即/WEB-INF/下-->
+		<property name="templateFileUrlServer">
+			<value>com/yzj/wf/com/ibank/standard/IBankServerMapsTemplate.xml</value>
+		</property>
+		<property name="templateFileUrlClient">
+			<value>com/yzj/wf/com/ibank/standard/IBankClientMapsTemplate.xml</value>
+		</property>
+	</bean>
+	
+	<!-- IBank字段填充服务 --> 
+	<bean id="iBankReviseServer" name="iBankReviseServer"
+		class="com.yzj.wf.com.ibank.core.IBankReviseServer" init-method="init">
+		<property name="serviceFactory">
+			<ref bean="serviceFactory"/>
+		</property>
+	</bean>
+	
+	<!-- IBank字段长度修正服务 -->
+	<bean id="iBankFixServer" name="iBankFixServer" 
+		class="com.yzj.wf.com.ibank.core.IBankFixServer" init-method="init"/>
+		
+	<!-- 通讯客户端核心服务 -->
+	<bean id="IBank" name="IBank" class="com.yzj.wf.com.ibank.core.CBank"
+		init-method="init">
+		<property name="templateFactory">
+			<ref bean="templateFactoryService"/>
+		</property>
+		<property name="reviseService">
+			<ref bean="iBankReviseServer"/>
+		</property>
+		<property name="fixService">
+			<ref bean="iBankFixServer"/>
+		</property>
+		<property name="serviceFactory">
+			<ref bean="serviceFactory"/>
+		</property>
+	</bean>
+	<!-- IBank服务端个性化服务********************************************************************** -->
+	<!-- 验印处理服务 -->
+	<!--  
+	<bean id="sealProcess" class="com.infotech.xdocproc.shnsh.server.receiveseal.ReceiveProveResult" />
+	-->
+	<bean id="sampleProcess" class="com.yzj.wf.com.ibank.standard.server.SampleProcess"/>
+	
+	<!-- IBank交易码获取器服务 --> 
+	<bean id="NORMALTRADECODEGETTER" class="com.yzj.wf.com.ibank.standard.server.IBankServerNormalTradeCodeGetter" />
+	<!-- 上传下传扩展服务(依赖于数据库) -->
+	<bean id="ExternService_DB" name="/ExternService_DB"
+		class="com.yzj.wf.com.ibank.standard.server.IBankExternDBService">
+		<property name="serviceFactory">
+			<ref bean="serviceFactory"/>
+		</property> 
+	
+	</bean>	
+	
+	<!-- IBank服务端控制器 -->
+	<bean id="iBankServer" class="com.yzj.wf.com.ibank.standard.server.CBankServer" >
+		<property name="maxThreads">
+			<value>10</value>
+		</property>
+		<property name="maxSpareThreads">
+			<value>5</value>
+		</property>
+		<property name="mixSpareThreads">
+			<value>2</value>
+		</property>
+		<property name="workWaitTimeout">
+			<value>60000</value>
+		</property>	
+	</bean>		
+	
+	<!-- 通讯服务端组件(基于SOCKET) -->
+	<bean id="SocketControl" name="SocketControl" class="com.yzj.wf.com.ibank.standard.server.IBankSocketControl"
+	    init-method="init">
+	    <property name="port">
+			<value>10000</value>
+		</property>	
+	    <property name="templateFactory">
+			<ref bean="templateFactoryService"/>
+		</property>
+	    <property name="serviceFactory">
+	        <ref bean="serviceFactory"/>
+	    </property>
+	    <property name="fixService">
+			<ref bean="iBankFixServer"/>
+		</property>
+		<property name="reviseService">
+			<ref bean="iBankReviseServer"/>
+		</property>
+	</bean>
+</beans>

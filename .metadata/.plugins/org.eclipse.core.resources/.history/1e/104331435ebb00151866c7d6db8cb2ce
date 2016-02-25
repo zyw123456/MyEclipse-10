@@ -1,0 +1,126 @@
+package com.sinoway.common.util;
+
+import java.awt.Color;
+import java.io.InputStream;
+import java.util.Random;
+import java.util.zip.Adler32;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedInputStream;
+import org.apache.commons.codec.digest.DigestUtils;
+
+public final class UEncrypt
+{
+  public static final HASH_TYPE getHashTypeByName(String _hashTypeName)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getHashTypeByName", new Object[] { _hashTypeName });
+
+    return HASH_TYPE.valueOf(_hashTypeName);
+  }
+
+  public static final CHECK_CODE_TYPE getCheckCodeTypeByName(String _checkCodeTypeName)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getCheckCodeTypeByName", new Object[] { _checkCodeTypeName });
+
+    return CHECK_CODE_TYPE.valueOf(_checkCodeTypeName);
+  }
+
+  public static final String getHash(HASH_TYPE _hashType, String _message)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getHash", new Object[] { _hashType, _message });
+
+    if (_hashType.equals(HASH_TYPE.MD5)) return DigestUtils.md5Hex(_message);
+    if (_hashType.equals(HASH_TYPE.SHA1)) return DigestUtils.shaHex(_message);
+    if (_hashType.equals(HASH_TYPE.SHA2)) return DigestUtils.sha256Hex(_message);
+    throw new Exception("UEncrypt : No such hash type, failed to getHash");
+  }
+
+  public static final Long getCheckCodeNum(CHECK_CODE_TYPE _checkCodeType, InputStream _in)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getCheckCodeNum", new Object[] { _checkCodeType, _in });
+
+    if (_checkCodeType.equals(CHECK_CODE_TYPE.CRC32)) { CRC32 crc32 = new CRC32(); CheckedInputStream cin = new CheckedInputStream(_in, crc32); while (cin.read() != -1);
+      return Long.valueOf(crc32.getValue()); }
+    if (_checkCodeType.equals(CHECK_CODE_TYPE.ADLER32)) { Adler32 adler32 = new Adler32(); for (CheckedInputStream cin = new CheckedInputStream(_in, adler32); cin.read() != -1; );
+      return Long.valueOf(adler32.getValue()); }
+    throw new Exception("UEncrypt : No such check code type, failed to getCheckCodeNum");
+  }
+
+  public static final String getCheckCodeStr(CHECK_CODE_TYPE _checkCodeType, InputStream _in)
+    throws Exception
+  {
+    return Long.toHexString(getCheckCodeNum(_checkCodeType, _in).longValue());
+  }
+
+  public static final Long getCheckCodeNum(CHECK_CODE_TYPE _checkCodeType, String _message)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getCheckCodeNum", new Object[] { _checkCodeType, _message });
+
+    if (_checkCodeType.equals(CHECK_CODE_TYPE.CRC32)) { CRC32 crc32 = new CRC32(); crc32.update(_message.getBytes()); return Long.valueOf(crc32.getValue()); }
+    if (_checkCodeType.equals(CHECK_CODE_TYPE.ADLER32)) { Adler32 adler32 = new Adler32(); adler32.update(_message.getBytes()); return Long.valueOf(adler32.getValue()); }
+    throw new Exception("UEncrypt : No such check code type, failed to getCheckCodeNum");
+  }
+
+  public static final String getCheckCodeStr(CHECK_CODE_TYPE _checkCodeType, String _message)
+    throws Exception
+  {
+    return Long.toHexString(getCheckCodeNum(_checkCodeType, _message).longValue());
+  }
+
+  public static final String rot13(String _source)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "rot13", new Object[] { _source });
+
+    StringBuffer _target = new StringBuffer();
+    for (int i = 0; i < _source.length(); i++) {
+      char c = _source.charAt(i);
+      if ((c >= 'a') && (c <= 'm')) c = (char)(c + '\r');
+      else if ((c >= 'A') && (c <= 'M')) c = (char)(c + '\r');
+      else if ((c >= 'n') && (c <= 'z')) c = (char)(c - '\r');
+      else if ((c >= 'N') && (c <= 'Z')) c = (char)(c - '\r');
+      _target.append(c);
+    }
+    return _target.toString();
+  }
+
+  public static final String getRandomNumberStr(Integer _length)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getRandomNumberStr", new Object[] { _length });
+
+    StringBuffer _target = new StringBuffer();
+    Random _random = new Random();
+    for (int i = 0; i < _length.intValue(); i++)
+      _target.append(_random.nextInt(10));
+    return _target.toString();
+  }
+
+  public static final Color getRandomColor(Integer _fc, Integer _bc)
+    throws Exception
+  {
+    UFormat.checkEmptyParam("UEncrypt", "getRandomColor", new Object[] { _fc, _bc });
+
+    Random random = new Random();
+    if (_fc.intValue() > 255) _fc = Integer.valueOf(255);
+    if (_bc.intValue() > 255) _bc = Integer.valueOf(255);
+    int r = _fc.intValue() + random.nextInt(_bc.intValue() - _fc.intValue());
+    int g = _fc.intValue() + random.nextInt(_bc.intValue() - _fc.intValue());
+    int b = _fc.intValue() + random.nextInt(_bc.intValue() - _fc.intValue());
+    return new Color(r, g, b);
+  }
+
+  public static enum CHECK_CODE_TYPE
+  {
+    CRC32, ADLER32;
+  }
+
+  public static enum HASH_TYPE
+  {
+    MD5, SHA1, SHA2;
+  }
+}

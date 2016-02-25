@@ -1,0 +1,50 @@
+package com.sinoway.common.service.parse;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jdom.input.SAXBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.parse.GeneralJsonMsgParser;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+
+/**
+ * 通用json报文转换器(json转化为xml)
+ * 
+ * @author zhangyanwei
+ * @version 1.0 2016-01-04
+ */
+public class TestTranXml {
+  
+	   // 测试  
+   public static void main(String[] args) {  
+	       System.out.println( ("<MapSet>"  
+               + "<MapGroup id='Sheboygan'>" + "<Map>"  
+               + "<Type>MapGuideddddddd</Type>"  
+	               + "<SingleTile>true</SingleTile>" + "<Extension>"  
+	               + "<ResourceId>ddd</ResourceId>" + "</Extension>" + "</Map>"  
+	                + "<Map>" + "<Type>ccc</Type>" + "<SingleTile>ggg</SingleTile>"  
+              + "<Extension>" + "<ResourceId>aaa</ResourceId>"  
+	               + "</Extension>" + "</Map>" + "<Extension />" + "</MapGroup>"  
+	                + "<ddd>" + "33333333" + "</ddd>" + "<ddd>" + "444" + "</ddd>"  
+               + "</MapSet>"));  
+	   }  
+
+	
+
+}

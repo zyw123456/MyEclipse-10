@@ -1,0 +1,44 @@
+package com.sinoway.mcp.service.strade.imate.token;
+
+import java.io.UnsupportedEncodingException;
+import org.apache.http.conn.ConnectTimeoutException;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.constant.AccountConstant;
+import com.sinoway.common.util.MD5Utils;
+import com.sinoway.mcp.service.strade.gzt.util.Token;
+import com.sinoway.mcp.service.strade.imate.ws.HDGetAccessToken;
+import com.sinoway.mcp.service.strade.imate.ws.HDGetAccessTokenSoap;
+
+/**
+ * 亿美获取token方法
+ * @author zhangyanwei
+ *
+ */
+public class TokenSington {
+	public static ImToken token = null;
+	
+	public  static String gettoken() throws UnsupportedEncodingException, ConnectTimeoutException{
+		  
+		  if (token == null){
+			  token  = Token.getInstance();
+		  }
+		  synchronized (token) {
+			
+		  //2小时过期 这里1小时50分钟获取一次
+		   if(null == token.getTokenid() || System.currentTimeMillis() - token.getTime()>1000*60*110 ){
+			   HDGetAccessToken accessToken = new HDGetAccessToken();
+			   HDGetAccessTokenSoap hdGetAccessTokenSoap = accessToken.getHDGetAccessTokenSoap();
+			   String json = hdGetAccessTokenSoap.getACCESSTOKEN("8AC20B7CW6D98W4369WB876WCCA3E36EDB3B", "32C82793L7B2CL41FFL9F67L6D75BF2CC46D", "4F0DF96BH6608H4C14H9867HC801263B1304");
+			   JSONObject obj =(JSONObject) JSONObject.parse(json);
+			   //authtoken 10秒失效 获取成功后10秒内无法再次获取
+			   token.setTokenid(obj.getString("access_token"));
+			   token.setTime(System.currentTimeMillis());
+		   }
+		   
+		  }
+		   
+		   return token.getTokenid();
+		   
+	   } 		    
+
+}

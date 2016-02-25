@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<!-- 查询报告 -->
+	<sql-query name="accountDao.getAccountInfoBycompno"
+		cacheable="true">
+		<![CDATA[
+			select {usrprd.*}  from WF_CFGDEF_COMPINFO  usrprd
+			where usrprd.COMPNO = :compid
+		]]>
+		<return alias="usrprd" class="com.sinoway.acc.entity.WfCfgdefCompinfo"/>
+	</sql-query>
+</hibernate-mapping>

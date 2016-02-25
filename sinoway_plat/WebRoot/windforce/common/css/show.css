@@ -1,0 +1,19 @@
+/* 此文件用于显示界面元素的配置文件 */
+
+/* 界面顶部区域开始 */
+
+/* 柜员编号 */
+.nav_menu_nav .peopleCodeSpan{
+/* 	display: none; */ 
+}
+/* 柜员姓名 */
+.nav_menu_nav .peopleNameSpan{
+/* 	display: none; */
+}
+/* 机构号 */
+.nav_menu_nav .orgNoSpan{
+/* 	display: none; */
+}
+
+/* 界面顶部区域结束 */
+

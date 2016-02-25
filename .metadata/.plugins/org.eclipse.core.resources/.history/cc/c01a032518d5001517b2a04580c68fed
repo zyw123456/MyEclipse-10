@@ -1,0 +1,184 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.base.entity.BCfgdefCompusr;
+import com.sinoway.base.entity.BCfgrefCompusrprd;
+import com.sinoway.base.service.BCfgdefCompusrService;
+import com.sinoway.base.service.BCfgrefCompusrprdService;
+import com.sinoway.common.constant.Constant.HttpStatus;
+import com.sinoway.common.constant.Constant.MsgCode;
+import com.sinoway.common.service.cfg.CommonUserService;
+import com.sinoway.common.util.GUIDGenerator;
+@Service("commonDefUserService")
+public class CommonDefUserService  implements CommonUserService {
+	Logger logger = LogManager.getLogger(CommonDefProductService.class.getName());
+	@Autowired
+	private BCfgdefCompusrService bCfgdefCompusrService;
+	@Autowired
+	private BCfgrefCompusrprdService bCfgrefCompusrprdService;
+	
+	@Override
+	public Object addusrInfo(Object usrInfo) throws Exception {
+		JSONObject jo = (JSONObject) usrInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	  try{
+		 //对字段长度进行校验
+		 if(jo.get("usrnam").toString().length() >64){
+			 msg.append("新增用户名超长\n");  
+		 }
+		 if(jo.get("usrid").toString().length() >32){
+			 msg.append("新增父用户id超长\n");  
+		 }
+		 if(jo.get("orgno").toString().length() >24){
+			 msg.append("新增机构号超长\n");  
+		 }
+		 logger.info("新增用户报文" + jo.toJSONString());
+		BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+		bCfgdefCompusr.setUsrnam(jo.get("usrnam").toString() == null ? "" : jo.get("usrnam").toString());
+		bCfgdefCompusr.setPUsrid(jo.get("usrid").toString()== null ? "" : jo.get("usrid").toString()); // 父账户
+		bCfgdefCompusr.setUsrid(GUIDGenerator.generateId()); // 企业用户
+		bCfgdefCompusr.setUsrtype(jo.get("usrtype").toString());
+		bCfgdefCompusr.setUsrpass(jo.get("usrpass").toString());
+		bCfgdefCompusr.setOrgno(jo.get("orgno").toString()== null ? "" : jo.get("orgno").toString());
+		String proods[] = jo.get("prdcods").toString().split(",");
+		bCfgdefCompusr.setId(GUIDGenerator.generateId());
+		bCfgdefCompusr.setUsrsta(HttpStatus.STATIS_SUCCESS.getCode());
+		// 新增产品用户关系对应表
+		for (int i = 0; i < proods.length; i++) {
+			BCfgrefCompusrprd prd = new BCfgrefCompusrprd();
+			prd.setId(GUIDGenerator.generateId());
+			prd.setPrdcod(proods[i]);
+			prd.setSta(HttpStatus.STATIS_SUCCESS.getCode());
+			prd.setUsrid(bCfgdefCompusr.getUsrid());
+			prd.setUsrtype(jo.get("usrtype").toString());
+			Object objop = this.addCompusrprd(prd);
+		}
+		// 新增用户表
+		Object obj = bCfgdefCompusrService.insert("BCfgdefCompusr.insertByEntity",bCfgdefCompusr);
+
+		backobj.put("msgcode", MsgCode.MSGCODE_ADDCHILDACC.getValue()); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+		backobj.put("subusrid", bCfgdefCompusr.getUsrid() ==null ? "" : bCfgdefCompusr.getUsrid()); // 用户编码
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states", HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append( "新增用户成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("新增用户失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	  }catch(Exception e){
+		  logger.info("新增用户出现异常" + jo.toJSONString());
+		e.printStackTrace();
+		throw e;
+	  }
+		return backobj;
+	}
+
+	@Override
+	public Object editusrInfo(Object usrInfo) throws Exception {
+		JSONObject jo = (JSONObject) usrInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	try{
+		 if(jo.get("usrnam").toString().length() >64){
+			 msg.append("修改用户名超长\n");  
+		 }
+		
+		 if(jo.get("orgno").toString().length() >24){
+			 msg.append("修改机构号超长\n");  
+		 }
+		 if(jo.get("subusrid").toString().length() >32){
+			 msg.append("修改子账户id超长\n");  
+		 }
+		BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+		bCfgdefCompusr.setPUsrnam(jo.get("usrnam").toString() == null ? "" : jo.get("usrnam").toString()); // 用户名
+		bCfgdefCompusr.setOrgno(jo.get("orgno").toString()== null ? "" : jo.get("orgno").toString());
+		bCfgdefCompusr.setUsrid(jo.get("subusrid").toString() == null ? "" : jo.get("subusrid").toString());
+		String proods[] = jo.get("prdcods").toString().split(",");
+		for (int i = 0; i < proods.length; i++) {
+			BCfgrefCompusrprd prd = new BCfgrefCompusrprd();
+			prd.setPrdcod(proods[i]);
+			prd.setSta(HttpStatus.STATIS_SUCCESS.getCode());
+			prd.setUsrid(bCfgdefCompusr.getUsrid());
+			Object objop = this.editCompusrprd(prd);
+		}
+		Object obj = bCfgdefCompusrService.update("BCfgdefCompusr.updateByEntity",bCfgdefCompusr);
+		backobj.put("msgcode", MsgCode.MSGCODE_UPDATECHILDACC.getValue()); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states", HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("修改用户成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("修改用户失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	 }catch(Exception e){
+		 e.printStackTrace();
+		 throw e;
+	 }
+		return backobj;
+	}
+
+	@Override
+	public Object delusrInfo(Object usrInfo) throws Exception {
+		JSONObject jo = (JSONObject) usrInfo;
+		JSONObject backobj  =  new JSONObject();
+		StringBuffer msg = new StringBuffer();
+	try{
+		if(jo.get("subusrid").toString().length() >32){
+			 msg.append("删除子账户id超长\n");  
+		}
+		BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+		bCfgdefCompusr.setUsrid(jo.get("subusrid").toString()); // 根据用户id删除一条记录
+		bCfgdefCompusr.setUsrsta(HttpStatus.STATIS_FAIL.getCode()); // 逻辑删除操作 0 代表不可用
+
+		Object obj =  bCfgdefCompusrService.update("BCfgdefCompusr.updateByEntity",bCfgdefCompusr);
+		backobj.put("msgcode", MsgCode.MSGCODE_DELETECHILDACC.getValue()); // 报文类型
+		backobj.put("operator", jo.get("operator")); // 操作人
+		if (obj.toString().equals(HttpStatus.STATIS_SUCCESS.getCode())) {
+			backobj.put("states",HttpStatus.STATIS_SUCCESS.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("删除用户成功报文"); // 返回的描述
+		} else {
+			backobj.put("states", HttpStatus.STATIS_FAIL.getCode()); // 状态 0 -失败 1-表示成功
+			 msg.append("删除用户失败报文"); // 返回的描述
+		}
+		backobj.put("result", msg.toString()); // 返回的描述
+	}catch(Exception e){
+		e.printStackTrace();
+		throw e;
+	}
+		return backobj;
+	}
+
+	@Override
+	public Object upPwdusrInfo(Object usrInfo) throws Exception {
+		return bCfgdefCompusrService.update("BCfgdefCompusr.updateByEntity",usrInfo);
+	}
+
+	@Override
+	public Object addCompusrprd(Object bCfgdefCompusr) throws Exception {
+		return bCfgrefCompusrprdService.insert("BCfgrefCompusrprd.insertByEntity",bCfgdefCompusr);
+	}
+	
+	@Override
+	public Object editCompusrprd(Object usrInfo) throws Exception {
+		return bCfgrefCompusrprdService.update("BCfgrefCompusrprd.updateByEntity",usrInfo);
+	}
+
+	@Override
+	public Object delCompusrprd(Object usrInfo) throws Exception {
+		return bCfgrefCompusrprdService.update("BCfgrefCompusrprd.updateByEntity",usrInfo);
+	}
+
+
+	
+}

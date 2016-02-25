@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefFntcustsrv" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefFntcustsrv" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- CHNLCOD -->
+    <result column="CHNLCOD" property="chnlcod" jdbcType="VARCHAR" />
+    <!-- SERVCOD -->
+    <result column="SERVCOD" property="servcod" jdbcType="VARCHAR" />
+    <!-- SERNAM -->
+    <result column="SERNAM" property="sernam" jdbcType="VARCHAR" />
+    <!-- SERVIP -->
+    <result column="SERVIP" property="servip" jdbcType="VARCHAR" />
+    <!-- SERVMAC -->
+    <result column="SERVMAC" property="servmac" jdbcType="VARCHAR" />
+    <!-- 0-停用 1-启用 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			CHNLCOD,
+			SERVCOD,
+			SERNAM,
+			SERVIP,
+			SERVMAC,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="chnlcod != null" >	  CHNLCOD = #{chnlcod,jdbcType=VARCHAR},	</if>
+    <if test="servcod != null" >	  SERVCOD = #{servcod,jdbcType=VARCHAR},	</if>
+    <if test="sernam != null" >	  SERNAM = #{sernam,jdbcType=VARCHAR},	</if>
+    <if test="servip != null" >	  SERVIP = #{servip,jdbcType=VARCHAR},	</if>
+    <if test="servmac != null" >	  SERVMAC = #{servmac,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="chnlcod != null" >
+		  and CHNLCOD = #{chnlcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="servcod != null" >
+		  and SERVCOD = #{servcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="sernam != null" >
+		  and SERNAM = #{sernam,jdbcType=VARCHAR}
+		</if>
+	    <if test="servip != null" >
+		  and SERVIP = #{servip,jdbcType=VARCHAR}
+		</if>
+	    <if test="servmac != null" >
+		  and SERVMAC = #{servmac,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_FNTCUSTSRV
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntcustsrv" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_FNTCUSTSRV
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_FNTCUSTSRV
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefFntcustsrv" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_FNTCUSTSRV
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_FNTCUSTSRV (ID,
+			CHNLCOD,
+			SERVCOD,
+			SERNAM,
+			SERVIP,
+			SERVMAC,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{chnlcod,jdbcType=VARCHAR},
+    #{servcod,jdbcType=VARCHAR},
+    #{sernam,jdbcType=VARCHAR},
+    #{servip,jdbcType=VARCHAR},
+    #{servmac,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntcustsrv" >
+    insert into B_CFGDEF_FNTCUSTSRV (ID,
+			CHNLCOD,
+			SERVCOD,
+			SERNAM,
+			SERVIP,
+			SERVMAC,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{chnlcod,jdbcType=VARCHAR},
+    #{servcod,jdbcType=VARCHAR},
+    #{sernam,jdbcType=VARCHAR},
+    #{servip,jdbcType=VARCHAR},
+    #{servmac,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_FNTCUSTSRV
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntcustsrv">
+  	delete from B_CFGDEF_FNTCUSTSRV 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_FNTCUSTSRV 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefFntcustsrv">
+  	update B_CFGDEF_FNTCUSTSRV 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_FNTCUSTSRV (ID,
+			CHNLCOD,
+			SERVCOD,
+			SERNAM,
+			SERVIP,
+			SERVMAC,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.chnlcod,jdbcType=VARCHAR},
+    #{item.servcod,jdbcType=VARCHAR},
+    #{item.sernam,jdbcType=VARCHAR},
+    #{item.servip,jdbcType=VARCHAR},
+    #{item.servmac,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_FNTCUSTSRV 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

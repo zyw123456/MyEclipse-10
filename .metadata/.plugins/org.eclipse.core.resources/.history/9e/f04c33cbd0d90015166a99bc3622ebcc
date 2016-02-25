@@ -1,0 +1,7 @@
+package com.sinoway.test.service.impl;
+
+import com.sinoway.test.service.ITestDemoService;
+
+public class TestDemoService implements ITestDemoService {
+
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="sinoway_pubTest02"
+  id="myeclipse.1446002367205"
+  context-root="/sinoway_pubTest02"
+  j2ee-spec="6.0"
+  archive="sinoway_pubTest02.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebContent" />
+  </attributes>
+</project-module>
+

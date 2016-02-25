@@ -1,0 +1,186 @@
+//全局变量，近三日流量
+var threeFlow = [12,21,10];
+/**
+ * 页面初始化
+ */
+$(document).ready(function() {
+	//登录成功,默认展示首页
+	$("#content-all").show();
+	$("#content-all").load(ctx + "/sinoway/dk3/home.jsp");
+	$("#foot").load(ctx + "/sinoway/dk3/foot1.jsp");
+	configHeight();
+	//解析各级菜单
+	parseNaviMenuToObj(naviMenu);
+	//动态生成一级菜单 
+	generateFirstMenu();
+	//注册一级菜单点击事件
+	$("li").click(
+			function () {
+				$("li").removeClass("active");
+				$(this).addClass("active");
+			}
+	);
+
+});
+
+/**
+ * 控制左右高度一致
+ */
+function configHeight(){
+	 var conheight =  $(window).height() - $(".top").height() - $(".foot").parent().height() - 40;
+     var heightleft = $("#leftheight").height();
+     var heightright = $("#rightheight").height();
+     var realheight;
+     realheight = heightleft > heightright?heightleft:heightright;
+     if(conheight > realheight){
+         $("#rightheight").css("min-height" ,conheight);
+         $("#leftheight").css("min-height",conheight);
+     }
+}
+/**
+ * 动态生成一级菜单
+ */
+function generateFirstMenu(){
+	var html = '';
+	if(null != menuObj&&null!=menuObj.firstMenu){
+		for(var i=0;i<menuObj.firstMenu.length;i++){
+			//如果是首页,添加选中样式
+			if(menuObj.firstMenu[i].id =='19C561823349405389B751998A1C4D91'){
+				html +="<li class='active' ><a href='javascript:void(0);' onclick ='firstMenuClick("+i+")'>"+menuObj.firstMenu[i].name+"</a></li>";
+			}else{
+				html += "<li ><a href='javascript:void(0);' onclick ='firstMenuClick("+i+")'>"+menuObj.firstMenu[i].name+"</a></li>";
+			}
+		}
+		$("#firstMenu").html(html);
+	}
+}
+/**
+ * 检查session是否过期
+ * @param index,菜单数组下标
+ * @param level,菜单级别
+ */
+/*function checkSession(index,level){
+	$.ajax({
+		url : "checkSession.action",
+		type : "post",
+		data : "",
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : false,
+		success : function(data, textStatus) {
+			if (data != "") {
+				if(data == 1){
+					if(level == 1){	
+						firstMenuClick(index);
+					}else if(level == 2){
+						secondMenuClick(index);
+					}
+				}else{
+					location.href = ctx + "/sinoway/dk/login.jsp";
+				}
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}*/
+/**
+ * 点击一级菜单
+ * @param index,菜单数组下标
+ */
+function firstMenuClick(index){
+	var childrenId = menuObj.firstMenu[index].children;
+	//如果是首页
+	if(menuObj.firstMenu[index].id=='19C561823349405389B751998A1C4D91'){
+		$("#content-all").load(ctx + "/sinoway/dk3/home.jsp");
+		$("#content-split").hide();
+		$("#content-all").show();
+		$("#foot").removeClass("top-margin-20");
+		$("#foot").load(ctx + "/sinoway/dk3/foot1.jsp");
+		configHeight();
+	}else{
+		$("#content-split").show();
+    	$("#content-all").hide();
+    	$("#foot").addClass("top-margin-20");
+    	$("#foot").load(ctx + "/sinoway/dk3/foot2.jsp");
+		var html = "";
+		for(var i=0;i<childrenId.length;i++){
+			for(var j=0;j<menuObj.secondMenu.length;j++){
+				if(childrenId[i]._reference == menuObj.secondMenu[j].id){
+					if(menuObj.secondMenu[j].id == "A6D36C5D8458494AA6D033C3D52ED1C2"||menuObj.secondMenu[j].id=="C07338EC52D146ACB1522A8872574AE7"||menuObj.secondMenu[j].id=="32749A3B2B194011A717D6F9F1AA0B6F"){
+						html += "<a  class='list-group-item active' href='javascript:void(0);' onclick ='secondMenuClick("+j+")'>"+menuObj.secondMenu[j].name+"</a>";
+					}else{
+						html += "<a class='list-group-item' href='javascript:void(0);' onclick ='secondMenuClick("+j+")'>"+menuObj.secondMenu[j].name+"</a>";
+					}
+				}
+			}
+		}
+		if(menuObj.firstMenu[index].id=='24CE05CCC09B4F3AA12FC78ABA5B6B57'){
+			//增加退出登录按钮
+			var logout = '退出系统';
+			html += "<a href='javascript:void(0);' class='list-group-item' onclick ='logout()'>"+logout+"</a>";
+		}
+		//进行二级菜单的展现
+		$("#leftheight").html(html);	
+	}
+	//跳转页面
+	$("#rightheight").load(ctx + "/sinoway/dk3/blank.jsp");
+	//控制左右高度一致
+	configHeight();
+	//注册二级菜单点击事件
+	$(".list-group-item").click(function(){
+		$(".list-group-item").removeClass("active");
+		$(this).addClass("active");
+	});
+}
+/**
+ * 退出系统
+ */
+function logout() {
+	if (window.confirm('您确认退出系统?', '提示信息')) {
+		$.getJSON(ctx + "/logoutCheck.action?_t=" + new Date().getTime(), function(data) {// 检查当前用户是否可以正常退出
+			if (data.logoutRule == "agree") {// 同意，直接退出！
+				window.onbeforeunload =  function() {
+					
+				};
+				window.parent.parent.parent.location.href = ctx + "/j_spring_security_logout";
+			} else if (data.logoutRule == "warn") {// 警告，提示用户是否退出
+				if (window.confirm(data.msg, '提示信息')) {
+					window.onbeforeunload =  function() {
+						
+					};
+					window.location.href = ctx + "/j_spring_security_logout";
+				}
+			} else {// 拒绝退出，给出拒绝理由
+				alert(data.msg);
+			}
+		});
+	}
+}
+/**
+ * 点击二级菜单
+ * @param index,菜单数组下标
+ */
+function secondMenuClick(index){
+    $("#rightheight").load(ctx +"/sinoway/dk3/stmIndex.jsp");
+	//$("#rightheight").load("datatables/stmdemo.jsp");
+	configHeight();
+}
+/**
+ * 点击报告模块管理按钮
+ */
+function rptManage(){
+	$("#rightheight").load(ctx +"/sinoway/dk3/rptManager.jsp");
+	configHeight();
+}
+/**
+ * 点击反欺诈模块管理按钮
+ */
+function fadManage(){
+	$("#rightheight").load(ctx +"/sinoway/dk3/fadManager.jsp");
+	configHeight();
+}

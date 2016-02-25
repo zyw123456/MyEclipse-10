@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="HP" namespace="/" extends="struts-default">
+		<!--获取账号监控统计  -->
+		<action name="getAccAlarmNo" class="hPAction" method="getAccAlarmNo">
+			<result>/sinoway/dk/home.jsp</result>
+		</action>
+		<!--获取平台监控预警统计  -->
+		<action name="getPlatAlarmNo" class="hPAction" method="getPlatAlarmNo">
+			<result>/sinoway/dk/home.jsp</result>
+		</action>
+		<!--获取账号实时报告更新数据  -->
+		<action name="getTopAccRpt" class="hPAction" method="getTopAccRpt">
+			<result>/sinoway/dk/home.jsp</result>
+		</action>
+		<!--获取实时预警更新数据  -->
+		<action name="getTopPlatAlarmDetail" class="hPAction" method="getTopPlatAlarmDetail">
+			<result>/sinoway/dk/home.jsp</result>
+		</action>
+	</package>
+	<package name="HPCacgeManager" namespace="/" extends="json-default">
+		<action name="hpCache_*" class="hPAction" method="{1}">
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>    

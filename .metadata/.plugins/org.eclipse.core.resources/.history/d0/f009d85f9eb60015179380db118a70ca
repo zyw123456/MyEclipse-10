@@ -1,0 +1,5 @@
+package com.sinoway.common.service.parse;
+
+public class TestXml {
+
+}

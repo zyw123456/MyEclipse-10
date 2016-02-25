@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ParamRoot>
+	<System name="DEFAULT" memo="WF系统参数配置">
+		<GroupName>pam_baseparam</GroupName>
+		<GroupName>pam_system_universal</GroupName>
+		<GroupName>URLParam</GroupName>
+		<GroupName>WFDB</GroupName>
+		<GroupName>WF_CORE_PARAM</GroupName>
+		<GroupName>BIZLOG_TABLE</GroupName>
+		<GroupName>EMAIL_PARAM</GroupName>
+		<GroupName>AUTOTASK</GroupName>
+	</System>
+</ParamRoot>

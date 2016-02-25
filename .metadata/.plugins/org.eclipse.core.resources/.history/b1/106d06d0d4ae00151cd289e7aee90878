@@ -1,0 +1,403 @@
+package com.sinoway.common.action;
+
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.alibaba.fastjson.JSONObject;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+import com.sinoway.base.entity.BCfgdefCompusr;
+import com.sinoway.base.entity.BCfgdefOrginfo;
+import com.sinoway.base.entity.BCfgdefPrdinfo;
+import com.sinoway.base.entity.BCfgrefCompusrprd;
+import com.sinoway.base.entity.BCfgrefPrddetil;
+import com.sinoway.common.constant.TempIdGenerator;
+import com.sinoway.common.service.cfg.CommonOrganService;
+import com.sinoway.common.service.cfg.CommonProductService;
+import com.sinoway.common.service.cfg.CommonUserService;
+import com.sinoway.common.util.DateUtil;
+import com.sinoway.common.util.GUIDGenerator;
+
+
+/**
+ * 核心的pub接口
+ */
+public class CommonConfigAction extends ActionSupport{
+
+	
+	private static final long serialVersionUID = 1L;
+
+	@Autowired
+	private CommonOrganService commonOrganService;
+	
+	@Autowired
+	private CommonProductService commonProductService;
+	
+	@Autowired
+	private CommonUserService commonUserService;
+	
+	/**
+	 * 产品策略新增
+	 */
+	public  String  insertProductInfo(){
+
+	//获取request
+    ActionContext context=ActionContext.getContext();  
+	HttpServletRequest request = (HttpServletRequest)context.get(ServletActionContext.HTTP_REQUEST);  
+		String result = ""; 
+		try {
+			
+		request.setCharacterEncoding("UTF-8");
+		
+        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));  
+     
+        String line = "";  
+        StringBuffer buf = new StringBuffer();  
+        while ( (line = br.readLine()) != null ) {  
+            buf.append(line);  
+        }  
+        result = buf.toString();  
+     //   result="{\"msgcode\":\"001\",\"appcod\":\"003\",\"prdnam\":\"复杂产品\",\"trncods\":\"[{\"trncod\":\"102\", \"trnnam\":\"原交易码2\", \"dayexpcnt\":\"3\", \"monexpcnt\":\"44\", \"mon3expcnt\":\"345\"}, {\"trncod\":\"104\", \"trnnam\":\"原交易码4\", \"dayexpcnt\":\"5\", \"monexpcnt\":\"67\", \"mon3expcnt\":\"890\"}]\",\"operator\":\"super\"}";
+        System.out.println(result);  
+	    //将字符串转换成JSON对象
+		JSONObject jo =(JSONObject) JSONObject.parse(result);
+		System.out.println(jo.toString()+"核心系统json解析完之后的串--------------------------------");
+		//用于拼接返回报文
+		 Object objop = null;
+	    JSONObject backobj = new   JSONObject();
+	    if(jo.get("msgcode").toString().equals("001")){//产品策略新增
+				BCfgdefPrdinfo bCfgdefPrdinfo = new BCfgdefPrdinfo();
+				bCfgdefPrdinfo.setAppcod(jo.get("appcod").toString());  
+				bCfgdefPrdinfo.setPrdnam(jo.get("prdnam").toString());
+				bCfgdefPrdinfo.setCretday(DateUtil.getCurrentDate8Len());
+				bCfgdefPrdinfo.setId(GUIDGenerator.generateId());
+				// 生成产品码
+		    	bCfgdefPrdinfo.setPrdcod(String.valueOf(TempIdGenerator.getInstance().getID()));
+		    	 String trancodstr = jo.get("trncods").toString();
+					
+		       //判断如果是天警云  按复杂报文进行处理
+			    if(jo.get("appcod").toString().equals("003")){
+				    for(int i = 0; i < trancods.length; i++ ){
+					    JSONObject trancodobj = (JSONObject) JSONObject.parse(trancods[i]);
+					    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+					    detail.setId(GUIDGenerator.generateId());
+					    detail.setDayexpcnt(trancodobj.getString("dayexpcnt"));
+					    detail.setMon3expcnt(trancodobj.getString("mon3expcnt"));
+					    detail.setMonexpcnt(trancodobj.getString("monexpcnt"));
+					    detail.setPrdcod(bCfgdefPrdinfo.getPrdcod());
+					    detail.setSta("1");
+					    detail.setTrncod(trancodobj.getString("trncod"));
+					    detail.setPrdnam(jo.get("prdnam").toString());
+					    objop = commonProductService.addPrddetil(detail);
+				    }
+			    } else{
+			     String trancods[] = jo.get("trncods").toString().split(",");
+						
+		    	  for(int i = 0; i < trancods.length; i++ ){
+					    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+					    detail.setId(GUIDGenerator.generateId());
+					    detail.setPrdcod(bCfgdefPrdinfo.getPrdcod());
+					    detail.setSta("1");
+					    detail.setTrncod(trancods[i]);
+					    detail.setPrdnam(jo.get("prdnam").toString());
+					    objop = commonProductService.addPrddetil(detail);
+				    }
+			    }
+			    
+			   Object obj =commonProductService.addprdInfo(bCfgdefPrdinfo);
+			
+			   if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回失败报文");  //返回的描述
+				}
+				backobj.put("msgcode", "001");      //报文类型
+				backobj.put("operator",jo.get("operator"));   //操作人
+				backobj.put("prdcod",bCfgdefPrdinfo.getPrdcod());       //产品码
+			
+			
+	    }else if(jo.get("msgcode").toString().equals("002")){ //产品策略修改
+	    	
+		    	BCfgdefPrdinfo bCfgdefPrdinfo = new BCfgdefPrdinfo();
+		    	bCfgdefPrdinfo.setAppcod(jo.get("appcod").toString());  
+				bCfgdefPrdinfo.setPrdnam(jo.get("prdnam").toString());
+				bCfgdefPrdinfo.setCretday(DateUtil.getCurrentDate().replaceAll("-", ""));
+				bCfgdefPrdinfo.setPrdcod(jo.get("prdcod").toString());
+				Object obj = commonProductService.editprdInfo(bCfgdefPrdinfo);
+				String trancods[] = jo.get("trncods").toString().split(",");
+					
+		       //判断如果是天警云  按复杂报文进行处理
+			    if(jo.get("appcod").toString().equals("003")){
+				    for(int i = 0; i < trancods.length; i++ ){
+					    JSONObject trancodobj = (JSONObject) JSONObject.parse(trancods[i]);
+					    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+					    detail.setId(GUIDGenerator.generateId());
+					    detail.setDayexpcnt(trancodobj.getString("dayexpcnt"));
+					    detail.setMon3expcnt(trancodobj.getString("mon3expcnt"));
+					    detail.setMonexpcnt(trancodobj.getString("monexpcnt"));
+					    detail.setPrdcod(bCfgdefPrdinfo.getPrdcod());
+					    detail.setSta("1");
+					    detail.setTrncod(trancodobj.getString("trncod"));
+					    detail.setPrdnam(jo.get("prdnam").toString());
+					    objop = commonProductService.editPrddetil(detail);
+				    }
+			    } else{
+			    	  for(int i = 0; i < trancods.length; i++ ){
+					    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+					    detail.setId(GUIDGenerator.generateId());
+					    detail.setPrdcod(bCfgdefPrdinfo.getPrdcod());
+					    detail.setSta("1");
+					    detail.setTrncod(trancods[i]);
+					    detail.setPrdnam(jo.get("prdnam").toString());
+					    objop = commonProductService.editPrddetil(detail);
+					    }
+			    }
+			    
+				backobj.put("msgcode", "002");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("prdcod",jo.get("prdcod").toString());       //产品码
+			
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回失败报文");  //返回的描述
+				}
+	    	
+	    }else if(jo.get("msgcode").toString().equals("003")){//产品策略删除
+		    	BCfgdefPrdinfo bCfgdefPrdinfo = new BCfgdefPrdinfo();
+		    	//根据产品码去删除产品表的记录
+				bCfgdefPrdinfo.setPrdcod(jo.get("prdcod").toString());
+				bCfgdefPrdinfo.setSta("0");
+				Object obj = commonProductService.editprdInfo(bCfgdefPrdinfo);
+				String trancods[] = jo.get("trncods").toString().split(",");
+				
+			       //判断如果是天警云  按复杂报文进行处理
+				    if(jo.get("appcod").toString().equals("003")){
+					    for(int i = 0; i < trancods.length; i++ ){
+						    JSONObject trancodobj = (JSONObject) JSONObject.parse(trancods[i]);
+						    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+						    detail.setSta("0");
+						    detail.setTrncod(trancodobj.getString("trncod"));
+						    objop = commonProductService.editPrddetil(detail);
+					    }
+				    } else{
+				    	  for(int i = 0; i < trancods.length; i++ ){
+						    BCfgrefPrddetil detail = new BCfgrefPrddetil();
+						    detail.setSta("0");
+						    detail.setTrncod(trancods[i]);
+						    objop = commonProductService.editPrddetil(detail);
+						    }
+				    }
+				backobj.put("msgcode", "003");      //报文类型
+				backobj.put("operator",jo.get("operator"));   //操作人
+				backobj.put("prdcod", "002");       //产品码
+			
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "返回失败报文");  //返回的描述
+				}
+			
+	    }else if(jo.get("msgcode").toString().equals("004")){//用户新增
+		    	BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+				bCfgdefCompusr.setUsrnam(jo.get("usrnam").toString());
+				bCfgdefCompusr.setPUsrid(GUIDGenerator.generateId());     //父账户
+				bCfgdefCompusr.setUsrid(GUIDGenerator.generateId());     //企业用户
+				bCfgdefCompusr.setUsrtype(jo.get("usrtype").toString());
+				bCfgdefCompusr.setUsrpass(jo.get("usrpass").toString());
+				bCfgdefCompusr.setOrgno(jo.get("orgno").toString());
+				String proods [] = jo.get("prdcods").toString().split(",");
+				bCfgdefCompusr.setId(GUIDGenerator.generateId());
+			  
+				//新增产品用户关系对应表
+                for(int i =0 ; i<proods.length ;i++){
+                 BCfgrefCompusrprd prd = new BCfgrefCompusrprd();
+                 prd.setId(GUIDGenerator.generateId());
+                 prd.setPrdcod(proods[i]);
+                 prd.setSta("1");
+                 prd.setUsrid(bCfgdefCompusr.getUsrid());
+                 prd.setUsrtype(jo.get("usrtype").toString());
+                 objop= commonUserService.addCompusrprd(prd);
+				}
+                //新增用户表
+				Object obj = commonUserService.addusrInfo(bCfgdefCompusr);
+				
+				backobj.put("msgcode", "004");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("usrid",bCfgdefCompusr.getUsrid());       //用户编码
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "新增用户成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "新增用户失败报文");  //返回的描述
+				}
+	    }else if(jo.get("msgcode").toString().equals("005")){//用户修改
+				BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+				bCfgdefCompusr.setPUsrnam(jo.get("usrnam").toString());   //用户名
+				bCfgdefCompusr.setOrgno(jo.get("orgno").toString());
+				bCfgdefCompusr.setUsrid(jo.get("usrid").toString()); 
+				String proods [] = jo.get("prdcods").toString().split(",");
+                for(int i =0 ; i<proods.length ;i++){
+                	 BCfgrefCompusrprd prd = new BCfgrefCompusrprd();
+                     prd.setPrdcod(proods[i]);
+                     prd.setSta("1");
+                     prd.setUsrid(bCfgdefCompusr.getUsrid());
+                     prd.setUsrtype(jo.get("usrtype").toString());
+                     objop= commonUserService.editCompusrprd(prd);
+				}
+			   Object   obj  = commonUserService.editusrInfo(bCfgdefCompusr);
+				
+				backobj.put("msgcode", "005");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("usrid", bCfgdefCompusr.getUsrid());       //用户编码
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改用户成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改用户失败报文");  //返回的描述
+			}
+			
+	    }else if(jo.get("msgcode").toString().equals("006")){//用户删除
+		    	BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+				bCfgdefCompusr.setUsrid(jo.get("usrid").toString());     //根据用户id删除一条记录
+				bCfgdefCompusr.setUsrsta("0");                        //逻辑删除操作 0 代表不可用
+				String proods [] = jo.get("prdcods").toString().split(",");
+				
+				//删除产品用户关系表
+                for(int i =0 ; i<proods.length ;i++){
+                	 BCfgrefCompusrprd prd = new BCfgrefCompusrprd();
+                     prd.setPrdcod(proods[i]);
+                     prd.setSta("0");
+                     prd.setUsrid(bCfgdefCompusr.getUsrid());
+                     objop= commonUserService.editCompusrprd(prd);
+				}
+				Object obj  =   commonUserService.editusrInfo(bCfgdefCompusr);
+				backobj.put("msgcode", "006");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("usrid", bCfgdefCompusr.getUsrid());       //用户编码
+				if(obj.toString().equals("1")&& objop.toString().equals(proods.toString().length())){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "删除用户成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "删除用户失败报文");  //返回的描述
+				}
+				
+	    }else if(jo.get("msgcode").toString().equals("007")){ //机构新增
+		    	BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+				bCfgdefOrginfo.setOrgno(GUIDGenerator.generateId());   //机构号
+				bCfgdefOrginfo.setOrgnam(jo.get("orgnam").toString()); //机构名称   
+				bCfgdefOrginfo.setPorgno(jo.get("porgno").toString());  //父账户
+				bCfgdefOrginfo.setOrgtyp(jo.get("orgtyp").toString());  //机构类型
+				bCfgdefOrginfo.setId(GUIDGenerator.generateId());
+			    Object obj = commonOrganService.addOrganInfo(bCfgdefOrginfo);
+				
+				backobj.put("msgcode", "007");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("orgno", bCfgdefOrginfo.getOrgno());       //机构号
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "新增机构成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "新增机构失败报文");  //返回的描述
+				}
+			
+	    }else if(jo.get("msgcode").toString().equals("008")){//机构修改
+		    	BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+		    	
+				bCfgdefOrginfo.setOrgno(jo.get("orgno").toString());   //机构号
+				bCfgdefOrginfo.setOrgnam(jo.get("orgnam").toString()); //机构名称   
+				bCfgdefOrginfo.setPorgno(jo.get("porgno").toString());  //父账户
+				bCfgdefOrginfo.setOrgtyp(jo.get("orgtyp").toString());  //机构类型
+				
+				//TODO 机构编号
+			    Object obj = commonOrganService.editOrganInfo(bCfgdefOrginfo);
+				
+				backobj.put("msgcode", "008");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("orgno", bCfgdefOrginfo.getOrgno());       //机构号
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改机构成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改机构失败报文");  //返回的描述
+				}
+	    }else if(jo.get("msgcode").toString().equals("009")){//机构删除
+		    	
+		    	BCfgdefOrginfo bCfgdefOrginfo = new BCfgdefOrginfo();
+				bCfgdefOrginfo.setOrgno(jo.get("orgno").toString());   //机构号
+//				bCfgdefOrginfo.setOrgnam(jo.get("orgnam").toString()); //机构名称   
+//				bCfgdefOrginfo.setPorgno(jo.get("porgno").toString());  //父账户
+//				bCfgdefOrginfo.setOrgtyp(jo.get("orgtyp").toString());  //机构类型
+				bCfgdefOrginfo.setSta("0");            //逻辑删除 0  代表不可用
+			    Object obj = commonOrganService.editOrganInfo(bCfgdefOrginfo);
+				
+				backobj.put("msgcode", "009");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "删除机构成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "删除机构失败报文");  //返回的描述
+				}
+	    }else if(jo.get("msgcode").toString().equals("0010")){//密码修改
+
+		    	BCfgdefCompusr bCfgdefCompusr = new BCfgdefCompusr();
+				bCfgdefCompusr.setId("15122815002151e763458a8081d40001");
+				bCfgdefCompusr.setUsrpass(jo.get("usrpass").toString());
+				//TODO 生成userid
+				bCfgdefCompusr.setUsrid(jo.get("usrid").toString()); 
+			    Object   obj  = commonUserService.editusrInfo(bCfgdefCompusr);
+				
+				backobj.put("msgcode", "0010");      //报文类型
+				backobj.put("operator", jo.get("operator"));   //操作人
+				backobj.put("usrid", bCfgdefCompusr.getPUsrid());       //用户编码
+				if(obj.toString().equals("1")){
+				backobj.put("states", "1");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改密码成功报文");  //返回的描述
+				}else{
+				backobj.put("states", "0");     //状态     0 -失败    1-表示成功
+				backobj.put("result", "修改密码失败报文");  //返回的描述
+		        }
+				
+	      }
+	  //报文返回响应到前置
+
+        HttpServletResponse response = (HttpServletResponse)context.get(ServletActionContext.HTTP_RESPONSE);  
+	    response.setHeader("cache-control", "no-cache");    
+        response.setContentType("text/html");  
+		OutputStreamWriter outs= new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+		outs.write(backobj.toString());
+	//	outs.write("{\"usrnam\":\"bnbnbn\",\"msgcode\":\"004\",\"orgno\":\"244423\",\"p_usrid\":\"zlzp\",\"prdcods\":\"bcvbvcb,eqwc454,vbcvbcb\",\"usrpass\":\"21218cca77804d2ba1922c33e0151105\",\"usrtype\":\"200\",\"operator\":\"zlzp\"}");
+		outs.flush();
+	
+		
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+	
+		return null;
+	}
+	
+
+}

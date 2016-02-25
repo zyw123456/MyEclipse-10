@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="AccChild" namespace="/" extends="struts-default">
+		<!--查询登录父账号下的所有子账号  -->
+		<action name="queryCurChildren" class="PoOrganizeinfoAction" method="queryCurChildren">
+			<result>/sinoway/acc/accChildList.jsp</result>
+		</action>
+		<!--查询登录父账号下的所有团队  -->
+		<action name="queryCurOrganize" class="PoOrganizeinfoAction" method="queryCurOrganize">
+			<result>/sinoway/acc/accChildList.jsp</result>
+		</action>
+		<!--根据子账号id查对象  -->
+		<action name="getPeopleById" class="PoOrganizeinfoAction" method="getPeopleById">
+			<result>/sinoway/acc/accChildList.jsp</result>
+		</action>
+		<!--根据团队id查团队下的人员  -->
+		<action name="getPeopleByOrgId" class="PoOrganizeinfoAction" method="getPeopleByOrgId">
+			<result>/sinoway/acc/accChildList.jsp</result>
+		</action>
+		<!--查询登录父账号下的所有产品  -->
+		<action name="queryCurPrds" class="PoOrganizeinfoAction" method="queryCurPrds">
+			<result>/sinoway/acc/accChildAdd.jsp</result>
+		</action>
+		<!--给子账户赋权限-->
+		<action name="setPermission" class="PoOrganizeinfoAction" method="setPermission">
+			<result>/sinoway/acc/accChildAdd.jsp</result>
+		</action>
+		<!--根据用户账号获得用户所拥有的产品-->
+		<action name="getPrdsByPeocode" class="PoOrganizeinfoAction" method="getPrdsByPeocode">
+			<result>/sinoway/acc/accChildUpdate.jsp</result>
+			<result name="input">/sinoway/acc/accChildLook.jsp</result>
+		</action>
+		<!--预修改用户账号获得用户所拥有的产品-->
+		<action name="updatePrdsByPeocode" class="PoOrganizeinfoAction" method="updatePrdsByPeocode">
+			<result>/sinoway/acc/accChildUpdate.jsp</result>
+			<result name="input">/sinoway/acc/accChildLook.jsp</result>
+		</action>
+		<!--修改子账户赋权限-->
+		<action name="updatePermission" class="PoOrganizeinfoAction" method="updatePermission">
+			<result>/sinoway/acc/accChildUpdate.jsp</result>
+		</action>
+		<!--根据id删除用户-->
+		<action name="deletePeople" class="PoOrganizeinfoAction" method="deletePeople">
+			<result>/sinoway/acc/accChildList.jsp</result>
+		</action>
+		<!-- 查询登录 账户下所有子账户 -->
+		<action name="fuzzyQueryChildren" class="PoOrganizeinfoAction" method="fuzzyQueryChildren">
+				<result>/sinoway/acc/accChildAdd.jsp</result>
+		</action>
+		<!-- 登录 账户下新增团队 -->
+		<action name="saveNewTeam" class="PoOrganizeinfoAction" method="saveNewTeam">
+  		<result>/sinoway/acc/accChildAdd.jsp</result>  
+		</action>
+		<!-- 校验用户账号是否重复-->
+		<action name="checkPeopleRepeat" class="PoOrganizeinfoAction" method="checkPeopleRepeat">
+  		<result>/sinoway/acc/accChildAdd.jsp</result>  
+		</action>
+		
+		<!--校验团队名称是否重复  -->
+		<action name="checkTeamRepeat" class="PoOrganizeinfoAction" method="checkTeamRepeat">
+  		 <result>/sinoway/acc/accChildAdd.jsp</result>  
+		</action>
+		<!-- 查询登录 账户下的所有团队-->
+		<action name="queryAllTeam" class="PoOrganizeinfoAction" method="queryAllTeam">
+				<result>/sinoway/acc/accChildAdd.jsp</result> 
+		</action>
+		<!-- 根据id查询产品明细 -->
+		<action name="findWfcfgerfPrdById" class="PoOrganizeinfoAction" method="findWfcfgerfPrdById">
+				<result>/sinoway/acc/accChildAdd.jsp</result> 
+		</action>
+		<!-- 根据 使用人id查询其信息信息-->
+		<action name="findPeopleInfoById" class="PoOrganizeinfoAction" method="findPeopleInfoById">
+				<result>/sinoway/acc/accChildList.jsp</result> 
+		</action>
+	</package>
+</struts>    

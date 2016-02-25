@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<!-- 根据id查一个预警人员对象 -->
+<query name="waitingMonitorDao.getWfDatCerditwarnById"
+		cacheable="true">
+		<![CDATA[
+			from WfDatCerditPrsn where id=:id
+		]]>
+	</query>
+<!-- 查询预警报告发起人员的预警产品模板-->
+<query name="waitingMonitorDao.queryWarnPrds"
+		cacheable="true">
+		<![CDATA[
+			select wcp from WfCfgdefPrdinfo wcp,WfCfgrefCompusrprd wcc,PeopleInfo p  
+			where wcp.prdcod=wcc.prdcod and p.peopleCode=wcc.peoplecode and p.peopleCode=:id
+			and wcp.appnam=:appname and wcp.sta=:prdsta and wcc.sta=:comsta
+		]]>
+	</query>
+<!-- 根据产品编码查产品-->
+<query name="waitingMonitorDao.getPrdByPrdcod"
+		cacheable="true">
+		<![CDATA[
+			from WfCfgdefPrdinfo where prdcod=:prdcod
+		]]>
+	</query>
+</hibernate-mapping>

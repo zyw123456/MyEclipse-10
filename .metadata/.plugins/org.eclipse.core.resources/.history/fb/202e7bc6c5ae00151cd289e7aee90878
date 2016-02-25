@@ -1,0 +1,410 @@
+package com.sinoway.base.facde;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sinoway.base.bean.AuthorValidate;
+import com.sinoway.base.entity.BCfgdefOrginfo;
+import com.sinoway.base.entity.BCfgrefRoletrn;
+import com.sinoway.base.entity.BCfgrefUsrrole;
+import com.sinoway.base.entity.BDatTrnrightchk;
+import com.sinoway.base.service.BCfgrefRoletrnService;
+import com.sinoway.base.service.BCfgrefUsrroleService;
+import com.sinoway.base.service.BDatTrnrightchkService;
+import com.sinoway.base.cache.BCfgdefChnlblackCache;
+import com.sinoway.base.cache.BCfgdefOrgblackCache;
+import com.sinoway.base.cache.BCfgdefOrginfoCache;
+import com.sinoway.base.cache.BCfgdefPrddetilCache;
+import com.sinoway.base.cache.BCfgdefTrnblackCache;
+import com.sinoway.base.cache.BCfgdefUsrTrnblackCache;
+import com.sinoway.base.cache.BCfgdefUsrblackCache;
+import com.sinoway.base.cache.BCfgrefCompusrprdCache;
+import com.sinoway.common.util.DateUtil;
+import com.sinoway.common.util.GUIDGenerator;
+
+@Service("rightChkFacde")
+public class RightChkFacde {
+	//黑名单控制开关 1:表示开启 0:表示关闭
+	//机构黑名单
+	private String orgBlackOn = "1";
+	//用户黑名单
+	private String usrBlackOn = "1";
+	//渠道黑名单
+	private String chnlBlackOn = "1";
+	//用户交易码黑名单
+	private String usrTrnBlackOn = "1";
+	//交易码黑名单
+	private String trnBlackOn = "1";
+	@Autowired
+	private BCfgdefChnlblackCache chnlblackCache;
+	@Autowired
+	private BCfgdefOrgblackCache orgblackCache;
+	@Autowired
+	private BCfgdefTrnblackCache trnblackCache;
+	@Autowired
+	private BCfgdefUsrblackCache usrblackCache;
+	@Autowired
+	private BCfgdefUsrTrnblackCache usrtrnblackCache;
+	@Autowired
+	private BCfgdefOrginfoCache orginfoCache;
+	@Autowired
+	private BCfgrefCompusrprdCache usrprdCache;
+	@Autowired
+	private BCfgdefPrddetilCache prddetailCache;
+	@Autowired
+	private BCfgrefUsrroleService usrroleService;
+	@Autowired
+	private BCfgrefRoletrnService roletrnService;
+	@Autowired
+	private BDatTrnrightchkService trnrightchkService;
+	
+	private BDatTrnrightchk trc;
+	
+	private static final String CHNLBLACKCHKRES = "渠道黑名单受限";
+	private static final String ORGBLACKCHKRES = "机构黑名单受限";
+	private static final String TRNBLACKCHKRES = "交易码黑名单受限";
+	private static final String USRBLACKCHKRES = "用户黑名单受限";
+	private static final String USRTRNBLACKCHKRES = "用户交易码黑名单受限";
+	private static final String USRIDNULL = "非法校验,用户ID为空";
+	private static final String ORGNONULL = "非法校验,机构号为空";
+	private static final String PRDCODNULL = "非法校验,企业用户产品编码不能为空";
+	private static final String TRNCODANDPRDCODNULL = "非法校验,产品编码和交易码不能同时为空";
+	private static final String CHNLCODNULL = "非法校验,渠道编码为空";
+	private static final String FNTTRNJRNNULL = "非法校验,前置流水号为空";
+	private static final String ORGNULL = "校验失败,机构不存在";
+	private static final String ORGTYPNULL = "校验失败,校验机构的类型为空";
+	private static final String UNUSRTRNRIGHT = "该用户无此交易码权限";
+	private static final String UNUSRPRDRIGHT = "该用户无此产品权限";
+	 
+	/**
+	 * 用户交易权限验证 
+	 * 传入用户id和产品编码且无交易码时,验证用户产品权限,传入交易码时,验证用户交易码权限
+	 * @param bean 内包含:前置流水号,用户id,用户名称(可空),机构号,机构名称(可空),渠道编码,交易码
+	 * @return
+	 */
+	public String rightChkRes(AuthorValidate bean){
+		//验证流程 0-6
+		trc = new BDatTrnrightchk();
+		trc.setId(GUIDGenerator.generateId());
+		trc.setUsrid(bean.getUsercod());
+		trc.setUsrnam(bean.getUsernam());
+		trc.setTrncod(bean.getTrncod());
+		trc.setChnlcod(bean.getChnlcod());
+		trc.setFnttrnjrn(bean.getFnttrnjrn());
+		trc.setOrgno(bean.getOrgno());
+		trc.setOrgnam(bean.getOrgname());
+		trc.setPrdcod(bean.getPrdcod());
+		trc.setPrdnam(bean.getPrdnam());
+		trc.setStrdte(DateUtil.dateToStr(new Date()));
+		trc.setStrtim(DateUtil.timeToStr(new Date()));
+		//0.输入参数校验,避免空参数验证
+		String rightChkRes = inputParamChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.timeToStr(new Date()));
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+
+		//1.渠道黑名单验证
+		rightChkRes = chnlBlackChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.timeToStr(new Date()));
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+		//2.机构黑名单验证
+		rightChkRes = orgBlackChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.getCurrentTime());
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+		//3.交易码黑名单验证
+		rightChkRes = trnBlackChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.getCurrentTime());
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+		//4.用户黑名单验证
+		rightChkRes = usrBlackChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.getCurrentTime());
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+		//5.用户交易码黑名单验证
+		rightChkRes = usrTrnBlackChk(bean);
+		if(!"true".equals(rightChkRes)){
+			trc.setChkres("false");
+			trc.setResreason(rightChkRes);
+			trc.setRestim(DateUtil.getCurrentTime());
+			trnrightchkService.save(trc);
+			trc = null;
+			return rightChkRes;
+		}
+		
+		//6.交易码为空时,进行用户产品权限验证;否则进行用户交易码权限验证
+		if(null == bean.getTrncod()){
+			rightChkRes = usrPrdRightChk(bean);
+			if(!"true".equals(rightChkRes)){
+				trc.setChkres("false");
+				trc.setResreason(rightChkRes);
+				trc.setRestim(DateUtil.getCurrentTime());
+				trnrightchkService.save(trc);
+				trc = null;
+				return rightChkRes;
+			}
+		}else{
+			//用户交易码权限验证
+			rightChkRes = usrTrnRightChk(bean);
+			if(!"true".equals(rightChkRes)){
+				trc.setChkres("false");
+				trc.setResreason(rightChkRes);
+				trc.setRestim(DateUtil.getCurrentTime());
+				trnrightchkService.save(trc);
+				trc = null;
+				return rightChkRes;
+			}
+		}
+		
+		
+		trc.setChkres("true");
+		trc.setResreason(null);
+		trc.setRestim(DateUtil.getCurrentTime());
+		trnrightchkService.save(trc);
+		trc = null;
+		return "true";
+	}
+	
+	/**
+	 * 传入参数校验
+	 * @param bean 参数校验
+	 * @return
+	 */
+	protected String inputParamChk(AuthorValidate bean){
+		String usrid = bean.getUsercod();
+		if(null == usrid){
+			return RightChkFacde.USRIDNULL;
+		}
+		String trncod = bean.getTrncod();
+		String prdcod = bean.getPrdcod();
+		//交易码和产品不能同时为空
+		if(null == trncod && null == prdcod){
+			return RightChkFacde.TRNCODANDPRDCODNULL;
+		}
+		String orgno = bean.getOrgno();
+		if(null == orgno){
+			return RightChkFacde.ORGNONULL;
+		}
+		String chnlcod = bean.getChnlcod();
+		if(null == chnlcod){
+			return RightChkFacde.CHNLCODNULL;
+		}
+		String fnttrnjrn = bean.getFnttrnjrn();
+		if(null == fnttrnjrn){
+			return RightChkFacde.FNTTRNJRNNULL;
+		}
+		return "true";
+	}
+	
+	/**
+	 * 渠道黑名单验证
+	 * @param bean
+	 * @return
+	 */
+	protected String chnlBlackChk(AuthorValidate bean){
+		if("1".equals(chnlBlackOn)){
+			String chnlcod = bean.getChnlcod();
+			if(null != chnlblackCache.get(chnlcod)){
+				return RightChkFacde.CHNLBLACKCHKRES;
+			}
+		}
+		return "true";
+	}
+	
+	/**
+	 * 机构黑名单验证
+	 * @param bean
+	 * @return
+	 */
+	protected String orgBlackChk(AuthorValidate bean){
+		if("1".equals(orgBlackOn)){
+			String orgno = bean.getOrgno();
+			if(null!=orgblackCache.get(orgno)){
+				return RightChkFacde.ORGBLACKCHKRES;
+			}
+		}
+		return "true";
+	}
+	
+	/**
+	 * 交易码黑名单验证
+	 * @param bean
+	 * @return
+	 */
+	protected String trnBlackChk(AuthorValidate bean){
+		if("1".equals(trnBlackOn)){
+			String trncod = bean.getTrncod();
+			if(null != trnblackCache.get(trncod)){
+				return RightChkFacde.TRNBLACKCHKRES;
+			}
+		}
+		return "true";
+	}
+	
+	/**
+	 * 用户黑名单验证
+	 * @param bean
+	 * @return
+	 */
+	protected String usrBlackChk(AuthorValidate bean){
+		if("1".equals(usrBlackOn)){
+			String usrid = bean.getUsercod();
+			if(null != usrblackCache.get(usrid)){
+				return RightChkFacde.USRBLACKCHKRES;
+			}
+		}
+		return "true";
+	}
+	
+	/**
+	 * 用户交易码黑名单验证
+	 * @param bean
+	 * @return
+	 */
+	
+	protected String usrTrnBlackChk(AuthorValidate bean){
+		if("1".equals(usrTrnBlackOn)){
+			String usrid = bean.getUsercod();
+			String trncod = bean.getTrncod();
+			if(null != usrtrnblackCache.get(usrid+"_"+trncod)){
+				return RightChkFacde.USRTRNBLACKCHKRES;
+			}
+		}
+		return "true";
+	}
+	
+	/**
+	 * 用户产品权限认证
+	 * @param bean
+	 * @return
+	 */
+	protected String usrPrdRightChk(AuthorValidate bean) {
+		String usrid = bean.getUsercod();
+		String prdcod = bean.getPrdcod();
+		if(null == usrprdCache.get(usrid+"_"+prdcod)){
+			return RightChkFacde.UNUSRPRDRIGHT;
+		}
+		return "true";
+	}
+	
+	/**
+	 * 用户交易码权限认证
+	 * @param bean
+	 * @return
+	 */
+	protected String usrTrnRightChk(AuthorValidate bean){
+		//分企业用户和个人用户进行权限验证;从机构类型进行区别 0表示个人用户,1表示企业用户,2表示供应商用户
+		
+		String orgNo = bean.getOrgno();
+		BCfgdefOrginfo orginfo = (BCfgdefOrginfo) orginfoCache.get(orgNo);
+		if(null == orginfo){
+			return RightChkFacde.ORGNULL;
+		}
+		String orgtyp = orginfo.getOrgtyp();
+		if(null==orgtyp){
+			return RightChkFacde.ORGTYPNULL;
+		}
+		
+		String prdcod = bean.getPrdcod();
+		String usrid = bean.getUsercod();
+		String trncod = bean.getTrncod();
+		//对公用户
+		if("1".equals(orgtyp)){
+			//验证用户产品,再验证产品交易码
+			if(null == prdcod){
+				return RightChkFacde.PRDCODNULL;
+			}
+			if(null == usrprdCache.get(usrid+"_"+prdcod)){
+				return RightChkFacde.UNUSRPRDRIGHT;
+			}
+			if(null == prddetailCache.get(prdcod+"_"+trncod)){
+				return RightChkFacde.UNUSRTRNRIGHT;
+			}
+		}
+		//对私用户
+		if("0".equals(orgtyp)){
+			boolean contain = false;
+			//验证用户角色,再验证角色交易码
+			Map<String, Object> findMap = new HashMap<String, Object>();
+			findMap.put("usrid", usrid);
+			findMap.put("sta", "1");
+			List<BCfgrefUsrrole> usrRoleList = usrroleService.find(findMap);
+			findMap.clear();
+			String rolecod;
+			List<BCfgrefRoletrn> roleTrnList = null;
+			for(int i=0;i<usrRoleList.size();i++){
+				rolecod = usrRoleList.get(i).getRolecod();
+				findMap.put("rolecod", rolecod);
+				findMap.put("sta", "1");
+				roleTrnList = roletrnService.find(findMap);
+				for(int j=0;j<roleTrnList.size();j++){
+					if(trncod.equals(roleTrnList.get(j).getTrncod())){
+						contain = true;
+						break;
+					}
+				}
+			}
+			if(!contain){
+				return RightChkFacde.UNUSRTRNRIGHT;
+			}
+		}
+		
+		return "true";
+	}
+	
+
+	
+	
+	public void setOrgBlackOn(String orgBlackOn) {
+		this.orgBlackOn = orgBlackOn;
+	}
+	public void setUsrBlackOn(String usrBlackOn) {
+		this.usrBlackOn = usrBlackOn;
+	}
+	public void setChnlBlackOn(String chnlBlackOn) {
+		this.chnlBlackOn = chnlBlackOn;
+	}
+	public void setUsrTrnBlackOn(String usrTrnBlackOn) {
+		this.usrTrnBlackOn = usrTrnBlackOn;
+	}
+	public void setTrnBlackOn(String trnBlackOn) {
+		this.trnBlackOn = trnBlackOn;
+	}
+}

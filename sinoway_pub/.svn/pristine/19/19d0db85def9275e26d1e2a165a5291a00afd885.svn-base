@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgrefPrdtrnchnl" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgrefPrdtrnchnl" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- PRDTRNCOD -->
+    <result column="PRDTRNCOD" property="prdtrncod" jdbcType="VARCHAR" />
+    <!-- NODECOD -->
+    <result column="NODECOD" property="nodecod" jdbcType="VARCHAR" />
+    <!-- USRID -->
+    <result column="USRID" property="usrid" jdbcType="VARCHAR" />
+    <!-- MTATRNCOD -->
+    <result column="MTATRNCOD" property="mtatrncod" jdbcType="VARCHAR" />
+    <!-- CHNLCOD -->
+    <result column="CHNLCOD" property="chnlcod" jdbcType="VARCHAR" />
+    <!-- LEVELS -->
+    <result column="LEVELS" property="levels" jdbcType="VARCHAR" />
+    <!-- 0、停用
+1、启用 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			PRDTRNCOD,
+			NODECOD,
+			USRID,
+			MTATRNCOD,
+			CHNLCOD,
+			LEVELS,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="prdtrncod != null" >	  PRDTRNCOD = #{prdtrncod,jdbcType=VARCHAR},	</if>
+    <if test="nodecod != null" >	  NODECOD = #{nodecod,jdbcType=VARCHAR},	</if>
+    <if test="usrid != null" >	  USRID = #{usrid,jdbcType=VARCHAR},	</if>
+    <if test="mtatrncod != null" >	  MTATRNCOD = #{mtatrncod,jdbcType=VARCHAR},	</if>
+    <if test="chnlcod != null" >	  CHNLCOD = #{chnlcod,jdbcType=VARCHAR},	</if>
+    <if test="levels != null" >	  LEVELS = #{levels,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="prdtrncod != null" >
+		  and PRDTRNCOD = #{prdtrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="nodecod != null" >
+		  and NODECOD = #{nodecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrid != null" >
+		  and USRID = #{usrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="mtatrncod != null" >
+		  and MTATRNCOD = #{mtatrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="chnlcod != null" >
+		  and CHNLCOD = #{chnlcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="levels != null" >
+		  and LEVELS = #{levels,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_PRDTRNCHNL
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrdtrnchnl" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_PRDTRNCHNL
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_PRDTRNCHNL
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgrefPrdtrnchnl" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_PRDTRNCHNL
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGREF_PRDTRNCHNL (ID,
+			PRDTRNCOD,
+			NODECOD,
+			USRID,
+			MTATRNCOD,
+			CHNLCOD,
+			LEVELS,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdtrncod,jdbcType=VARCHAR},
+    #{nodecod,jdbcType=VARCHAR},
+    #{usrid,jdbcType=VARCHAR},
+    #{mtatrncod,jdbcType=VARCHAR},
+    #{chnlcod,jdbcType=VARCHAR},
+    #{levels,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrdtrnchnl" >
+    insert into B_CFGREF_PRDTRNCHNL (ID,
+			PRDTRNCOD,
+			NODECOD,
+			USRID,
+			MTATRNCOD,
+			CHNLCOD,
+			LEVELS,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdtrncod,jdbcType=VARCHAR},
+    #{nodecod,jdbcType=VARCHAR},
+    #{usrid,jdbcType=VARCHAR},
+    #{mtatrncod,jdbcType=VARCHAR},
+    #{chnlcod,jdbcType=VARCHAR},
+    #{levels,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGREF_PRDTRNCHNL
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrdtrnchnl">
+  	delete from B_CFGREF_PRDTRNCHNL 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGREF_PRDTRNCHNL 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgrefPrdtrnchnl">
+  	update B_CFGREF_PRDTRNCHNL 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGREF_PRDTRNCHNL (ID,
+			PRDTRNCOD,
+			NODECOD,
+			USRID,
+			MTATRNCOD,
+			CHNLCOD,
+			LEVELS,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.prdtrncod,jdbcType=VARCHAR},
+    #{item.nodecod,jdbcType=VARCHAR},
+    #{item.usrid,jdbcType=VARCHAR},
+    #{item.mtatrncod,jdbcType=VARCHAR},
+    #{item.chnlcod,jdbcType=VARCHAR},
+    #{item.levels,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGREF_PRDTRNCHNL 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

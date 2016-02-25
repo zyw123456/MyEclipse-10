@@ -1,0 +1,28 @@
+package com.sinoway.common.parse;
+
+import org.w3c.dom.Document;
+
+import com.sinoway.common.util.DocumentUtil;
+
+public class TestTradeParseP000003 {
+
+	
+	
+	
+	
+	public static  void  in (){
+	Document  dom = DocumentUtil.filePToDomByDecode("E:/XML_IBankServerMapsTemplate1.xml", "UTF-8");	
+		
+		
+		
+		
+	}
+
+	public static void main(String[] args) {
+	
+		
+		
+		
+	}
+
+}

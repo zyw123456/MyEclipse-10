@@ -1,0 +1,45 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sinoway.base.entity.BCfgdefCompusr;
+import com.sinoway.base.service.BCfgdefCompusrService;
+import com.sinoway.base.service.BCfgrefCompusrprdService;
+import com.sinoway.common.service.cfg.CommonUserService;
+
+@Service("commonDefUserService")
+public class CommonDefUserService  implements CommonUserService {
+	@Autowired
+	private BCfgdefCompusrService bCfgdefCompusrService;
+	@Autowired
+	private BCfgrefCompusrprdService bCfgrefCompusrprdService;
+	
+	@Override
+	public Object addusrInfo(Object usrInfo) throws Exception {
+		
+		return bCfgdefCompusrService.insert("BCfgdefCompusr.insertByEntity",usrInfo);
+	}
+
+	@Override
+	public Object editusrInfo(Object usrInfo) throws Exception {
+		return bCfgdefCompusrService.update("BCfgdefCompusr.updateByEntity",usrInfo);
+	}
+
+	@Override
+	public Object delusrInfo(Object usrInfo) throws Exception {
+		return bCfgdefCompusrService.delete("BCfgdefCompusr.deleteByEntity",usrInfo);
+	}
+
+	@Override
+	public Object upPwdusrInfo(Object usrInfo) throws Exception {
+		return bCfgdefCompusrService.update("BCfgdefCompusr.updateByEntity",usrInfo);
+	}
+
+	@Override
+	public Object addCompusrprd(BCfgdefCompusr bCfgdefCompusr) throws Exception {
+		return bCfgrefCompusrprdService.insert("BCfgdefCompusr.updateByEntity",usrInfo);
+	}
+
+	
+}

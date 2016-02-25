@@ -1,0 +1,49 @@
+package com.sinoway.common.que;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class TestCatchPool {
+
+	
+	
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		String formatted = Integer.toHexString(3464564);
+		SimpleDateFormat  sdfdte = new SimpleDateFormat("yyyyMMdd");
+		System.out.println(formatted +"-----------");
+		StringBuffer buf = new StringBuffer("00000000");
+		buf.replace(8 - formatted.length(), 8, formatted);
+		
+
+		System.out.println(buf.toString());
+		
+		
+		System.out.println(sdfdte.format(new Date()));
+		
+	
+		if (formatted != null && !formatted.trim().equals("")){
+			try{
+			ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(formatted.getBytes());
+		
+			}catch (Exception ex){
+			ex.printStackTrace();
+			}
+		}else {
+			
+			throw new IOException();
+			
+		}
+		
+
+
+
+	}  
+
+    
+
+}

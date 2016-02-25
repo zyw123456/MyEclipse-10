@@ -1,0 +1,128 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@page import="com.sinoway.common.util.Constant"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
+<%@ taglib uri="/WEB-INF/tlds/pageTag.tld" prefix="page"%>              
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    <script src="datatables/lib/jquery-1.11.3.min.js"></script>
+    <title>个人报告</title>
+    <link rel="stylesheet" href="sinoway/common/css/main.css">
+    <link rel="stylesheet" href="sinoway/common/css/bootstrap.min.css">
+
+	<%--<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">--%>
+    
+    <script type="text/javascript"
+	src='<%=request.getContextPath()%>/common/js/jquery/jquery-1.7.1.js'></script>
+	<script type="text/javascript"
+	src='<%=request.getContextPath()%>/common/js/jquery/jquery-ui-1.8.18.custom.js'></script>
+	<script type="text/javascript"
+	src='<%=request.getContextPath()%>/common/js/jquery/jquery.json-2.4.js'></script>
+	 <script type="text/javascript" 
+    src="<%=request.getContextPath()%>/sinoway/common/js/changeColor.js"></script>
+     <script src="datatables/lib/dataTables-1.10.7/media/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" 
+    src="<%=request.getContextPath()%>/sinoway/rpt/js/rptList.js"></script>
+    <script type="text/javascript" 
+    src="<%=request.getContextPath()%>/sinoway/common/js/changeHeight.js"></script>
+    <style type="text/css">
+		body{
+		background-color: #eeeeee;
+		width: 94%;
+		}
+	</style>
+	<script type="text/javascript"
+	src="<%=request.getContextPath()%>/windforce/common/js/My97DatePicker/WdatePicker.js"></script>
+	
+     <script type="text/javascript" 
+    src="<%=request.getContextPath()%>/sinoway/rpt/js/kkpager.js"></script>
+     <script type="text/javascript" 
+    src="<%=request.getContextPath()%>/sinoway/rpt/js/kkpager.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/sinoway/rpt/css/kkpager_blue.css" />
+  
+  </head>
+  
+  <body>
+  <div class="report_right">
+  		<div class="query_report">
+  			<form class="form-inline">
+               <div class="input-group">
+	               <div class="input-group-addon">姓&nbsp;&nbsp;&nbsp;名</div>
+	               <input type="text" class="form-control"  id="prsnnam" />
+	               <div class="input-group-addon">身份证号</div>
+	               <input type="text" class="form-control"  id="prsncod" />
+               </div>
+               <div class="input-group">
+	               <div class="input-group-addon">报告号</div>
+	               <input type="text" class="form-control"  id="rptid" />
+	               <div class="input-group-addon">报告更新时间</div>
+	               <input type="text" class="form-control sdf"  id="rptmodsrtdte"  onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyyMMdd',maxDate:'#F{$dp.$D(\'rptmodenddte\')||\'%y-%M-%d\'}'});" />
+               	   <div class="input-group-addon">至</div>
+               	   <input type="text" class="form-control sdfs" id="rptmodenddte" onclick="WdatePicker({skin:'whyGreen',minDate:'#F{$dp.$D(\'rptmodsrtdte\')}',dateFmt:'yyyyMMdd',maxDate:'%y-%M-%d'});"/>
+               </div>
+             </form>
+  		</div>
+  		<div class="form_sou" id="search">
+            <div id="round2">
+               <a href="javascript:void(0)" >搜索</a>
+            </div>
+        </div>
+        <div style=" clear:both;"></div>
+        <div  id="tab_report">
+	  		<table id="tb1">
+	  			<thead>
+  					<tr>
+				       <th style="background-color:#EEEEEE; color:#999; font-size:16px; text-align:left; padding-left:20px;"  class="ahha"  colspan="7">
+				        <input style="vertical-align:middle;"  type="checkbox"  id="xuan" title="全选/取消"/>  
+				        <img alt="" src="sinoway/common/images/remove.png" width="14" height="16" />
+				        <a class="arome" href="javascript:void(0)" id="dd">删除报告
+				        </a>
+				       </th>
+			    	</tr>
+			    	<tr>
+			        	<th>全选</th>
+			      		<th><div>
+			      		<div style="width:62%;top:6;position:relative;left:30;">报告更新时间</div>
+			      			<div style="width:7;height:13;position:relative;float:left;left:78%;top:-16">
+			      			<div style="width:7;height:6">
+				      			<a  class="datas" href="javascript:void(0)" onclick="sheng()"><img alt="" src="sinoway/common/images/data_top.png"/></a>
+				      		</div>
+				      		<div style="width:7;height:6;position:relative;top:4">
+				      			<a  class="datas" href="javascript:void(0)" onclick="jiang()"><img alt="" src="sinoway/common/images/data_btm.png"/></a>
+			      			</div>
+			      			</div>
+			      		</div>
+			      		</th>
+			      		<th>报告号</th>
+			      		<th>姓名</th>
+					    <th>身份证号</th>
+					    <th><select id="datcmitori" onchange="sel()" >
+			        			<option value="">报告数据来源</option>
+			        			<option value="<%=Constant.DatCmitori.DatCmitori_APP.getCode() %>" ><%=Constant.DatCmitori.DatCmitori_APP.getValue() %></option>
+			        			<option value="<%=Constant.DatCmitori.DatCmitori_INTERFACE.getCode() %>" ><%=Constant.DatCmitori.DatCmitori_INTERFACE.getValue() %></option>
+			        			<option value="<%=Constant.DatCmitori.DatCmitori_PLANT.getCode() %>"><%=Constant.DatCmitori.DatCmitori_PLANT.getValue() %></option>
+			        			<option value="<%=Constant.DatCmitori.DatCmitori_WECHAT.getCode() %>"><%=Constant.DatCmitori.DatCmitori_WECHAT.getValue() %></option>
+        					</select>
+        				</th>
+					    <th>操作</th>
+			        </tr>
+			   </thead>
+  			   <tbody id="tab">
+  			   </tbody>
+  			   <tfoot>
+    				<tr >
+    					<td  colspan="7" >
+  							<div id="kkpager" class="grayr"></div>
+  						</td>
+  			   		</tr>
+  			   </tfoot>
+  			</table>
+    	</div>
+  </body>
+</html>

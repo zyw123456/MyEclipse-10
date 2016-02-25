@@ -1,0 +1,59 @@
+package com.sinoway.mcp.service.strade.imate.token;
+
+import java.io.UnsupportedEncodingException;
+import org.apache.http.conn.ConnectTimeoutException;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.constant.AccountConstant;
+import com.sinoway.common.util.HttpUtils;
+import com.sinoway.common.util.MD5Utils;
+import com.sinoway.mcp.service.strade.gzt.util.Token;
+
+/**
+ * 
+ * @author zhangyanwei
+ *
+ */
+public class TokenSington {
+	public static Token token = null;
+	public  static String gettoken() throws UnsupportedEncodingException, ConnectTimeoutException{
+		  
+		  if (token == null){
+			  token  = Token.getInstance();
+		  }
+		  synchronized (token) {
+			
+		  //2小时过期 这里1小时50分钟获取一次
+		   if(null == token.getTokenid() || System.currentTimeMillis() - token.getTime()>1000*60*110 ){
+			   String url = AccountConstant.CHINATELECOM_POSTURL+"/system/publicKey.json?apiKey="+AccountConstant.CHINATELECOM_AIPKEY;
+//			   String url = "http://111.235.158.136:18080/restful/system/publicKey.json?apiKey=74F25D6CCDD127E839BB82C2ACAEF227";
+			   String httpPost = HttpUtils.executeGet(url);
+			   JSONObject json = JSONObject.parseObject(httpPost);
+			   //authtoken 10秒失效 获取成功后10秒内无法再次获取
+			   if(json.containsKey("code") && json.getString("code").equals("200")){ // 成功
+				   String authCode = json.getString("data");
+				   String sign = MD5Utils.MD5(AccountConstant.CHINATELECOM_AIPKEY+AccountConstant.CHINATELECOM_PWD+authCode);
+				   String str  = AccountConstant.CHINATELECOM_POSTURL+"/system/token.json?apiKey="+AccountConstant.CHINATELECOM_AIPKEY+"&authCode="+authCode+"&sign="+sign;
+				   String tokenid = HttpUtils.executeGet(str);
+				   JSONObject obj = JSONObject.parseObject(tokenid);
+				   if (obj.containsKey("code") && obj.getString("code").equals("200")) { //成功
+					   JSONObject data = JSONObject.parseObject(obj.getString("data"));
+					   token.setTokenid(data.getString("token"));
+					   token.setTime(System.currentTimeMillis());
+				}else{
+					//获取失败之后authtoken 需要等待10秒之后再获取 因为authtoken只能使用一次 10秒之内不能重新获取
+					
+				}
+				   
+				   
+			   }else{
+				   
+			   }
+		   }
+		   
+		  }
+		   
+		   return token.getTokenid();
+		   
+	   } 		    
+
+}

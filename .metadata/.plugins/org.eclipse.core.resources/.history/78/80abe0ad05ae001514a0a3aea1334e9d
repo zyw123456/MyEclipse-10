@@ -1,0 +1,173 @@
+package com.sinoway.common.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sinoway.common.entity.BCfgdefTrnjrn;
+import com.sinoway.common.frame.SpringUtil;
+import com.sinoway.common.service.BCfgdefTrnjrnService;
+
+/**
+ * JRN流水号生成器，采用单例实现
+ * 	长度30位流水号
+ * 	生成规则：1位子系统号+1位流水类型号+8位交易码+12位时间（yyMMddHHmmss）+8位序号
+ * @author JMJ
+ */
+
+public class JRNGenerator {
+	
+//	@Autowired
+	private BCfgdefTrnjrnService bCfgdefTrnjrnService;
+	
+	private SimpleDateFormat sdfdte = new SimpleDateFormat("yyyyMMdd");
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+	private int Acurcount =  0;
+	private int Alstcount =  0;
+	private int Fcurcount =  0;
+	private int Flstcount =  0;
+	private int Ccurcount =  0;
+	private int Clstcount =  0;
+	
+	/**
+	 * 私有构造函数
+	 */
+	private static JRNGenerator instance = new JRNGenerator();
+	
+	private JRNGenerator() {
+		bCfgdefTrnjrnService = (BCfgdefTrnjrnService)SpringContextUtil.getBean("bCfgdefTrnjrnService");
+	}
+		
+	public static JRNGenerator getInstance() {
+		return instance; 
+	}
+
+	private String formatCount(int intval) {
+		String formatted = Integer.toString(intval);
+		StringBuffer buf = new StringBuffer("00000000");
+		buf.replace(8 - formatted.length(), 8, formatted);
+		return buf.toString();
+	}
+	
+	private synchronized int getCount(String sysCod) {
+//		synchronized (JRNGenerator.class) {
+			int[] tem =new int[2];
+			if("A".equals(sysCod)){
+				if(Alstcount==0){
+					tem = queryCount(sysCod);	
+					Acurcount = tem[0];
+					Alstcount = tem[1];				 
+				}
+				if(Alstcount==Acurcount){
+					tem = queryCount(sysCod);	
+					Acurcount = tem[0];
+					Alstcount = tem[1];		
+					Acurcount++;
+				}else{
+					Acurcount++;
+				}
+				return Acurcount;
+			}else if("F".equals(sysCod)){
+				if(Flstcount==0){
+					tem = queryCount(sysCod);	
+					Fcurcount = tem[0];
+					Flstcount = tem[1];		
+				}
+				if(Flstcount==Fcurcount){
+					tem = queryCount(sysCod);	
+					Fcurcount = tem[0];
+					Flstcount = tem[1];		
+					Fcurcount++;
+				}else{
+					Fcurcount++;
+				}
+				return Fcurcount;
+			}else if("C".equals(sysCod)){
+				if(Clstcount==0){
+					tem = queryCount(sysCod);	
+					Ccurcount = tem[0];
+					Clstcount = tem[1];
+				}
+				if(Clstcount==Ccurcount){
+					tem = queryCount(sysCod);	
+					Ccurcount = tem[0];
+					Clstcount = tem[1];
+					Ccurcount++;
+				}else{
+					Ccurcount++;
+				}
+				return Ccurcount;
+			}else{
+				return 0;
+			}	
+//		}
+	}
+
+	private int[] queryCount(String sysCod) {
+		
+		int[] resInt = new int[2];
+		BCfgdefTrnjrn bCfgdefTrnjrn = new BCfgdefTrnjrn();
+		String currDte = sdfdte.format(new Date());
+		bCfgdefTrnjrn.setSyscod(sysCod);
+		bCfgdefTrnjrn.setJrndte(currDte);
+		List tmpList =bCfgdefTrnjrnService.find(bCfgdefTrnjrn);
+		
+		if(tmpList!=null && tmpList.size()>0){
+			String resCount = "";
+			bCfgdefTrnjrn = (BCfgdefTrnjrn)tmpList.get(0);
+			resCount = 	bCfgdefTrnjrn.getJrnval();
+			resInt[0] = Integer.parseInt(resCount);
+			resInt[1] = Integer.parseInt(resCount)+1000;
+			bCfgdefTrnjrn.setJrnval(String.valueOf(resInt[1]));
+			bCfgdefTrnjrnService.update(bCfgdefTrnjrn);
+		}else{
+		    String ID  = GUIDGenerator.generateId();
+		    bCfgdefTrnjrn.setId(ID);
+		    bCfgdefTrnjrn.setJrnval("1000");
+		    resInt[0] = 0;
+		    resInt[1] = 1000;
+		    bCfgdefTrnjrnService.save(bCfgdefTrnjrn);		    
+		}
+		return resInt;
+	}
+    /**
+     * 
+     * @param sysCod 1位 系统编码："C","F","A"
+     * @param sysTyp 1位 系统内部编码：各自定义
+     * @param trnCod 8位 交易编码： "10001001"
+     * @return
+     */
+	public static String generateJrn(String sysCod,String sysTyp,String trnCod){
+		return instance.generateIdStringBuffer(sysCod, sysTyp, trnCod).toString();
+	}
+
+	private StringBuffer generateIdStringBuffer(String sysCod,String sysTyp,String trnCod) {
+		return new StringBuffer(30).append(sysCod).append(sysTyp).append(trnCod)
+		.append(sdf.format(new Date())).append(formatCount(getCount(sysCod)));
+	}
+	
+	public BCfgdefTrnjrnService getBCfgdefTrnjrnService() {
+		return bCfgdefTrnjrnService;
+	}
+
+	public void setBCfgdefTrnjrnService(BCfgdefTrnjrnService cfgdefTrnjrnService) {
+		bCfgdefTrnjrnService = cfgdefTrnjrnService;
+	}
+	
+	public static void main(String[] args) {
+		Long long1 = System.currentTimeMillis();
+		String sysCod="C";
+		String sysTyp="101";
+		String trnCod="10100001";
+		
+//		for(int i=0;i<100;i++){
+//			System.out.println("流水号："+JRNGenerator.getInstance().generateJrn(sysCod, sysTyp, trnCod));
+//		}
+		System.out.println(System.currentTimeMillis()-long1);
+	}
+	
+	
+}

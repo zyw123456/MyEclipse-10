@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-1-4 11:51:21 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.wrn.entity.WfDatCerditPrsn" table="WF_DAT_CERDITPRSN">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="prsnnam" type="string">
+            <column name="PRSNNAM" length="32" not-null="true" />
+        </property>
+        <property name="credtyp" type="string">
+            <column name="CREDTYP" length="8" />
+        </property>
+        <property name="credtno" type="string">
+            <column name="CREDTNO" length="32" />
+        </property>
+        <property name="prsncod" type="string">
+            <column name="PRSNCOD" length="32" not-null="true" />
+        </property>
+        <property name="loantyp" type="string">
+            <column name="LOANTYP" length="6" />
+        </property>
+        <property name="loanamt" type="string">
+            <column name="LOANAMT" length="10" />
+        </property>
+        <property name="loanlmt" type="string">
+            <column name="LOANLMT" length="6" />
+        </property>
+        <property name="prdcod" type="string">
+            <column name="PRDCOD" length="8" />
+        </property>
+        <property name="prdnam" type="string">
+            <column name="PRDNAM" length="64" />
+        </property>
+        <property name="loansrtdte" type="string">
+            <column name="LOANSRTDTE" length="16" />
+        </property>
+        <property name="loanenddte" type="string">
+            <column name="LOANENDDTE" length="16" />
+        </property>
+        <property name="telno" type="string">
+            <column name="TELNO" length="11" />
+        </property>
+        <property name="repaydte" type="string">
+            <column name="REPAYDTE" length="10" />
+        </property>
+        <property name="repaytyp" type="string">
+            <column name="REPAYTYP" length="32" />
+        </property>
+        <property name="repayamt" type="string">
+            <column name="REPAYAMT" length="32" />
+        </property>
+        
+        <property name="peoplecode" type="string">
+            <column name="PEOPLECODE" length="32" />
+        </property>
+        <property name="orgno" type="string">
+            <column name="ORGNO" length="32" />
+        </property>
+        <property name="parntcode" type="string">
+            <column name="PARNTCODE" length="32" />
+        </property>
+        <property name="sta" type="string">
+            <column name="STA" length="2">
+                <comment>0-&#180;&#253;&#178;&#185;&#179;&#228;&#215;&#202;&#193;&#207; 1-&#213;&#253;&#212;&#218;&#188;&#224;&#191;&#216;
+                2-&#212;&#221;&#205;&#163;&#188;&#224;&#191;&#216; 3-&#205;&#163;&#214;&#185;&#188;&#224;&#191;&#216; 4-&#202;&#253;&#190;&#221;&#210;&#236;&#179;&#163;</comment>
+            </column>
+        </property>
+        <property name="usrid" type="string">
+            <column name="USRID" length="32" />
+        </property>
+        <property name="p_usrid" type="string">
+            <column name="P_USRID" length="32" />
+        </property>
+        <property name="corgno" type="string">
+            <column name="CORGNO" length="32" />
+        </property>
+        <property name="cporgno" type="string">
+            <column name="CPORGNO" length="32" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:redis-default.properties</value>
+		</property>
+	</bean>
+	
+	<!-- 配置 RedisConfig对象 -->
+	<bean id="redisConfig" class="com.sinoway.cache.redis.utils.RedisConnectConfig">
+		<property name="hostLists" value="${redis_hostList}"></property>
+		<property name="dataDefaultTime" value="${redis_dataDefaultTime}"></property>
+	</bean>
+	
+	<!-- 配置缓存实现类为 RedisSingleImpl,并注入RedisConfig -->
+	<bean id="iCache" class="com.sinoway.cache.redis.RedisClusterImpl">
+		<property name="redisConfig" ref="redisConfig"></property>
+	</bean>
+
+</beans>

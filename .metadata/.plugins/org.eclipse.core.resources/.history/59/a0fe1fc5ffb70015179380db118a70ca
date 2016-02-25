@@ -1,0 +1,525 @@
+package com.sinoway.common.service.parse;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.parse.GeneralJsonMsgParser;
+import com.sinoway.common.util.StringUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+
+/**
+ * 通用json报文转换器
+ * 
+ * @author Liuzhen
+ * @version 1.0
+ * 2015-10-30 
+ */
+public class GeneralXmlTradeMsgTransferJson {
+	
+
+	/**
+	 * 通过模板对JSONObject进行转换，转换输出JsonObject
+	 * @param el   模板节点
+	 * @param pel 当前xml报文
+	 * @param roottel 整体xml报文
+	 * @return 转换完成的Json格式报文
+	 * @throws JsonMsgParseException  TradeMsgTransfException  Exception
+	 */
+	public JSONObject transfJsonMsgByJTemp(Element el,Element pel,Element rootel,String tradeCode,GeneralBusEntity entity) throws JsonMsgParseException,TradeMsgTransfException,Exception{
+		
+		if(el == null)
+			throw new TradeMsgTransfException("Json报文转换异常：模板节点不能为空");
+//		if(rootJson == null)
+//			throw new TradeMsgTransfException("Json报文转换异常：根（整体）报文不能为空");
+		
+		JSONObject json = new JSONObject();
+			
+		// 获取模板中所有子节点，目前包含 key obj list
+		NodeList nodes = el.getChildNodes();
+		
+		if(nodes != null && nodes.getLength() > 0){
+			//　逐个节点解析
+			for(int i = 0; i < nodes.getLength(); i ++ ){
+				
+				Node node =  nodes.item(i);
+				
+				// 获取当前节点名称
+				String nName = node.getNodeName();
+				
+				Element sEl = null;
+				
+				// 字符节点处理
+				if("KEY".equals(nName)){
+					
+					sEl = (Element)node;
+					// 获取节点key值
+					String keyV = sEl.getTextContent();
+					
+					// 是否为报文头赋值 0 - 不赋值 1-赋值
+					String assignment = sEl.getAttribute("ASSIGNMENT").equals("")? "0" : sEl.getAttribute("ASSIGNMENT");
+					
+					// 是否为交易码节点 0-不是  1-是
+					String isTradeCode = sEl.getAttribute("ISTRADECODE").equals("")? "0" : sEl.getAttribute("ISTRADECODE");
+					
+					
+					// 是否为空 0-可以为空   1-不可以为空       默认为空
+					String iscannull = sEl.getAttribute("ISCANNULL").equals("")? "0" : sEl.getAttribute("ISCANNULL");
+					
+					// 是否限制长度  0-不限制  1-限制       默认不限制
+					String len = sEl.getAttribute("LEN").equals("")? "0" : sEl.getAttribute("LEN");
+					
+					// 是否限制最大长度 0-不限制     1-限制     默认不限制
+					String maxlen = sEl.getAttribute("MAXLEN").equals("")? "0" : sEl.getAttribute("MAXLEN");
+					
+					// 是否限制最小长度 0-不限制     1-限制     默认不限制
+					String minlen = sEl.getAttribute("MINLEN").equals("")? "0" : sEl.getAttribute("MINLEN");
+					
+				    if(!isTradeCode.equals("0")){
+					  if(isTradeCode.length()>1)
+						throw new TradeMsgTransfException("Json报文转换异常：模板中字符节点ISTRADECODE值长度不能大于1");	
+					}
+					
+					// 对应流水字段
+					String colum = sEl.getAttribute("COLUM").equals("")? "0" : sEl.getAttribute("COLUM");
+					// 返回状态字段 0-否 1-是
+					String stateskey = sEl.getAttribute("STATESKEY").equals("")? "0" : sEl.getAttribute("STATESKEY");
+					// 返回结果字段 0-否 1-是
+					String resultkey = sEl.getAttribute("RESULTKEY").equals("")? "0" : sEl.getAttribute("RESULTKEY");
+
+					if("0".equals(assignment)){
+						if("".equals(StringUtil.trim(keyV)))
+							throw new TradeMsgTransfException("Json报文转换异常：模板中字符节点key值不能为空");
+					
+					}
+					
+					// 获取类型  0-从报文头中获取  1-从报文体中获取
+					String getType= sEl.getAttribute("GETTYPE").equals("")? "1" : sEl.getAttribute("GETTYPE");
+					
+					// 当前节点值获取表达式
+					String from = sEl.getAttribute("FROM");
+					if(!"".equals(keyV) && "1".equals(getType) && !"1".equals(isTradeCode)){
+						if(from == null || "".equals(from))
+							throw new TradeMsgTransfException("Json报文转换异常：模板中字符节点from值不能为空");
+					}
+					
+					
+					String value = "";
+					// 不是交易码节点
+					if("0".equals(isTradeCode)){
+						// 从报文头中获取
+						if("0".equals(getType)){
+							if("CLNTJRN".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getClntjrn());// 客户端流水 
+							}else if("ORGNO".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getOrgno());//机构号
+							}else if("USRID".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getUsrid()); // 用户ID
+							}else if("SUBUSRID".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getSubusrid());// 子用户ID
+							}else if("CLNTTRNDTE".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getClnttrndte());// 客户端日期
+							}else if("CLNTTRNTIME".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getClnttrntime());// 客户端时间
+							}else if("CHNLCOD".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getChnlcod());// 渠道号
+							}else if("PRDCOD".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getPrdcod());// 产品号
+							}else if("FNTTRNJRN".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getFnttrnjrn());// 前置流水号
+							}else if("FRNTTRNDTE".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getFrnttrndte());// 前置交易日期
+							}else if("FRNTTRNTIM".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getFrnttrntim());// 前置交易时间
+							}else if("MASTTRNDTE".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getMasttrndte());// 核心交易日期
+							}else if("MASTTRNTIM".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getMasttrntim());// 核心交易时间
+							}else if("MASTJRN".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getMastjrn());// 核心交易流水
+							}else if("SUPPTRNJRN".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getSupptrnjrn());// 供应商交易流水
+							}else if("SUPPTRNDTE".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getSupptrndte());// 供应商交易日期
+							}else if("SUPPTRNTIM".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getSupptrntim());// 供应商交易时间
+							}else if("TRNBTCHID".equals(colum)){
+								value = StringUtil.NullToString(entity.getCoreHeader().getTrnbtchid());// 交易批次号
+							}
+							
+							if("1".equals(stateskey))
+								value = StringUtil.NullToString(entity.getProcSta());// 处理状态
+							
+							if("1".equals(resultkey))
+								value = StringUtil.NullToString(entity.getProcReslut());// 处理结果
+							
+						// 从报文体中获取
+						}else if("1".equals(getType)){
+							// 是否继承父节点 0-否  1-是，默认为否
+							String extend = sEl.getAttribute("EXTEND").equals("") ? "0" : sEl.getAttribute("EXTEND");
+							if(!"".equals(from)){
+								// 不继承父节点
+								if("0".equals(extend)){
+									Object o = GeneralJsonMsgParser.getXmlValueByKey(pel, from);
+									if(o != null){
+										try{
+											value = (String)o;
+										}catch(Exception e){
+											throw new TradeMsgTransfException("Json报文转换异常：字符节点值不匹配:key:" + keyV + "，from:" + from);
+										}
+										value = (String)o;
+									}
+									
+								// 继承父节点
+								}else if("1".equals(extend)){
+									if(pel.getNodeName() == null)
+										throw new TradeMsgTransfException("Json报文转换异常：key节点extend属性为1时候,父JsonObject不能为空:key:" + keyV + "，from:" + from);
+									
+									Object o = GeneralJsonMsgParser.getXmlValueByKey(pel, from);
+									if(o != null){
+										try{
+											value = (String)o;
+										}catch(Exception e){
+											throw new TradeMsgTransfException("Json报文转换异常：字符节点值类型不匹配:key:" + keyV + "，from:" + from);
+										}
+									}
+								}else{
+									throw new TradeMsgTransfException("Json报文转换异常：不支持的extend属性值:key:" + keyV + "，from:" + from);
+								}
+							}
+						}else{
+							throw new TradeMsgTransfException("Json报文转换异常：不支持的getType属性值：" + getType);
+						}
+						
+						// 为报文头赋值
+						if(!"0".equals(colum) && "1".equals(assignment)){
+							if("CLNTJRN".equals(colum)){
+								entity.getCoreHeader().setClntjrn(value);// 客户端流水 
+							}else if("ORGNO".equals(colum)){
+								entity.getCoreHeader().setOrgno(value);//机构号
+							}else if("USRID".equals(colum)){
+								entity.getCoreHeader().setUsrid(value); // 用户ID
+							}else if("SUBUSRID".equals(colum)){
+								entity.getCoreHeader().setSubusrid(value);// 子用户ID
+							}else if("CLNTTRNDTE".equals(colum)){
+								entity.getCoreHeader().setClnttrndte(value);// 客户端日期
+							}else if("CLNTTRNTIME".equals(colum)){
+								entity.getCoreHeader().setClnttrntime(value);// 客户端时间
+							}else if("CHNLCOD".equals(colum)){
+								entity.getCoreHeader().setChnlcod(value);// 渠道号
+							}else if("PRDCOD".equals(colum)){
+								entity.getCoreHeader().setPrdcod(value);// 产品号
+							}else if("FNTTRNJRN".equals(colum)){
+								entity.getCoreHeader().setFnttrnjrn(value);// 前置流水号
+							}else if("FRNTTRNDTE".equals(colum)){
+								entity.getCoreHeader().setFrnttrndte(value);// 前置交易日期
+							}else if("FRNTTRNTIM".equals(colum)){
+								entity.getCoreHeader().setFrnttrntim(value);// 前置交易时间
+							}else if("MASTTRNDTE".equals(colum)){
+								entity.getCoreHeader().setMasttrndte(value);// 核心交易日期
+							}else if("MASTTRNTIM".equals(colum)){
+								entity.getCoreHeader().setMasttrntim(value);// 核心交易时间
+							}else if("MASTJRN".equals(colum)){
+								entity.getCoreHeader().setMastjrn(value);// 核心交易流水
+							}else if("SUPPTRNJRN".equals(colum)){
+								entity.getCoreHeader().setSupptrnjrn(value);// 供应商交易流水
+							}else if("SUPPTRNDTE".equals(colum)){
+								entity.getCoreHeader().setSupptrndte(value);// 供应商交易日期
+							}else if("SUPPTRNTIM".equals(colum)){
+								entity.getCoreHeader().setSupptrntim(value);// 供应商交易时间
+							}else if("TRNBTCHID".equals(colum)){
+								entity.getCoreHeader().setTrnbtchid(value);// 交易批次号
+							}
+						}
+					// 交易码节点
+					}else{
+						if(tradeCode == null || "".equals(tradeCode)){
+							value = pel.getTextContent();
+						}else{
+							value = tradeCode;
+						}
+					}
+					
+					// 拼装节点
+					if(!"".equals(keyV)){
+						//此时整个属性配置了不能为空，
+						if("1".equals(iscannull)){
+							throw new TradeMsgTransfException("Json报文转换异常："+keyV+"属性的value不能为空");
+						}
+						//配置此属性的固定长度
+						if(Integer.valueOf(len)!= value.length() && !len.equals("0")){
+							throw new TradeMsgTransfException("Json报文转换异常："+keyV+"属性的固定长度是"+len);
+						}
+						
+						//配置此属性的最大长度
+						if(Integer.valueOf(maxlen) < value.length() && !maxlen.equals("0")){
+							throw new TradeMsgTransfException("Json报文转换异常："+keyV+"属性的最大长度是"+maxlen);
+						}
+						
+						//配置此属性的最小长度
+						if(Integer.valueOf(minlen) < value.length() && !minlen.equals("0") ){
+							throw new TradeMsgTransfException("Json报文转换异常："+keyV+"属性的最小长度是"+minlen);
+						}
+						json.put(keyV, StringUtil.NullToString(value));
+					}
+						
+				//　JSONObject 节点解析
+				}else if("OBJ".equals(nName)){
+					sEl = (Element)node;
+					
+					// 转换后报文的key值
+					String keyV = sEl.getAttribute("KEY");
+					if(keyV == null || "".equals(keyV))
+						throw new TradeMsgTransfException("Json报文转换异常：obj节点的key属性不能为空");
+					
+					// 节点值获取表达式
+					String from = sEl.getAttribute("FROM");
+					
+					//  是否继承父节点 0-否  1-是，默认为否
+					String extend = sEl.getAttribute("EXTEND").equals("") ? "0" : sEl.getAttribute("EXTEND"); 
+					
+					// 解析obj节点
+					JSONObject fromJson = null;
+					
+					//　从报文中获取节点值来源的JsonObject
+					if(!"".equals(from)){
+						Object o = null;
+						// 不继承父节点
+						if("0".equals(extend)){
+						
+							o = GeneralJsonMsgParser.getXmlValueByKey(rootel, from);
+
+						// 继承父节点，此时pJson不能为空
+						}else if("1".equals(extend)){
+							
+							if(pel.getNodeName() == null){
+								throw new TradeMsgTransfException("Json报文转换异常：obj节点extend属性为1是,父JsonObject不能为空");
+							}
+							
+							o = GeneralJsonMsgParser.getXmlValueByKey(pel, from);
+						
+						}else{
+							throw new TradeMsgTransfException("Json报文转换异常：不支持的extend属性值");
+						}
+						if(o != null){
+							try{
+								fromJson = (JSONObject)o;
+							}catch(Exception e){
+								e.printStackTrace();
+								throw new TradeMsgTransfException("Json报文转换异常：obj值类型不匹配");
+							}
+						}
+					}
+					
+					JSONObject sJson = transfJsonMsgByJTemp(sEl,pel,rootel,tradeCode,entity);
+					
+					json.put(keyV, sJson);
+				
+				//　JSONArray 节点解析	
+				}else if("LIST".equals(nName)){
+					sEl = (Element)node;
+					
+					// 转换后报文的key值
+					String keyV = sEl.getAttribute("KEY");
+					if(keyV == null || "".equals(keyV))
+						throw new TradeMsgTransfException("Json报文转换异常：obj节点的key属性不能为空");
+					
+					// 节点值获取表达式
+					String from = sEl.getAttribute("FROM");
+					
+					if(from == null || "".equals(from))
+						throw new TradeMsgTransfException("Json报文转换异常：模板中list节点from值不能为空");
+					
+					//  是否继承父节点 0-否  1-是，默认为否
+					String extend = sEl.getAttribute("EXTEND").equals("") ? "0" : sEl.getAttribute("EXTEND"); 
+					
+					Object o = null;
+					// 不继承父节点
+					if("0".equals(extend)){
+					
+						o = GeneralJsonMsgParser.getXmlValueByKey(rootel, from);
+
+					// 继承父节点，此时pJson不能为空
+					}else if("1".equals(extend)){
+						
+						if(pJson == null){
+							throw new TradeMsgTransfException("Json报文转换异常：list节点extend属性为1是,父JsonObject不能为空");
+						}
+						
+						o = GeneralJsonMsgParser.getXmlValueByKey(pel, from);
+					
+					}else{
+						throw new TradeMsgTransfException("Json报文转换异常：不支持的extend属性值");
+					}
+					
+					JSONArray fromJsa = null;
+					try{
+						fromJsa = (JSONArray)o;
+					}catch(Exception e){
+						e.printStackTrace();
+						throw new TradeMsgTransfException("Json报文转换异常：list节点的值类型不匹配"); 
+					}
+					
+					//　解析list节点
+					JSONArray jsa = transfJsonArrMsgByJTemp(sEl,fromJsa,pJson,rootJson);
+					if(jsa != null ){
+						json.put(keyV, jsa);
+					}
+				}
+				
+			}
+		}else{
+			throw new TradeMsgTransfException("Json报文转换异常：模板中obj节点不能没有子节点");
+		}
+		
+		return json;
+		
+	}
+	
+	/**
+	 * 通过模板对JSONArray进行转换，转换输出JsonArray
+	 * @param el   模板节点
+	 * @param jsa  要解析的jsonArray
+	 * @param pJson 当前Json报文
+	 * @param rootJson 整体Json报文
+	 * @return 转换完成的JsonArray格式报文
+	 * @throws TradeMsgTransfException 
+	 * @throws JsonMsgParseException 
+	 */
+	private JSONArray transfJsonArrMsgByJTemp(Element el,JSONArray jsa,JSONObject pJson,JSONObject rootJson) throws TradeMsgTransfException{
+		
+		if(el == null)
+			throw new TradeMsgTransfException("JsonArray报文转换异常：模板节点不能为空");
+		if(rootJson == null)
+			throw new TradeMsgTransfException("JsonArray报文转换异常：根（整体）报文不能为空");
+		if(jsa == null || jsa.size() == 0)
+			return new JSONArray();
+		
+		NodeList nodes = el.getChildNodes();
+		String fromVcanNoKeyFlg = "0";
+		// 如果当前list节点没有子节点，那么值来源的JSONArray可以没有key值，即["a","b"]的形式，否则必须为JSONObject
+		if(nodes == null)
+			fromVcanNoKeyFlg = "1";
+		
+		// 如果当前list节点只有一个key子节点，那么值来源的JSONArray可以没有key值，即["a","b"]的形式，否则必须为JSONObject;
+		if(nodes.getLength() == 0){
+			Node node = nodes.item(0);
+			if("KEY".equals(node.getNodeName())){
+				fromVcanNoKeyFlg = "2";	
+			}
+		}
+			
+		
+		//　解析后返回的JSONArray
+		JSONArray jsonArray = new JSONArray();
+		
+		
+		for(int i = 0; i < jsa.size(); i++){
+
+			// 获取当前值来源对象
+			Object o = jsa.get(i);
+			// 如果值来源的jsa子元素类型为String，则list节点必须没有子节点或之后一个key子节点
+			if(o instanceof String){
+				if(!("1".equals(fromVcanNoKeyFlg) || "2".equals(fromVcanNoKeyFlg))){
+					throw new TradeMsgTransfException("JsonArray报文转换异常：list子节点值类型不匹配");
+				}
+				String v = (String)o;
+				if("2".equals(fromVcanNoKeyFlg)){
+					JSONObject json = new JSONObject();
+					String keyV = nodes.item(0).getTextContent();
+					json.put(keyV, v);
+					jsonArray.add(keyV);
+				}else if("1".equals(fromVcanNoKeyFlg)){
+					jsonArray.add(v);
+				}
+			}else if(o instanceof JSONObject){
+				
+				JSONObject fromJson = (JSONObject)o;
+				
+				for(int j = 0; j < nodes.getLength(); j ++){
+					Element sEl = (Element) nodes.item(j);
+					String keyV = sEl.getNodeName();
+					String from = sEl.getAttribute("FROM");
+					String extend = sEl.getAttribute("EXTEND");
+					
+					if("KEY".equals(keyV)){
+						String k = sEl.getTextContent();
+						if("".equals(k))
+							throw new TradeMsgTransfException("JsonArray报文转换异常：key节点键值不能为空");
+						if("".equals(from))
+							throw new TradeMsgTransfException("JsonArray报文转换异常：不支持的list子节点类型");
+						// 继承父节点
+						if("0".equals(extend)){
+							Object oV = null;
+						// 不继承父节点
+						}else if("1".equals(extend)){
+							
+						}else{
+							throw new TradeMsgTransfException("JsonArray报文转换异常：不支持的extend属性值");
+						}
+					}else if("OBJ".equals(keyV)){
+						
+					}else if("LIST".equals(keyV)){
+						
+					}else{
+						throw new TradeMsgTransfException("JsonArray报文转换异常：不支持的list子节点类型");
+					}
+				}
+			}else{
+				throw new TradeMsgTransfException("JsonArray报文转换异常：不支持的list子节点值类型");
+			}
+			
+		}
+
+		// 开始逐个字段解析
+		for(int j = 0; j < 2; j ++){
+			JSONObject json = new JSONObject();
+			for(int i = 0; i < nodes.getLength(); i ++ ){
+				
+				Node node =  nodes.item(i);
+				Element sEl = null;
+				String nName = node.getNodeName();
+				
+				if("KEY".equals(nName)){
+					sEl = (Element)node;
+					String keyV = sEl.getTextContent();
+					
+					if(keyV != null && !"".equals(keyV)){
+						json.put(keyV, "StringValue");
+					}
+				}else if("OBJ".equals(nName)){
+					sEl = (Element)node;
+					String keyV = sEl.getAttribute("KEY");
+					
+					if(keyV != null && !"".equals(keyV)){
+						//JSONObject sJson = transfJsonMsgByJTemp(sEl,rootJson);
+						
+//						if(sJson != null){
+//							json.put(keyV, sJson);
+//						}
+					}
+					
+				}else if("LIST".equals(nName)){
+					sEl = (Element)node;
+					String keyV = sEl.getAttribute("KEY");
+					
+					if(keyV != null && !"".equals(keyV)){
+					//	JSONArray jsa = transfJsonArrMsgByJTemp(sEl,rootJson);
+						if(jsa != null ){
+							json.put(keyV, jsa);
+						}
+					}
+				}
+			}
+			jsonArray.add(json);
+		}
+		
+	
+		return jsonArray;
+	}
+	
+
+}

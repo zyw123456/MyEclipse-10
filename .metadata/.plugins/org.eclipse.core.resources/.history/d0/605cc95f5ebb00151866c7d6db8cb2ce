@@ -1,0 +1,117 @@
+package com.sinoway.common.util;
+
+import java.security.MessageDigest;
+import java.util.Random;
+
+/**
+ * 通用字符处理工具类
+ * @author LiuZhen
+ * @version 1.0
+ * 2015-10-30
+ */
+public class StringUtil {
+
+	
+	/**
+	 * null转换空
+	 * @param str
+	 * @return
+	 */
+	public static String NullToString(String str){
+		
+		if(str == null){
+			return "";
+		}
+		return str;
+	}
+	
+	/**
+	 * 去前后空格
+	 * @param str
+	 * @return
+	 */
+	public static String trim(String str) {
+		if(str == null){
+			return "";
+		}
+		
+		return str.trim();
+		
+	}
+	
+	/**
+	 * 采用hash算法获得信息摘要，可采用的算法有MD5算法和SHA1算法
+	 * 
+	 * @param unencodedPassword
+	 *            待加密的字符串
+	 * @param algorithm
+	 *            加密算法，只能写Constants.MD5或者Constants.SHA1
+	 * @return <li>null 失败</li> <li>非空 加密后的字符串</li>
+	 */
+	public static String hash(byte[] unencodedPassword, String algorithm) {
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance(algorithm);
+		} catch (Exception e) {
+
+			return null;
+		}
+
+		md.reset();
+
+		md.update(unencodedPassword);
+
+		byte[] encodedPassword = md.digest();
+
+		StringBuffer buf = new StringBuffer();
+
+		for (int i = 0; i < encodedPassword.length; i++) {
+			if ((encodedPassword[i] & 0xff) < 0x10) {
+				buf.append("0");
+			}
+
+			buf.append(Long.toString(encodedPassword[i] & 0xff, 16));
+		}
+
+		return buf.toString();
+	}
+
+	/**
+	 * 采用hash算法获得信息摘要，可采用的算法有MD5算法和SHA1算法
+	 * 
+	 * @param password
+	 *            待加密的字符串
+	 * @param algorithm
+	 *            加密算法，只能写Constants.MD5或者Constants.SHA1
+	 * @return <li>null 失败</li> <li>非空 加密后的字符串</li>
+	 */
+	public static String hash(String str, String algorithm) {
+		return hash(str.getBytes(), algorithm);
+	}
+	public static void main(String[] args) {
+		System.out.println(StringUtil.hash("00000000000000000000","MD5"));
+	}
+	 
+	 /**
+     * java生成随机数字和字母组合
+     * @param length[生成随机数的长度]
+     * @return
+     */
+    public static String getCharAndNumr(int length) {
+        String val = "";
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            // 输出字母还是数字
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; 
+            // 字符串
+            if ("char".equalsIgnoreCase(charOrNum)) {
+                // 取得大写字母还是小写字母
+                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; 
+                val += (char) (choice + random.nextInt(26));
+            } else if ("num".equalsIgnoreCase(charOrNum)) { // 数字
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
+}

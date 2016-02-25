@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;logback.xml&apos; to &apos;sinoway_pub/conf&apos;&#x0D;&#x0A;- Original project: &apos;sinoway_mcp&apos;&#x0D;&#x0A;- Destination element: &apos;sinoway_pub/conf&apos;&#x0D;&#x0A;- Original element: &apos;logback.xml&apos;" description="Copy file" destination="=sinoway_pub/conf" element1="conf/logback.xml" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1455608369330" units="0" version="1.0"/>
+</session>

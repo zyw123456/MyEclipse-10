@@ -1,0 +1,46 @@
+package com.sinoway.common.service.cfg.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.sinoway.base.entity.BCfgdefPrdinfo;
+import com.sinoway.base.service.BCfgdefPrdinfoService;
+import com.sinoway.base.service.BCfgrefPrddetilService;
+import com.sinoway.common.service.cfg.CommonProductService;
+
+@Service("commonDefProductService")
+public class CommonDefProductService  implements CommonProductService{
+
+	@Autowired
+	private BCfgdefPrdinfoService bCfgdefPrdinfoService;
+	
+	@Autowired
+	private BCfgrefPrddetilService bCfgrefPrddetilService;
+	
+	public Object addprdInfo(Object prdInfo) throws Exception {
+	
+		return 	bCfgdefPrdinfoService.insert("BCfgdefPrdinfo.insertByEntity", prdInfo);
+	}
+
+	public Object editprdInfo(Object prdInfo) throws Exception {
+		
+		return bCfgdefPrdinfoService.update("BCfgdefPrdinfo.updateByEntity", prdInfo);
+	}
+
+	@Override
+	public Object delprdInfo(Object prdInfo) throws Exception {
+		
+		return bCfgdefPrdinfoService.delete("BCfgdefPrdinfo.deleteByEntity", prdInfo);
+	}
+
+	@Override
+	public Object addPrddetil(Object bCfgdefPrdinfo) throws Exception {
+		return bCfgrefPrddetilService.insert("BCfgrefPrddetil.insertByEntity", bCfgdefPrdinfo);
+	}
+
+	@Override
+	public Object editPrddetil(BCfgdefPrdinfo bCfgdefPrdinfo) throws Exception {
+		return bCfgrefPrddetilService.update("BCfgrefPrddetil.insertByEntity", bCfgdefPrdinfo);
+	}
+
+}

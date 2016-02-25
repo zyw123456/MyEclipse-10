@@ -1,0 +1,442 @@
+package com.sinoway.common.service.server.http;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
+import org.springframework.web.context.ServletContextAware;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.sinoway.base.entity.BCfgdefChnltrd;
+import com.sinoway.common.constant.SystemConstant;
+import com.sinoway.common.constant.MsgTransfConstant.MsgTemplateType;
+import com.sinoway.common.constant.ServerConstant.ResSta;
+import com.sinoway.common.constant.ServerConstant.ServiceBean;
+import com.sinoway.common.constant.SystemConstant.IsOrNot;
+import com.sinoway.common.constant.SystemConstant.SOPtrnTypt;
+import com.sinoway.common.entity.DesEntity;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.entity.GeneralMsgHeader;
+import com.sinoway.common.entity.Product;
+import com.sinoway.common.entity.Trade;
+import com.sinoway.common.exception.MsgHeaderParseException;
+import com.sinoway.common.exception.TradeAuthException;
+import com.sinoway.common.exception.TradeProcException;
+import com.sinoway.common.frame.SpringContextUtil;
+import com.sinoway.common.service.parse.GeneralMsgHeaderService;
+import com.sinoway.common.service.processer.GeneralProcesserService;
+import com.sinoway.common.service.server.authen.AuthenTemplateFactory;
+import com.sinoway.common.service.template.GeneralTemplateService;
+import com.sinoway.common.util.ByteUtil;
+import com.sinoway.common.util.DateUtil;
+import com.sinoway.common.util.McpLogger;
+import com.sinoway.common.util.StringUtil;
+import com.sinoway.common.util.SystemCfgUtil;
+import com.sinoway.common.util.SystemOperateUtil;
+import com.yzj.wf.com.ibank.common.server.IBankServer;
+import com.yzj.wf.com.ibank.common.server.ThreadPoolException;
+
+/**
+ * http服务
+ * @author jintao
+ *
+ */
+public class GeneralHttpControl extends ActionSupport  implements ServletRequestAware, ServletResponseAware, ServletContextAware{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private HttpServletRequest request;
+	private ServletContext servletContext;
+	private HttpServletResponse response;
+	private AuthenTemplateFactory authtemplFactoryService;//Ip 渠道 交易认证模板工厂
+	private GeneralMsgHeaderService msgHeaderService;// 通用报文头解析服务
+	private GeneralTemplateService templateService = null;// 交易模板服务
+	private McpLogger logger = McpLogger.getLogger(getClass());
+	
+	public void execute_work(){
+		String ip = request.getRemoteAddr();
+		logger.info("获取到http请求 ip地址："+ip);
+		GeneralProcesserService processer = null;
+//		ip = "127.0.0.1";
+		try {
+		//判断ip是否可以访问	
+		if(authtemplFactoryService != null){
+				if(!authtemplFactoryService.isIpCanDo(ip)){
+					logger.error("不接收该Ip的请求：ip" + ip + "：" + request.getRemotePort());
+					return ;
+				}
+			} 
+		}catch (TradeAuthException e) {
+			logger.error("发生认证异常："+e.getMessage());
+			e.printStackTrace();
+		}
+		GeneralMsgHeader header = null;
+		try {
+			header = msgHeaderService.reciveMsgHeader(request);
+			
+		} catch (MsgHeaderParseException e) {
+			logger.error("服务处理异常，接收报文头信息错误" +e.getMessage());
+			e.printStackTrace();
+			return;
+		}
+
+		
+		// 接收时间
+		Date date = new Date();
+		
+		// 初始化业务处理实体
+		GeneralBusEntity busEntity = new GeneralBusEntity(); 
+		busEntity.setTrnddate(date);
+		// 设置交易日期
+		busEntity.setTrnDate(DateUtil.dateToString(date, "yyyyMMdd"));
+		// 设置交易时间
+		busEntity.setTrnTime(DateUtil.dateToString(date, "HHmmssSSS"));
+		//TODO 具体存储方式待定
+//		byte[] hBytes = header.getBytes();
+//		
+//		if(hBytes == null || hBytes.length == 0){
+//			logger.error("：服务处理异常，接收报文头信息错误，报文头信息不能为空。端口号：" + port);
+//			throw new ThreadPoolException("服务处理异常，接收报文头信息错误，报文头信息不能为空：" + port);
+//		}
+//		try{
+//			SystemOperateUtil.savePortFile(date,  "h", "req", hBytes);
+//		}catch(Exception e){
+//			logger.error("：服务处理异常：请求报文头存储失败：" + port);
+//		}
+		
+		busEntity.setHeader(header);	
+		// 渠道号
+		String chnlCode = header.getChnlcod();
+		try {
+		// 非渠道号
+		if(SystemConstant.NOT_CHNLCODE.equals(chnlCode)){
+			logger.error("：交易处理失败：渠道号不能为00000000：" +"，渠道号：" + chnlCode);
+			throw new ThreadPoolException("交易处理失败：渠道号不能为00000000：" +"，渠道号：" + chnlCode);
+		}
+			
+		//外部 交易码
+		String tradeCode = header.getOuttrncod();
+		
+		// 产品码
+		String prdCode = header.getPrdcod();
+		
+		// 交易模板
+		Trade trade = null;
+		
+		// 产品模板
+		Product product = null;
+	
+			
+		
+		// 单笔提交时交易码  产品码不能同时为非
+		if(IsOrNot.NOT.getValue().equals(header.getIsbatch())){
+			if(SystemConstant.NOT_TRCODE.equals(tradeCode) && SystemConstant.NOT_PRDCODE.equals(prdCode)){
+				logger.error("：交易处理失败：交易码/产品码不能同时为非：" +"，交易码：" + tradeCode + "，产品码：" + prdCode);
+				throw new ThreadPoolException("交易处理失败：交易码/产品码不能同时为非：" +"，交易码：" + tradeCode + "，产品码：" + prdCode);
+			}
+		}
+		// 交易码与产品码不能同时有值
+		if(!SystemConstant.NOT_TRCODE.equals(tradeCode) && !SystemConstant.NOT_PRDCODE.equals(prdCode)){
+			logger.error("：交易处理失败：交易码/产品码不能同时不为非：" +"，交易码：" + tradeCode + "，产品码：" + prdCode);
+			throw new ThreadPoolException("交易处理失败：交易码/产品码不能同不时为非：" +"，交易码：" + tradeCode + "，产品码：" + prdCode);
+		}
+		
+		// 获取内部交易码
+		if(!SystemConstant.NOT_TRCODE.equals(tradeCode)){
+			logger.info("本次交易为原交易请求，交易码:" + tradeCode + "，渠道号：" + chnlCode );
+			//外部交易码转换内部交易码
+			tradeCode = SystemCfgUtil.getIntrByOutTr(tradeCode, SOPtrnTypt.O);
+			header.setIntrncod(tradeCode);
+			logger.info("：交易认证......，交易码:" + tradeCode + "，渠道号：" + chnlCode );
+			try{
+				// 交易认证不通过
+				if(!authtemplFactoryService.isChnlIpTradeCanDo(chnlCode, ip, tradeCode)){
+					logger.error("：交易处理失败：渠道 ip 交易码认证不通过：" +"，渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+					throw new ThreadPoolException("交易处理失败：渠道 ip 交易码认证不通过：" +"，渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+				}
+			}catch(Exception e){
+				logger.error("：交易处理失败：交易认证出现异常：" + e);
+				throw new ThreadPoolException("交易处理失败：交易认证出现异常：" + e);
+			}
+			
+			logger.info("：交易认证通过，交易码:" + tradeCode + "，渠道号：" + chnlCode );
+			
+			// 获取交易配置模板
+			try {
+				trade = templateService.getTradeByTemplate(chnlCode, tradeCode);
+			} catch (Exception e) {
+				logger.error("：交易处理失败：获取交易配置模板异常：" + e);
+				throw new ThreadPoolException("交易处理失败：获取交易配置模板异常：" + e);
+			}
+			
+			if(trade == null){
+				logger.error("：交易处理失败：交易模板未配置："  + "渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+				throw new ThreadPoolException("交易处理失败：交易模板未配置：" +"渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+			}
+			// 获取业务处理服务
+			processer = (GeneralProcesserService)SpringContextUtil.getBean(trade.getParamValueByName(ServiceBean.PROCESSER.getValue()));
+			
+			if(processer == null){
+				logger.error("交易处理失败：业务处理服务不能为空：" + "渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+				throw new ThreadPoolException("交易处理失败：业务处理服务不能为空：" + "渠道号：" + chnlCode + "，IP:" + ip +  "，交易码：" + tradeCode);
+			}
+			
+			// 设置交易类型
+			busEntity.setTrnType(SOPtrnTypt.O.getValue());
+		}else if (!SystemConstant.NOT_PRDCODE.equals(prdCode)){
+
+			logger.info( "本次交易为产品请求，产品码:" + prdCode + "，渠道号：" + chnlCode );
+			logger.info("产品认证......，产品码:" + prdCode + "，渠道号：" + chnlCode );
+			try{
+				// 产品交易认证不通过
+				if(!authtemplFactoryService.isChnlIpPrdCanDo(chnlCode, ip, prdCode)){
+					logger.error("交易处理失败：渠道 ip 产品码认证不通过，端口号：渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+					throw new ThreadPoolException("交易处理失败：渠道 ip 产品码认证不通过，端口号： 渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+				}
+			}catch(Exception e){
+				logger.error("交易处理失败：交易认证出现异常" ,e);
+				throw new ThreadPoolException("交易处理失败：交易认证出现异常，端口号：" + e);
+			}
+			logger.info("产品认证通过，产品码:" + prdCode + "，渠道号：" + chnlCode );
+			
+			// 获取产品配置模板
+			try {
+				product = templateService.getPrdByTemplate(chnlCode, prdCode);
+			} catch (Exception e) {
+				logger.error("交易处理失败：获取产品配置模板异常，端口号：" ,e);
+				throw new ThreadPoolException("交易处理失败：获取产品配置模板异常，端口号：" ,e);
+			}
+			
+			if(product == null){
+				logger.error("交易处理失败：产品模板未配置，端口号：" +  "，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+				throw new ThreadPoolException("交易处理失败：产品模板未配置，端口号：" +  "，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+			}
+
+				// 获取业务处理服务
+			processer = (GeneralProcesserService)SpringContextUtil.getBean(product.getParamValueByName(ServiceBean.PROCESSER.getValue()));
+			
+			if(processer == null){
+				logger.error("交易处理失败：业务处理服务不能为空，端口号：" +  "，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+				throw new ThreadPoolException("交易处理失败：业务处理服务不能为空，端口号：" + "，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+			}
+			
+			// 设置交易类型
+			busEntity.setTrnType(SOPtrnTypt.P.getValue());
+		
+		}else{
+			logger.info("本次交易为批量请求，产品码:" + prdCode + "，渠道号：" + chnlCode );
+			// 获取渠道配置信息
+			BCfgdefChnltrd  chnlEntity = SystemCfgUtil.getChnlCfgInf(header.getChnlcod(), null, null);
+			if(chnlEntity == null || StringUtil.NullToString(chnlEntity.getBeannam()).equals("")){
+				logger.error("交易处理失败：批量发起时渠道配置或bean配置不能为空，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+				throw new ThreadPoolException("交易处理失败：批量发起时渠道配置或bean配置不能为空,渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+			}
+			// 获取业务处理服务
+			processer = (GeneralProcesserService)SpringContextUtil.getBean(chnlEntity.getBeannam());
+			
+			if(processer == null){
+				logger.error("交易处理失败：业务处理服务不能为空，渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+				throw new ThreadPoolException("交易处理失败：业务处理服务不能为空,渠道号：" + chnlCode + "，IP:" + ip +  "，产品码：" + prdCode);
+			}
+		}
+		
+		//获取报文体
+		byte[] msgBody = null;
+		try {
+			InputStream inputStream = request.getInputStream();
+			if(null == inputStream)
+				throw new ThreadPoolException("服务处理异常: 报文体内容不能为空");
+			msgBody = ByteUtil.input2byte(inputStream);
+			if(msgBody == null || msgBody.length == 0){
+				logger.error("服务处理异常: 报文体内容不能为空" );
+				throw new ThreadPoolException("服务处理异常: 报文体内容不能为空");	
+			}
+			logger.info("接收报文体数据完成，内容：" + new String(msgBody,"utf-8"));
+			busEntity.setDownMsg(msgBody);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//TODO 存储问题待定
+//		// 存储报文体
+//		try{
+//			SystemOperateUtil.savePortFile(date, port, "b", "req", msgBody);
+//		}catch(Exception e){
+//			logger.error("服务处理异常：请求报文体存储失败",e);
+//		}
+		
+		DesEntity keyEntity = SystemCfgUtil.getDesKeyInfByChnl(chnlCode);
+		if(keyEntity == null || StringUtil.NullToString(keyEntity.getKey()).equals("")){
+			logger.error("服务处理异常：密钥信息不能为空" +  "，渠道号：" + chnlCode);
+			throw new ThreadPoolException("服务处理异常：密钥信息不能为空" + "，渠道号：" + chnlCode);
+		}
+		
+		busEntity.setDesKeyInf(keyEntity);// 设置密钥信息
+		
+		String key = keyEntity.getKey();
+		
+		boolean isMsgTampered = true;
+		try{
+			isMsgTampered = SystemOperateUtil.isMsgTampered(key, msgBody, header.getCheckcod());
+		}catch(Exception e){
+			logger.error("服务处理异常：校验报文异常");
+			throw new ThreadPoolException("服务处理异常：校验报文异常");
+		}
+		if(isMsgTampered){
+			logger.error("服务处理异常：报文被篡改过");
+			throw new ThreadPoolException("服务处理异常：报文被篡改过");
+		}
+		try{
+			
+			String msgType = header.getMsgtype();
+			// 业务发起报文
+			if(MsgTemplateType.REQ.getValue().equals(msgType)){
+				logger.info("开始发起交易......");
+				// 开启业务处理
+				busEntity = processer.excuteToCore(busEntity);
+				
+				logger.info("交易发起完成，前置流水:" +busEntity.getFrntJrn());
+			// 结果获取
+			}else if(MsgTemplateType.ASYNRESREQ.getValue().equals(msgType)){
+				logger.info("开始获取结果......");
+				// 开启获取结果
+				busEntity = processer.excuteToCore(busEntity);
+				logger.info("获取结果获取结果完成");
+			}else{
+				logger.error("服务处理异常：不支持的报文类型" +  "，报文类型：" + msgType);
+				throw new ThreadPoolException("服务处理异常：不支持的报文类型" + "，报文类型：" + msgType);
+			}
+		}catch(Exception e){
+			logger.error("服务处理异常：业务处理过程中出现异常",e);
+			throw new ThreadPoolException("服务处理异常：业务处理过程中出现异常",e);
+		}
+		
+		boolean flg = false;
+		
+		logger.info("开始返回响应报文......，前置流水:" +busEntity.getFrntJrn());
+		//返回报文头
+		byte[] upHeader =  null;
+		try{
+			upHeader = msgHeaderService.transHeaderToByte(header);
+			if(upHeader == null || upHeader.length == 0){
+				logger.error("服务处理异常：返回报文头信息不能为空");
+				busEntity.setResSta(ResSta.F.getValue());
+				busEntity.setErrMsg("服务处理异常：返回报文头信息不能为空");
+			}else{
+				flg = true;
+			}
+			
+		}catch(MsgHeaderParseException e){
+			logger.error("服务处理异常：转换报文头失败",e);
+			busEntity.setResSta(ResSta.F.getValue());
+			busEntity.setErrMsg(e.getClass().toString() + ":" + e.getMessage());
+		}catch(Exception e){
+			logger.error("服务处理异常：转换报文头失败",e);
+			busEntity.setResSta(ResSta.F.getValue());
+			busEntity.setErrMsg(e.getClass().toString() + ":" + e.getMessage());
+		}
+		if(flg){
+			try{
+				// 返回报文体
+				byte[] upMsg = busEntity.getUpMsg();
+				
+				if(upMsg == null || upMsg.length == 0){
+					logger.error("服务处理异常：返回报文体信息不能为空");
+					throw new ThreadPoolException("服务处理异常：返回报文体信息不能为空");
+				}
+				
+				//TODO 存储问题待定
+//				// 存储返回报文头与报文体
+//				try{
+//					SystemOperateUtil.savePortFile(date,port,"h", "res", upHeader);
+//					SystemOperateUtil.savePortFile(date,port,"", "res", upMsg);
+//				}catch(Exception e){
+//					logger.error("服务处理异常：存储响应报文信息失败",e);
+//				}
+//				logger.info("开始写回报文头，前置流水:" +busEntity.getFrntJrn()+ ",内容：" + new String(upHeader));
+				// 报文头写回
+				response.setHeader("checkcod", busEntity.getHeader().getCheckcod());
+				response.getOutputStream().write(upMsg);
+				logger.info("开始写回报文体，前置流水:" +busEntity.getFrntJrn()+ ",内容：" + new String(upMsg,"utf-8"));
+				// 报文体写e回
+				logger.info("本次交易处理完成，前置流水:" +busEntity.getFrntJrn());
+			}catch(IOException e){
+				logger.error("服务处理异常：返回客户端出现I/O异常",e);
+				busEntity.setResSta(ResSta.F.getValue());
+				busEntity.setErrMsg(e.getClass().toString() + ":" + e.getMessage());
+			}catch(Exception e){
+				logger.error("服务处理异常：返回客户端出现异常",e);
+				busEntity.setResSta(ResSta.F.getValue());
+				busEntity.setErrMsg(e.getClass().toString() + ":" + e.getMessage());
+			}
+		}
+		
+		// 返回客户端后的逻辑
+		try{
+			if(busEntity.isRecordFlw())
+				processer.afterExcute(busEntity);
+		}catch(TradeProcException e){
+			logger.error("服务处理异常:返回客户端后的后续逻辑操作出现异常",e);
+			throw new ThreadPoolException("服务处理异常:返回客户端后的后续逻辑操作出现异常",e);
+		}catch(Exception e){
+			logger.error("服务处理异常:返回客户端后的后续逻辑操作出现异常",e);
+			throw new ThreadPoolException("服务处理异常:返回客户端后的后续逻辑操作出现异常",e);
+		}
+		}catch (ThreadPoolException e) {
+			e.printStackTrace();
+		}
+//		return SUCCESS;
+		
+	}
+	public HttpServletRequest getRequest() {
+		return request;
+	}
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
+	@Override
+	public void setServletContext(ServletContext arg0) {
+		this.servletContext = arg0;
+		
+	}
+	@Override
+	public void setServletResponse(HttpServletResponse arg0) {
+		this.response=arg0;
+	}
+	@Override
+	public void setServletRequest(HttpServletRequest arg0) {
+		this.request=arg0;
+		
+	}
+	public AuthenTemplateFactory getAuthtemplFactoryService() {
+		return authtemplFactoryService;
+	}
+	public void setAuthtemplFactoryService(
+			AuthenTemplateFactory authtemplFactoryService) {
+		this.authtemplFactoryService = authtemplFactoryService;
+	}
+	public GeneralMsgHeaderService getMsgHeaderService() {
+		return msgHeaderService;
+	}
+	public void setMsgHeaderService(GeneralMsgHeaderService msgHeaderService) {
+		this.msgHeaderService = msgHeaderService;
+	}
+	public GeneralTemplateService getTemplateService() {
+		return templateService;
+	}
+	public void setTemplateService(GeneralTemplateService templateService) {
+		this.templateService = templateService;
+	}
+	
+
+
+}

@@ -1,0 +1,78 @@
+body{
+    /*background-color: #ededed;*/
+    font-size: 14px;
+    font-family: "Microsoft Yahei";
+    background-color: #eeeeee;
+    margin: 0;
+    padding: 0;
+    /*transition: 3s;*/
+}
+
+/*常用CSS*/
+.border-bottom-1{
+    border-bottom:1px #999999 solid;
+}
+.container1{
+    /*float: left;   */
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-top: -320px;
+    margin-left: -512px;
+    width: 1024px;
+    height: 620px;
+    background-color: #FFFFFF;
+    background-image: url("../images/center-sep.png");
+    background-repeat: no-repeat;
+    background-position: center 0;
+}
+.report-con{
+    background-color: #FFFFFF;
+}
+.report-main{
+    background-size: 10px 100%;
+    background-image: url("../images/center-sep.png");
+    background-repeat: no-repeat;
+    background-position: center 0;
+
+    /*height: 768px;*/
+    /*width: 10px;*/
+}
+
+/*logo边距*/
+
+.report-title{
+    height: 90px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.report-home{
+    display: block;
+    float: left;
+    padding-left: 0px;
+    padding-top: 15px;
+}
+.report-return{
+    display: block;
+    float: left;
+    color: #666666;
+    padding-left: 8px;
+    padding-top: 18px;
+    padding-bottom: 5px;
+    /*margin-top: 20px;*/
+}
+.report-return-title{
+    float: left;
+    height: 100%;
+    width: 100%;
+    margin-top:0px;
+    margin-bottom: -20px;
+    margin-left: 15px;
+    margin-right: 0px;
+}
+.padding-15{
+    padding-top: 15px;
+    /*padding-bottom: 15px;*/
+    margin-left: -15px;
+    margin-right: -15px;
+}

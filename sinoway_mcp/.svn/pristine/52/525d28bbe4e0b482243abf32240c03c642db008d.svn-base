@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- 配置更新action bean -->
+	<bean id="CommcpAction " name="CommcpAction" class="com.sinoway.common.action.ConfigAction">
+	</bean>
+	<!-- 国政通身份认证子交易 -->
+	<bean id="stQueryValidatorService" name="stQueryValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.gzt.service.StQueryValidatorService"></bean>
+	<!-- 国政学历信息子交易 -->
+	<bean id="stEduQueryValidatorService" name="stEduQueryValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.gzt.service.StEduQueryValidatorService"></bean>
+	<!-- 国政学职业资格子交易 -->
+	<bean id="stProQueryCareerInfoService" name="stProQueryCareerInfoService" scope="prototype"  class="com.sinoway.mcp.service.strade.gzt.service.StProQueryCareerInfoService"></bean>
+	<!-- 联通手机号验证子交易 -->
+	<bean id="stLinkPhoneValidatorService" name="stLinkPhoneValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.unicom.StLinkPhoneValidatorService"></bean>
+	<!-- 电信手机号验证子交易 -->
+	<bean id="stTelecomValidatorService" name="stTelecomValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.telecom.StTelecomValidatorService"></bean>
+	<!-- 国政通银行卡认证 -->
+	<bean id="BankCardValidatorService" name="BankCardValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.gzt.service.BankCardValidatorService"></bean>
+	<!-- 法海涉诉信息-->
+	<bean id="JustizsacheValidatorService" name="JustizsacheValidatorService" scope="prototype"  class="com.sinoway.mcp.service.strade.fh.JustizsacheValidatorService"></bean>
+	<!-- 亿美短信认证-->
+	<bean id="stExceedQueryUsercheckService" name="stExceedQueryUsercheckService" scope="prototype"  class="com.sinoway.mcp.service.strade.imate.service.StExceedQueryUsercheckService"></bean>
+	<!-- 国政通航旅信息-->
+	<bean id="PassengerWorthService" name="PassengerWorthService" scope="prototype"  class="com.sinoway.mcp.service.strade.gzt.service.PassengerWorthService"></bean>
+	<!-- 量化派 传统金融高风险筛查结果-->
+	<bean id="OverdueValiDataorService" name="OverdueValiDataorService" scope="prototype"  class="com.sinoway.mcp.service.strade.quantgroup.OverdueValiDataorService"></bean>
+	<!-- 数据堂个人对外投资信息-->
+	<bean id="stPerExtInvtmentService" name="stPerExtInvtmentService" scope="prototype"  class="com.sinoway.mcp.service.strade.sjutang.StPerExtInvtmentService"></bean>
+	
+	<!-- bean 获取工具 -->
+	<bean id="SpringContextUtil" class="com.sinoway.common.frame.SpringContextUtil " scope="singleton" />
+	
+	<!-- 线程池工厂 -->
+	<bean id = "ThreadPoolFactory" name="ThreadPoolFactory" class = "com.sinoway.common.pool.ThreadPoolFactory" scope="singleton" init-method="init">
+		<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	
+	<!-- 系统操作工具类 -->
+	<bean id="SystemOperateUtil"  class="com.sinoway.common.util.SystemOperateUtil " scope="singleton" />
+    <!-- 	<bean id="JRNGenerator" class="com.sinoway.common.util.JRNGenerator" scope="singleton"  /> -->
+	<!-- 系统初始化服务 -->
+	<bean id="startService" name="startService" class="com.sinoway.common.service.init.StartService" >
+		<property name="queInfoCache">
+			<ref bean="bCfgdefQueueCache" />
+		</property>
+<!-- 		<property name="fDatPrdinfoflwService"> -->
+<!-- 			<ref bean="fDatPrdinfoflwService" /> -->
+<!-- 		</property> -->
+	</bean>
+	<!-- 系统初始化参数服务 -->
+	<bean id="SystemCfgUtil" name="SystemCfgUtil" scope="singleton" class="com.sinoway.common.util.SystemCfgUtil" init-method="init">
+		<property name="inouttrdCache">
+			<ref bean="bCfgrefFntinouttrnCache" />
+		</property>
+		<property name="sysParmCache">
+			<ref bean="bCfgdefSysparamCache" />
+		</property>
+		<property name="serInfoCache">
+			<ref bean="bCfgdefFntsrvinfoCache" />
+		</property>
+		<property name="serPortCache">
+			<ref bean="bCfgdefFntsrvportCache" />
+		</property>
+		<property name="tradeCfgCache">
+			<ref bean="bCfgdefFnttrninfoCache" />
+		</property>
+		<property name="queInfoCache">
+			<ref bean="bCfgdefQueueCache" />
+		</property>
+		<property name="chnlCfgCache">
+			<ref bean="bCfgdefBcfgdefchnltrdCache" />
+		</property>
+		<property name="addrCache">
+			<ref bean="bCfgdefFnttrnaddrCache" />
+		</property>
+		<property name="desCache">
+			<ref bean="bCfgdefFntkeyinfoCache" />
+		</property>
+	</bean>
+	<!-- 默认socket控制服务服务 -->
+	<bean id="SocketControl" name="SocketControl" scope="prototype" class="com.sinoway.common.service.server.socket.GeneralSocketControl" >
+		<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	<bean id="generalSocketOptradeTaskService" scope="prototype" name="generalSocketOptradeTaskService" class="com.sinoway.common.pool.task.GeneralSocketOPtradeTaskService" >
+		<property name="msgHeaderService">
+			<ref bean="msgHeaderService" />
+		</property>
+		<property name="authtemplFactoryService">
+			<ref bean="authtemplFactoryService" />
+		</property>
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+	</bean>
+	<bean id="generaOPtradeResTaskService" scope="prototype" name="generaOPtradeResTaskService" class="com.sinoway.common.pool.task.GeneraOPtradeResTaskService" >
+		<property name="oInfoService">
+			<ref bean="fDatPrdtrnflwService" />
+		</property>
+		<property name="pInfoService">
+			<ref bean="fDatPrdinfoflwService" />
+		</property>
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+	</bean>
+	<bean id="generalHttpOptradeTaskService" scope="prototype" name="generalHttpOptradeTaskService" class="com.sinoway.common.pool.task.GeneralHttpOPtradeTaskService" >
+		<property name="authtemplFactoryService">
+			<ref bean="authtemplFactoryService" />
+		</property>
+			<property name="msgHeaderService">
+			<ref bean="msgHeaderService" />
+		</property>
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+	</bean>
+	<bean id="generalSptradeTaskService" scope="prototype" name="generalSptradeTaskService" class="com.sinoway.common.pool.task.GeneralStradeTaskService" >
+		<property name="processer">
+			<ref bean="generalSTradeProcesserService" />
+		</property>
+	</bean>
+	<!-- 默认http控制服务 -->
+	<bean id="httpControl" name="httpControl" scope="prototype" class ="com.sinoway.common.service.server.http.GeneralHttpControl">
+		<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	<!-- 交易配置模板服务 -->
+	<bean id="templateService" name="templateService" class="com.sinoway.common.service.template.GeneralTemplateServiceImpl" init-method="init">
+		<property name="configPath">
+			<value>D:/XML_IBankServerMapsTemplate.xml</value>
+		</property>
+	</bean>
+	<!-- 交易认证服务 -->
+	<bean id="authtemplFactoryService" name="authtemplFactoryService"  init-method="init"  class="com.sinoway.common.service.server.authen.AuthenTemplateFactoryImpl" >
+		<property name="configPath">
+			<value>D:/chnlTemplate.xml</value>
+		</property>
+	</bean>
+	<!-- 报文头服务 -->
+	<bean id="msgHeaderService" name="msgHeaderService" class="com.sinoway.common.service.parse.GeneralMsgHeaderServiceImpl" >
+		<property name="msgLen">
+			<value>66</value>
+		</property>
+	</bean>
+	<!-- 默认业务处理服务 -->
+	<bean id="processerService" scope="prototype" name="processerService" class="com.sinoway.common.service.processer.GeneralProcesser" >
+		<property name="transferService">
+			<ref bean="generalTransferService" />
+		</property>
+		<property name="pInfoService">
+			<ref bean="fDatPrdinfoflwService" />
+		</property>
+		<property name="oInfoService">
+			<ref bean="fDatPrdtrnflwService" />
+		</property>
+		<property name="queOperator">
+			<ref bean="queOperator" />
+		</property>
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+	</bean>
+	<!-- 通用socket 异步响应服务 -->
+	<bean id="asnyres_scoket_service" scope="prototype" name="asnyres_scoket_service" class="com.sinoway.common.service.server.socket.GeneralSocketResService" >
+		<property name="headerService">
+			<ref bean="msgHeaderService" />
+		</property>
+	</bean>
+	
+	<!-- 通用原交易队列消费者服务 -->
+	<bean id="generalOPConsumerService" scope="prototype" name="generalOPConsumerService" class="com.sinoway.common.service.consumer.GeneralOPConsumerService" >
+			<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	<!-- 日志队列消费者服务 -->
+	<bean id="logRecordConsumerService" scope="prototype" name="logRecordConsumerService" class="com.sinoway.common.service.consumer.LogRecordConsumerService" >
+		<property name="fLogTrnflwService">
+			<ref bean="fLogTrnflwService" />
+		</property>
+		<property name="fDatOvertrnlogService">
+			<ref bean="fDatOvertrnlogService" />
+		</property>
+		<property name="fDatExptrnlogService">
+			<ref bean="fDatExptrnlogService" />
+		</property>
+	</bean>
+	<!-- 通用hTTP协议响应服务 -->
+	<bean id="generalHttpResService" scope="prototype" name="generalHttpResService" class="com.sinoway.common.service.server.http.GeneralHttpResService" >
+		<property name="headerService">
+			<ref bean="msgHeaderService" />
+		</property>
+	</bean>
+	<!-- 通用子交易交易队列消费者服务 -->
+	<bean id="generalSConsumerService" scope="prototype" name="generalSConsumerService" class="com.sinoway.common.service.consumer.GeneralSConsumerService" >
+		<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	<!-- 通用子交易处理服务 -->
+	<bean id="generalSTradeProcesserService" scope="prototype" name="generalSTradeProcesserService" class="com.sinoway.common.service.processer.GeneralSTradeProcess" >
+		<property name="sFlwService">
+			<ref bean="fDatMetatrnflwService" />
+		</property>
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+		<property name="transferService">
+			<ref bean="generalTransferService" />
+		</property>
+		<property name="tmoutService">
+			<ref bean="fDatOvertrnlogService" />
+		</property>
+		<property name="queOperator">
+			<ref bean="queOperator" />
+		</property>
+	</bean>
+	<!-- 子交易超时检测 -->
+	<bean id="sTradeTmOutMonitor" name="sTradeTmOutMonitor" scope="singleton" class="com.sinoway.common.service.tmout.GeneralStradeTmoutMonitor" init-method="init">
+		<property name="sFlwService">
+			<ref bean="fDatMetatrnflwService" />
+		</property>
+		<property name="poolIdMap">
+			<ref bean="poolMap" />
+		</property>
+	</bean>
+	<!-- 队列操作服务 -->
+	<bean id="queOperator" name="queOperator" class="com.sinoway.mcp.queue.service.KafkaQueOperator" >
+	</bean>
+	<!-- Json报文解析服务 -->
+	<bean id="jsontransferService" name="jsontransferService" class="com.sinoway.common.service.parse.GeneralJsonTradeMsgTransfer" >
+	</bean>
+	<!-- 业务报文转换服务 -->
+	<bean id="generalTransferService" name="generalTransferService" class="com.sinoway.common.service.transfer.GeneralTransferServiceImpl" >
+		<property name="templateService">
+			<ref bean="templateService" />
+		</property>
+		<property name="jsonTransfer">
+			<ref bean="jsontransferService" />
+		</property>
+	</bean>
+	<!-- IBank服务工厂映射MAP -->
+	<bean id="concurrentHashMap" class="java.util.concurrent.ConcurrentHashMap"
+		lazy-init="true">
+		<constructor-arg>
+			<map>
+				<entry key="IBANKSERVER" value-ref="iBankServer" />
+				<entry key="ibankprocess_service" value-ref="processerService" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="poolMap" class="java.util.concurrent.ConcurrentHashMap"
+		lazy-init="true">
+		<constructor-arg>
+			<map>
+				<entry key="otrade_proc_pool" value="otrade_proc_pool" />
+				<entry key="otrade_res_proc_pool" value="otrade_res_proc_pool" />
+				<entry key="strade_proc_pool" value="strade_proc_pool" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 在服务工厂中配置的服务可以根据特定交易配置文件中配置的服务标识符动态获取相关服务 -->
+	<bean id="serviceFactory" name="serviceFactory"
+		class="com.yzj.wf.com.ibank.servicefactory.ServiceFactory"
+		init-method="init">
+		<property name="concurrentHashMap">
+			<ref bean="concurrentHashMap" />
+		</property>
+		<property name="lazyStartTime">
+			<value>5</value>
+		</property>
+	</bean>
+
+	<!-- IBank服务端控制器 -->
+	<bean id="iBankServer" class="com.yzj.wf.com.ibank.standard.server.CBankServer">
+		<property name="maxThreads">
+			<value>20</value>
+		</property>
+		<property name="maxSpareThreads">
+			<value>5</value>
+		</property>
+		<property name="mixSpareThreads">
+			<value>2</value>
+		</property>
+		<property name="workWaitTimeout">
+			<value>6000</value>
+		</property>
+	</bean>
+
+</beans>

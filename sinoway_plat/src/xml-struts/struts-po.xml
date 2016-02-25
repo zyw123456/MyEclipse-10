@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="po" namespace="/" extends="struts-default">
+		<!-- 机构管理，1.5版本 -->
+		<action name="organizeAction_*" class="organizeAction" method="{1}">
+			<result name="orgIndexPage">/windforce/po/organizeinfo/organize_left.jsp
+			</result>
+		</action>
+		<!-- 机构导航列表显示 -->
+		<action name="getOrganizeList" class="getOrganizeListAction"
+			method="getOrganizeList">
+			<result name="success">/windforce/po/organizeinfo/organize_left.jsp
+			</result>
+		</action>
+		<!-- 获取适用机构角色组 -->
+		<action name="getOrgRoleGroup" class="getOrganizeListAction"
+			method="initRoleGroupInOrg">
+			<result name="roleGroup">/windforce/po/peopleInfo/roleRroupTable.jsp
+			</result>
+		</action>
+		<!-- 机构详细信息显示 -->
+		<action name="organizeDetail" class="getOrganizeDetailAction"
+			method="getOrganizeDetail">
+			<result name="success">/windforce/po/organizeinfo/detail.jsp</result>
+		</action>
+		<!-- 机构下人员分页显示 -->
+		<action name="getPeoplesByPage" class="getOrganizeDetailAction"
+			method="getPeoplesByPage">
+			<result name="peoplesTable">/windforce/po/organizeinfo/peoplesTable.jsp
+			</result>
+		</action>
+		<!-- 添加机构信息 -->
+		<action name="addOrganize" class="addOrganizeAction" method="addOrganize">
+			<result name="success">/windforce/po/organizeinfo/add.jsp</result>
+		</action>
+		<!-- 添加机构信息初始化 -->
+		<action name="initAddOrganize_*" class="initAddAction" method="{1}">
+			<result name="success">/windforce/po/organizeinfo/add.jsp</result>
+		</action>
+		<!-- 修改机构信息 -->
+		<action name="editOrganize_*" class="editOrganizeAction"
+			method="{1}">
+			<result name="success">/windforce/po/organizeinfo/editOrg.jsp</result>
+		</action>
+		<!-- 删除机构信息 -->
+		<action name="deleteOrganize" class="deleteOrganizeAction"
+			method="deleteOrganize">
+		</action>
+		<action name="checkDeleteAuth" class="deleteOrganizeAction"
+			method="checkDeleteAuth">
+		</action>
+		<!-- 用户管理模块 -->
+		<action name="userList" class="userManager" method="initUserList">
+			<result name="success">/windforce/po/peopleInfo/userManager.jsp</result>
+		</action>
+		<!-- 用户自动检索 -->
+		<action name="userAutoSearch" class="autoSearch" method="search">
+			<result name="success">/windforce/po/peopleInfo/userAutoSearchTable.jsp
+			</result>
+		</action>
+		<!-- 添加和修改时设置类型与父岗位的级联关系 -->
+		<action name="getParentOrg" class="setParentOrg" method="getParent">
+		</action>
+		<!-- 添加人员初始化角色信息 -->
+		<action name="initAddUserGroup" class="initAddUser" method="addPeopleInit">
+			<result name="success">/windforce/po/peopleInfo/addPeople.jsp</result>
+		</action>
+		<!-- 添加人员处理 -->
+		<action name="doAddUser" class="addUser" method="addPeople">
+		</action>
+		<!-- 修改人员处理 -->
+		<action name="editUser_*" class="editUser" method="{1}">
+			<result name="success">/windforce/po/peopleInfo/editPeople.jsp</result>
+		</action>
+		<!-- 删除人员处理 -->
+		<action name="doDelUser" class="delUser" method="deletePeople">
+		</action>
+		<!-- 机构拆并初始化处理 -->
+		<action name="splitOrg_*" class="splitOrg" method="{1}">
+			<result name="success">/windforce/po/organizeinfo/splitOrg.jsp</result>
+		</action>
+		<!-- 机构拆并处理 -->
+		<action name="doSplit" class="doSplit" method="doSplit">
+			<result name="success">/windforce/po/organizeinfo/splitOrg.jsp</result>
+		</action>
+		<!-- 用户详细信息 -->
+		<action name="userDetail" class="userDetail" method="getPeopleDetail">
+			<result name="success">/windforce/po/peopleInfo/peopleDetail.jsp
+			</result>
+		</action>
+		<!-- 机构自动检索 -->
+		<action name="autoSearch" class="getOrganizeListAction" method="searchOrgList">
+		</action>
+		<action name="exportAllPeople" class="getOrganizeListAction"
+			method="exportAllPeople">
+		</action>
+		
+		<!-- 修改密码 -->
+		<action name="editPwdAction" class="editUser" method="updatePwd">
+		</action>
+		<!-- 重置密码 -->
+		<action name="resetPwdAction" class="editUser" method="resetPwd">
+		</action>
+		<action name="peopleAndOrgMigrateAction_*" class="peopleAndOrgMigrateAction"
+			method="{1}">
+			<result name="PersonMigratePage">/windforce/po/peopleInfo/migratePeople.jsp
+			</result>
+			<result name="OrgMergePage">/windforce/po/organizeinfo/mergeOrg.jsp</result>
+			<result name="OrgMigratePage">/windforce/po/organizeinfo/migrateOrg.jsp
+			</result>
+		</action>
+		<action name="approvePeopleAction_*" class="approvePeopleAction"
+			method="{1}">
+			<result name="ApprovePage">/windforce/po/peopleInfo/approvePeople.jsp
+			</result>
+			<result name="ReturnPage">/windforce/po/peopleInfo/returnsPeople.jsp
+			</result>
+			<result name="RejectPage">/windforce/po/peopleInfo/rejectPeople.jsp
+			</result>
+			<result name="EditPeoplePage">/windforce/po/peopleInfo/returnsEditPeople.jsp
+			</result>
+		</action>
+	</package>
+	<package name="areaManagerInit" namespace="/" extends="struts-default">
+		<!-- 区域管理 -->
+		<action name="areaManager_*" class="areaManagerAction" method="{1}">
+			<result name="init">/windforce/v1_5/po/area/area.jsp</result>
+		</action>
+	</package>
+	<package name="areaAction" namespace="/" extends="json-default">
+		<action name="areaAction_*" class="areaManagerAction" method="{1}">
+			<result type="json">
+				<param name="root">action</param>
+			</result>
+		</action>
+	</package>
+	<package name="pofile" namespace="/" extends="struts-default">
+	    <action name="importOrg_*" class="orgAndPeopleFileImport" method="{1}">
+			<interceptor-ref name="fileUpload"> 
+                <param name="maximumSize">5242880</param>
+	            <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>  
+	            <param name="fileUpload.allowedExtensions">excel,xls</param>  
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="initPage">/windforce/po/organizeinfo/importOrg.jsp</result>
+		</action>
+		<action name="importPeople_*" class="orgAndPeopleFileImport" method="{1}">
+			<interceptor-ref name="fileUpload">
+	            <param name="fileUpload.maximumSize">5242880</param> 
+	            <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>  
+	            <param name="fileUpload.allowedExtensions">excel,xls</param>  
+	        </interceptor-ref>
+            <interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="initPage">/windforce/po/peopleInfo/importPeople.jsp</result>
+		</action>
+	</package>
+	
+	<package name="wf-ext-po" namespace="/wf/ext/po" extends="wf-json-struts">
+		<!--机构Action -->
+		<action name="extOrganizationAction_*" class="wfExtOrganizationAction" method="{1}">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+		</action>
+	</package>
+</struts>    

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="initAddcompany_package" namespace="/" extends="json-default">
+
+	   <!-- 查询当前登录的公司 -->
+		<action name="initAddcompany" class="accountAction" method="findCurrentCompany">
+			<result name="success">/sinoway/acc/CompanyInfo.jsp</result>
+		</action>
+		<!-- 添加公司基本信息 -->
+		<action name="addcompany" class="accountAction" method="insertCompanyInfo">
+			<result name="success">/sinoway/acc/CompanyInfo.jsp</result>
+		</action>
+		
+		<!--修改新密码 -->
+		<action name="updatepwd" class="accountAction" method="updatepwd">
+<!-- 	        <result name="success">/sinoway/acc/updatePwd.jsp</result> -->
+		</action>
+		<!-- 删除人员处理 -->
+		<action name="doDelUser" class="delUser" method="deletePeople">
+		</action>
+		<!-- 当前公司详细详细 -->
+		<action name="findCurrentCompInfo" class="accountAction" method="findCurrentCompInfo">
+		 <result name="success">/sinoway/acc/compEdit.jsp</result>
+		</action>
+		<action name="updateCompInfo" class="accountAction" method="updateCompInfo">
+			<result name="success">/sinoway/acc/compEdit.jsp</result>
+		</action>
+	</package>
+	
+</struts>    

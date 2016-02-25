@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- 机构管理的Action，1.5版本 -->
+	<bean id="organizeAction" class="com.yzj.wf.po.organize.action.OrganizeAction"
+		scope="session">
+	</bean>
+
+	<!-- 加载所有机构信息 -->
+	<bean id="getOrganizeListAction" class="com.yzj.wf.po.action.OrganizeListAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="poService" ref="POService"></property>
+		<property name="powerControlMap" ref="poPowerControlMap"></property>
+		<property name="orgViewLevelLimit">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>orgViewLevelLimit</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+	</bean>
+	<!-- 权限控制器map配置，key为权限sid，value为控制器，此map是有序的，程序会自上而下获取控制器，获取到一个即终止 -->
+	<bean id="poPowerControlMap" class="java.util.LinkedHashMap">
+		<constructor-arg>
+			<map>
+				<entry key="1111100000000000000000000000001" value-ref="SuperPOPowerControl" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<!-- 加载机构详细信息 -->
+	<bean id="getOrganizeDetailAction" class="com.yzj.wf.po.action.OrganizeDetailAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="peopleAdm">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="peopleInfoView">
+			<ref bean="peopleInfoView" />
+		</property>
+		<property name="poAuthConfig">
+			<ref bean="poAuthConfig" />
+		</property>
+		<property name="poService" ref="POService" />
+	</bean>
+
+	<!-- 添加机构信息 -->
+	<bean id="addOrganizeAction" class="com.yzj.wf.po.action.AddOrganizeAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+		<property name="operateObservers" ref="operateObservers" />
+		<property name="enableOrgNameRepeat">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOrgNameRepeat</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 修改机构信息 -->
+	<bean id="editOrganizeAction" class="com.yzj.wf.po.action.EditOrganizeAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="poService" ref="POService"></property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="operateObservers" ref="operateObservers" />
+		<property name="areaManagerService" ref="areaManagerService" />
+		<property name="enableOrgNameRepeat">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOrgNameRepeat</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableEditOrgTypeForOrg">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableEditOrgTypeForOrg</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 初始化添加机构信息 -->
+	<bean id="initAddAction" class="com.yzj.wf.po.action.InitAddOrganizeAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+	</bean>
+	<!-- 删除机构信息 -->
+	<bean id="deleteOrganizeAction" class="com.yzj.wf.po.action.DeleteOrganizeAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="operateLog" ref="OperateLogInfoAdm" />
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="operateObservers" ref="operateObservers" />
+	</bean>
+
+	<!-- 用户管理初始化 -->
+	<bean id="userManager" class="com.yzj.wf.po.action.UserManagerAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="orgBiz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+	</bean>
+
+	<!-- 用户自动检索方法 -->
+	<bean id="autoSearch" class="com.yzj.wf.po.action.UserAutoSearchAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+	</bean>
+
+	<!-- 用户自动检索方法 -->
+	<bean id="setParentOrg" class="com.yzj.wf.po.action.SetParentOrgAction"
+		scope="session">
+
+	</bean>
+
+
+	<!-- 添加用户初始化处理 -->
+	<bean id="initAddUser" class="com.yzj.wf.po.action.AddPeopleInitAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupBiz">
+			<ref bean="RoleGroupAdm" />
+		</property>
+		<property name="orgBiz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="poAuthConfig">
+			<ref bean="poAuthConfig" />
+		</property>
+	</bean>
+
+	<!-- 添加用户处理 -->
+	<bean id="addUser" class="com.yzj.wf.po.action.AddPeopleDoAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupBiz">
+			<ref bean="RoleGroupAdm" />
+		</property>
+		<property name="admBiz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="roleGroupPeopleAdm">
+			<ref bean="RoleGroupPeopleAdm" />
+		</property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+		<property name="roleAdm" ref="RoleAdm"></property>
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="enableOfflineApproveFun">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableOfflineApproveFun</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="operateObservers" ref="operateObservers" />
+	</bean>
+
+	<!-- 修改用户处理 -->
+	<bean id="editUser" class="com.yzj.wf.po.action.EditPeopleAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupBiz">
+			<ref bean="RoleGroupAdm" />
+		</property>
+		<property name="admBiz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="roleGroupPeopleAdm">
+			<ref bean="RoleGroupPeopleAdm" />
+		</property>
+		<property name="poService" ref="POService"></property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+		<property name="roleAdm" ref="RoleAdm"></property>
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="operateObservers" ref="operateObservers" />
+		<property name="pwdStrengthLevel">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>pwdStrengthLevel</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 删除用户处理 -->
+	<bean id="delUser" class="com.yzj.wf.po.action.DeletePeopleInfoAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="operateLog" ref="OperateLogInfoAdm"></property>
+		<property name="operateObservers" ref="operateObservers" />
+	</bean>
+
+	<!-- 机构拆并 -->
+	<bean id="splitOrg" class="com.yzj.wf.po.action.InitSplitOrgAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+
+	</bean>
+
+	<!-- 机构拆并 -->
+	<bean id="doSplit" class="com.yzj.wf.po.action.SplitOrgAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="peopleBiz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+	</bean>
+
+	<!-- 用户详细 -->
+	<bean id="userDetail" class="com.yzj.wf.po.action.PeopleDetailAction"
+		scope="session">
+		<property name="biz">
+			<ref bean="PeopleInfoAdm" />
+		</property>
+		<property name="roleGroupPeopleAdm">
+			<ref bean="RoleGroupPeopleAdm" />
+		</property>
+		<property name="organizeInfoAdm">
+			<ref bean="OrganizeInfoAdm" />
+		</property>
+		<property name="peopleInfoView">
+			<ref bean="peopleInfoView" />
+		</property>
+		<property name="poAuthConfig">
+			<ref bean="poAuthConfig" />
+		</property>
+	</bean>
+
+	<bean id="peopleAndOrgMigrateAction" class="com.yzj.wf.po.action.PeopleAndOrgMigrateAction"
+		scope="session">
+		<property name="poService" ref="POService"></property>
+		<property name="enableMigrateParentOrg">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableMigrateParentOrg</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="approvePeopleAction" class="com.yzj.wf.po.action.ApprovePeopleAction"
+		scope="session">
+		<property name="poService" ref="POService" />
+		<property name="roleGroupPeopleAdm" ref="RoleGroupPeopleAdm" />
+		<property name="peopleInfoAdm" ref="PeopleInfoAdm" />
+		<property name="operateLogAdm" ref="OperateLogInfoAdm" />
+		<property name="organizeInfoAdm" ref="OrganizeInfoAdm" />
+		<property name="poAuthConfig" ref="poAuthConfig" />
+		<property name="roleAdm" ref="RoleAdm" />
+		<property name="roleGroupAdm" ref="RoleGroupAdm" />
+	</bean>
+	
+	<!-- 区域管理 -->
+	<bean id="areaManagerAction" class="com.yzj.wf.po.action.AreaManagerAction"
+		scope="session">
+		<property name="poService" ref="POService"></property>
+		<property name="areaService" ref="areaManagerService"></property>
+		<property name="basePageService" ref="basePageService"></property>
+		<property name="areaDao" ref="areaDao"></property>
+	</bean>
+	
+	<!-- 机构、人员信息导入 -->
+	<bean id="orgAndPeopleFileImport" class="com.yzj.wf.po.action.OrgAndPeopleFileImportAction"
+		scope="prototype">
+		<property name="poService" ref="POService"></property>
+	</bean>
+	
+	<!-- 扩展机构Action -->
+	<bean id="wfExtOrganizationAction" class="com.yzj.wf.po.action.ExtOrganizationAction"
+		scope="prototype">
+		<property name="sysId" value="com.yzj.wf.core.model.po.OrganizeInfo" />
+		<property name="biz" ref="OrganizeInfoAdm" ></property>
+		<property name="poService" ref="POService"></property>
+		<property name="basePageService" ref="basePageService"></property>
+	</bean>
+</beans>

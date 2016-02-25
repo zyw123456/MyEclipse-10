@@ -1,0 +1,40 @@
+package com.sinoway.test.service.impl;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sinoway.test.service.ITestDemoService;
+import com.yzj.wf.common.WFException;
+import com.yzj.wf.common.db.dao.BaseDao;
+
+public class TestDemoService implements ITestDemoService {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	private BaseDao baseDao;
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+	public List findCreditrptList() {
+		List list = null;
+		try {
+			//String sql ="select * from WF_CFGDEF_COMPINFO where id = 'P10000000015122116084000000000'";
+		 return  baseDao.findByNamedQueryAndNamedParam("accountDao.getAccountInfoBycompno", "compid", compno);
+		
+		
+		} catch (WFException e) {
+			e.printStackTrace();
+		}
+	
+	}
+
+	public BaseDao getBaseDao() {
+		return baseDao;
+	}
+
+	public void setBaseDao(BaseDao baseDao) {
+		this.baseDao = baseDao;
+	}
+  
+}

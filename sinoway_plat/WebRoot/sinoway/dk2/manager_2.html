@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <!--<link rel="icon" href="favicon.ico" type="image/x-icon" />-->
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/font-awesome.min.css">
+    <link rel="stylesheet" href="style/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="style/table.css">
+    <link rel="stylesheet" href="style/common.css">
+    <link rel="stylesheet" href="style/mains.css">
+    <link rel="stylesheet" href="style/common.css">
+
+    <!--[if lte IE 9]>
+    <script src="js/respond.js"></script>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+    <title>报告模块</title>
+</head>
+<body>
+<header class="container-fluid top">
+    <div class="container logo_top">
+        <img src="images/login_home.png">
+    </div>
+    <div class="container" >
+        <ul class="nav nav-pills nav-justified">
+            <li><a href="#">首页</a></li>
+            <li ><a href="#">个人报告</a></li>
+            <li><a href="##">反欺诈云</a></li>
+            <li><a href="#">天警云</a></li>
+            <li  class="active"><a href="#">策略管理</a></li>
+            <li><a href="#">账号管理</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container top-margin-20">
+    <div class="row bg-color-content">
+        <div class="col-md-2 col-sm-2 list-group" id="leftheight">
+            <a href="#" class="list-group-item ">策略列表</a>
+            <a href="#" class="list-group-item active ">报告模块</a>
+            <a href="#" class="list-group-item ">反欺诈云模块</a>
+            <a href="#" class="list-group-item">天警云模块</a>
+            <a href="#" class="list-group-item">二维码管理</a>
+
+        </div>
+        <div class="col-md-10 col-sm-10 bg-color-white right-con-shadow" id="rightheight">
+            <div class="col-md-12 col-sm-12">
+                <div class="row">
+               <h4 class="text-left" >报告模板策略</h4>
+               <table id="reportdemo" class="display" cellspacing="0" width="100%">
+                   <thead>
+                       <tr>
+                           <th>更新时间</th>
+                           <th>模板名称</th>
+                           <th>包含内容</th>
+                           <th>操作</th>
+                       </tr>
+                   </thead>
+                   <tfoot>
+                       <tr>
+                           <th>----</th>
+                           <th>----</th>
+                           <th>----</th>
+                           <th><a href="javascript:void(0);" id="newcreat"> 新建</a> </th>
+                       </tr>
+                   </tfoot>
+                   <tbody>
+                       <tr>
+                           <td>20151012</td>
+                           <td>标准模板</td>
+                           <td><span>基本信息</span> <span>职业信息</span> <span>金融资产</span> <span>消费信息</span> <span>公共信息</span> <span>个人评分</span></td>
+                           <td><a  href="##">修改</a>&nbsp;&nbsp;&nbsp;<a  href="javascript:void (0);" data-toggle="modal" data-target="#myModal1">删除</a></td>
+                       </tr>
+                       <tr>
+                           <td>20151012</td>
+                           <td>标准模板</td>
+                           <td><span>基本信息</span> <span>职业信息</span> <span>金融资产</span> <span>消费信息</span> <span>公共信息</span> <span>个人评分</span></td>
+                           <td><a  href="##">修改</a>&nbsp;&nbsp;&nbsp;<a  href="javascript:void (0);" data-toggle="modal" data-target="#myModal1">删除</a></td>
+                       </tr>
+                       <tr>
+                           <td>20151012</td>
+                           <td>标准模板</td>
+                           <td><span>基本信息</span> <span>职业信息</span> <span>金融资产</span> <span>消费信息</span> <span>公共信息</span> <span>个人评分</span></td>
+                           <td><a  href="##">修改</a>&nbsp;&nbsp;&nbsp;<a  href="javascript:void (0);" data-toggle="modal" data-target="#myModal1">删除</a></td>
+                       </tr>
+                   </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 top-margin-20 bg-color-gray2" id="firststep">
+                <div class="col-md-6 col-sm-6 form-group top-margin-20">
+                    <div class="input-group">
+                        <span class="input-group-addon">自定义报告名称</span>
+                        <input type="text" value="" placeholder="" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <h5 class="text-center">请勾选报告服务内容</h5>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <div class="row">
+                                <span class="span-button">验证模块</span>
+                            </div>
+                        </div>
+                        <div class="col-md-9 col-sm-9" >
+                            <div class="row checkbox">
+                                <!--<div class="col-md-4 col-sm-4  ">-->
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">基本信息
+                                </label>
+
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">职业信息
+                                </label>
+
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">金融资产
+                                </label>
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">消费信息
+                                </label>
+
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">公共信息
+                                </label>
+
+                                <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                    <input type="checkbox" value="" name="checklist">个人评分
+                                </label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <a href="javascript:void (0);" class="usual-botton" id="next">下一步</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="javascript:void (0);" class="usual-botton cancel" id="cancel">取&nbsp;&nbsp;消</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 top-margin-20 bg-color-gray2" id="nextstep">
+                <div class="col-md-6 col-sm-6 form-group top-margin-20">
+                    <div class="input-group">
+                        <span class="input-group-addon">模板应用于</span>
+                        <img src="images/search.png" class="img-search">
+                        <input type="text" value="" placeholder="" class="form-control">
+                    </div>
+                </div>
+                <div class="row col-md-12 col-sm-12 bottom-margin-20">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4" id="myTab">
+                            <ul class="nav nav-justified bg-color-ccc tab-li font-s-14">
+                                <li><a href="#person" aria-controls="person" data-toggle="tab">
+                                    <span class="glyphicon glyphicon-user"></span> 个人
+                                </a> </li>
+                                <li><a href="#group" aria-controls="group" data-toggle="tab">
+                                    <i class="icon-group"></i> 团队
+                                </a> </li>
+                            </ul>
+                            <div class="col-sm-12 bg-color-white">
+                                <div class="tab-content" id="left-content">
+                                    <div class="tab-pane active" id="person" role="tabpanel" id="myTabs2">
+                                        <ul class="list-group">
+                                            <li class="list-group-item tabs"><a href="#fengkong" aria-controls="fengkong" data-toggle="tab">风控</a> </li>
+                                            <li class="list-group-item tabs"><a href="#tianshi1" aria-controls="tianshi1" data-toggle="tab">天使不哭1</a> </li>
+                                            <li class="list-group-item tabs"><a href="#tianshi2" aria-controls="tianshi2" data-toggle="tab">天使不哭2</a> </li>
+                                            <li class="list-group-item tabs"><a href="#tianshi3" aria-controls="tianshi3" data-toggle="tab">天使不哭3</a> </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="group" role="tabpanel">
+                                        <ul class="list-group">
+                                            <li class="list-group-item tabs"><a href="tianshi4" aria-controls="tianshi4" data-toggle="tab">风控1111</a> </li>
+                                            <li class="list-group-item tabs"><a href="tianshi5" aria-controls="tianshi5" data-toggle="tab">天使不哭1</a> </li>
+                                            <li class="list-group-item tabs"><a href="tianshi6" aria-controls="tianshi6" data-toggle="tab">天使不哭2</a> </li>
+                                            <li class="list-group-item tabs"><a href="tianshi7" aria-controls="tianshi7" data-toggle="tab">天使不哭3</a> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-8">
+                            <ul class="nav bg-color-ccc tab-li font-s-14 next-title">
+                                <li><a href="javascript:void (0)">
+                                     已选择
+                                </a> </li>
+                            </ul>
+                            <div class="col-sm-12 tab-content bg-color-white checkbox next-content" id="right-content">
+                                <div class="tab-pane" id="fengkong">
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+                                </div>
+                                <div class="tab-pane" id="tianshi1">
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+
+                                    <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                                        <input type="checkbox" value="" name="checklist">天使不哭
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-3">
+                        <a href="javascript:void (0);" class="usual-botton" id="save">保&nbsp;&nbsp;存</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="javascript:void (0);" class="usual-botton cancel" id="cancel1">取&nbsp;&nbsp;消</a>
+                    </div>
+                </div>
+            </div>
+       </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">是否要删除</h4>
+            </div>
+            <div class="modal-body text-center">
+                <span>确定要删除吗？</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/datatables/jquery-1.12.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function(){
+        var table = $('#reportdemo').DataTable( {
+            searching:false,
+            paging:false,
+            pageLength: 7,
+            "ordering": false,
+            "lengthChange": false,
+            "language": {
+                "lengthMenu": "_MENU_ 条记录每页",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)",
+                "paginate": {
+                    "previous": " < ",
+                    "next": ">"
+                }
+            },
+        } );
+        var conheight =  $(window).height() - $(".top").height() - $(".foot").parent().height() - 40;
+        var heightleft = $("#leftheight").height();
+        var heightright = $("#rightheight").height();
+        var realheight;
+        realheight = heightleft > heightright?heightleft:heightright;
+        if(conheight > realheight){
+            $("#rightheight").css("min-height" ,conheight);
+            $("#leftheight").css("min-height",conheight);
+        };
+    });
+//    $('#myTab a').click(function (e) {
+//           // e.preventDefault()
+//        $(this).tab('show')
+//    });
+//    $('#myTabs2 a').click(function (e) {
+//        // e.preventDefault()
+//        var herf = $(this).attr("href");
+//        $("#right-content a[herf="+herf+"]").tab('show')
+//    });
+    $('#del').click(function () {
+        table.row().remove().draw(false);
+        $('#myModal1').modal('hide')
+
+    });
+    $(".cancel").click(function(){
+        $("#firststep").hide();
+        $("#nextstep").hide();
+    });
+    $("#next").click(function(){
+        $("#firststep").hide();
+        $("#nextstep").show();
+        var conleftheight = $("#left-content").height();
+        var conrightheight = $("#right-content").height();
+        var conminheight;
+        conminheight = conleftheight > conrightheight ? conleftheight:conrightheight;
+        $("#left-content").css("min-height",conminheight + "px");
+        $("#right-content").css("min-height",conminheight + "px");
+    });
+    $("#newcreat").click(function(){
+        $("#firststep").show();
+    });
+</script>
+</body>
+</html>

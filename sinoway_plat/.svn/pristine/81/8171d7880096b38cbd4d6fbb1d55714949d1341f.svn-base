@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="loginAction" class="com.yzj.wf.dk.action.LoginAction"
+		scope="session">
+		<property name="poService">
+			<ref bean="POService" />
+		</property>
+		<property name="orgWorkingTimeService">
+		    <ref bean="orgWorkingTimeService"/>
+		</property>
+		<property name="iDesktopLoader">
+			<ref bean="iDesktopLoader" />
+		</property>
+		<property name="iDesktopInfoParser">
+			<ref bean="enhanceDesktopInfoParser" />
+		</property>
+		<property name="imoduleManager">
+			<ref bean="moduleManager" />
+		</property>
+		<property name="operateLog">
+			<ref bean="OperateLogInfoAdm" />
+		</property>
+		<property name="transferPowerInfoService">
+			<ref bean="transferPowerInfoService" />
+		</property>
+		<property name="taskQueryParam">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>taskQueryParam</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="enableLoginTime">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableLoginTime</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="systemModuleMapping" ref="systemModuleMapping" />
+	</bean>
+	<bean id="leftAutoSearchAction" class="com.yzj.wf.dk.action.LeftMenuAutoSearchAction"
+		scope="session">
+		<property name="iDesktopInfoParser">
+			<ref bean="enhanceDesktopInfoParser" />
+		</property>
+		<property name="taskQueryParam">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>taskQueryParam</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="logoutCheckAction" class="com.yzj.wf.dk.action.LogoutCheckAction"
+		scope="session">
+		<property name="logoutCheck">
+			<ref bean="defaultLogoutCheck" />
+		</property>
+	</bean>
+	<bean id="loginCheckAction" class="com.yzj.wf.dk.action.LoginCheckAction"
+		scope="session">
+		<property name="loginCheck">
+			<ref bean="defaultLoginCheck" />
+		</property>
+	</bean>
+	<bean id="pageSkipAction" class="com.yzj.wf.dk.action.PageSkipAction"
+		scope="session">
+		<property name="urlMap">
+			<map>
+				<entry key="people"
+					value="windforce/po/index.jsp?cud=2fee6e315209be9e5d8cef5d2cdf9dfd" /><!-- 
+					人员管理 -->
+				<entry key="org"
+					value="windforce/po/index.jsp?cud=cf6276e5eea8b5b2940624321c5b36ef" /><!-- 
+					机构管理 -->
+				<entry key="approvep" value="approvePeopleAction_initApprovePage.action" /><!-- 
+					审批人员 -->
+				<entry key="returnp" value="approvePeopleAction_initReturnPage.action" /><!-- 
+					退回修改 -->
+				<entry key="rejectp" value="approvePeopleAction_initRejectPage.action" /><!-- 
+					审批拒绝 -->
+			</map>
+		</property>
+	</bean>
+	<!-- 系统模块映射 -->
+	<bean id="systemModuleMapping" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!--key为systemModule的值，value为对应的模块SID，默认为空。 -->
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pageRediretAction" class="com.yzj.wf.dk.action.PageRediretAction"
+		scope="session">
+		<property name="redirectUrlMap">
+			<map>
+				<entry key="dms"
+					value="http://www.baidu.com" />
+			</map>
+		</property>
+	</bean>
+	<!-- 机构工作时间设置Action -->
+	<bean id="orgWorkingTimeAction" class="com.yzj.wf.wt.action.OrgWorkingTimeAction"
+	     scope="prototype">
+		<property name="sysId" value="com.yzj.wf.core.model.wt.OrgWorkingTime" />
+		<property name="basePageService" ref="basePageService"></property>
+		<property name="orgWorkingTimeService" ref="orgWorkingTimeService"></property>
+		<property name="poService" ref="POService"></property>
+	</bean>
+</beans>

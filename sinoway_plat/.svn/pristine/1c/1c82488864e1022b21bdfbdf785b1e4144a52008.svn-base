@@ -1,0 +1,306 @@
+ @charset "utf-8";
+
+/* Core Code */
+/* CSS Document */
+html {
+	font-size: 100%;
+	height: 100%;
+	 width:100%;
+	margin-bottom: 1px;
+	_background: #f0f0f0 url(about/blank) fixed; /*兼容IE6 防抖动*/
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	width:100%;
+	color: #333;
+}
+
+.clear {
+	clear: both;
+}
+
+img {
+	border: none;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	color: #333;
+	text-decoration: none;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: "宋体", Helvetica, Arial, sans-serif;
+	color: #333;
+	font-size: 18px;
+}
+
+/*-----------查询条件表格--------------*/
+.select-form-term table{
+	width:100%;
+}
+
+.select-form-term table tr{
+	height:34px;
+}
+
+.select-form-term table th{
+	width: 12%;
+	font-size: 14px;
+	font-family: 宋体;
+	font-weight:normal;
+	border-top: 1px solid #bdbdbd;
+	border-right: 1px solid #bdbdbd;
+	background-color: #EEEEFF;
+	text-align: center;
+}
+
+.select-form-term table td{
+	width: 21%;
+	border-top: 1px solid #bdbdbd;
+	border-right: 1px solid #bdbdbd;
+	background-color: #EEEEFF;
+	padding-left: 5px;
+}
+
+
+/*--------------------------panelBar--------------------------------------------*/
+
+html, body, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td { padding:0; margin:0; font-size:13px;}
+
+.panelBar,.toolBar li.hover,.toolBar li.hover a,.toolBar li.hover span,.toolBar span,.panelBar .line{
+	background: url(./images/grid.png) no-repeat;
+	padding: 0;
+	margin: 0;
+	line-height: 100%;
+}
+
+.panelBar {
+	background-color: #efefef;
+	display: block;
+	overflow: hidden;
+	height: 25px;
+	border-color: #b8d0d6;
+	background-repeat: repeat-x;
+}
+
+.panelBar ul {
+	padding: 1px;
+}
+
+.panelBar li {
+	float: left;
+	display: block;
+	overflow: hidden;
+	height: 23px;
+	padding: 0 0 0 5px;
+}
+
+.panelBar li.hover {
+	background-position: 0 -100px;
+}
+
+.panelBar li.hover a {
+	background-position: 100% -150px;
+}
+
+.panelBar .toolBar li,.panelBar .toolBar li.hover {
+	padding: 0 0 0 5px;
+	background-position: 0 -100px;
+}
+
+.panelBar .toolBar a,.panelBar .toolBar li.hover a {
+	float: left;
+	display: block;
+	overflow: hidden;
+	padding: 0 5px 0 0;
+	text-decoration: none;
+	background-position: 100% -150px;
+}
+
+.panelBar .toolBar span,.panelBar .toolBar li.hover span {
+	float: left;
+	display: block;
+	overflow: hidden;
+	height: 23px;
+	padding: 0 0 0 20px;
+	line-height: 23px;
+	cursor: pointer;
+}
+
+.panelBar .toolBar li.line {
+	display: block;
+	overflow: hidden;
+	width: 12px;
+	padding: 0;
+	text-indent: -500px;
+	background-position: 5px -200px;
+}
+
+.panelBar {
+	display: block;
+	overflow: hidden;
+	height: 25px;
+	border-style: solid;
+	border-width: 1px 0;
+	background-repeat: repeat-x;
+}
+
+.panelBar .toolBar a.add span {
+	background-position: 0 -696px;
+}
+
+.panelBar .toolBar a.delete span {
+	background-position: 0 -746px;
+}
+
+.panelBar .toolBar a.edit span {
+	background-position: 0 -796px;
+}
+
+.panelBar .toolBar a.icon span {
+	background-position: 0 -846px;
+}
+
+ /*------------------------searchBar --------------------*/
+.searchBar ul.searchContent {
+	display: block;
+	overflow: hidden;
+	height: 25px;
+}
+
+.searchBar ul.searchContent li {
+	float: left;
+	display: block;
+	overflow: hidden;
+	width: 300px;
+	height: 21px;
+	padding: 2px 0;
+}
+
+.searchBar label {
+	float: left;
+	width: 80px;
+	padding: 0 5px;
+	line-height: 23px;
+}
+
+.searchBar .searchContent td {
+	padding-right: 5px;
+	white-space: nowrap;
+	height: 25px
+}
+
+.searchBar .subBar {
+	height: 25px;
+}
+
+.searchBar .subBar ul {
+	float: right;
+}
+
+.searchBar .subBar li {
+	float: left;
+	margin-left: 5px;
+}
+
+.searchBar label {
+	color: #183152;
+}
+
+.pageHeader {
+	display: block;
+	overflow: auto;
+	margin-bottom: 1px;
+	padding: 0 5px 5px 5px ;
+	border-style: solid;
+	border-width: 1px 1px 1px 1px;
+	margin-top: 5px;
+}
+
+.contentTable , .pageHeader{
+	border-color: #b8d0d6;
+	background: #ebf0f5 url(./images/pageHeader_bg.png) repeat-x;
+}
+
+.pageHeader,.pageContent {
+	border-color: #b8d0d6;
+}
+
+.pageContent {
+	display: block;
+	position: relative;
+}
+
+.pageContent .panel {
+	clear: both;
+	margin: 5px
+}
+
+/*--------------dialog----------------*/
+.adddialog{padding:  0 0 0 0; }
+.adddialog  table{ width:100%; border: none; }
+.adddialog  table tr{ }
+.adddialog  table tr td{height:32px; border: none; text-align: left;}
+.adddialog table tr td input[type="text"]{width:148px;}
+.adddialog table tr td select{width:160px;}
+
+
+.ztree li a span{font-size:13px;}
+
+
+/*sidebar*/
+#sidebar { width:230px; position:absolute; top:5px; left:0px; overflow:hidden;}
+.toggleCollapse { display:block; overflow:hidden; height:26px; border-style:solid; border-width:1px 1px 0 1px; background-repeat:repeat-x;}
+.toggleCollapse h2 { float:left; padding-left:8px; line-height:26px;}
+.toggleCollapse div { float:right; display:block; overflow:hidden; width:25px; height:25px; text-indent:-100px; background-position:100% -47px; cursor:pointer;}
+.toggleCollapse div:hover { background-position:100% -97px;}
+
+/* Accordion */
+.accordion { display:block; overflow: auto;border-style:solid; border-width:1px 1px 1px 1px;}
+.accordion .accordionHeader { display:block; overflow:hidden; background-repeat:repeat-x; cursor:pointer;}
+.accordion .accordionHeader h2 { display:block; overflow:hidden; padding:0 25px 0 5px; height:25px; line-height:24px;}
+.accordion .accordionHeader h2 span { float:left; display:block; overflow:hidden; text-indent:-1000px; width:20px; height:25px;}
+.accordion .accordionContent { display:block; overflow:auto; border-style:solid; border-width:0 0 0 0;height:100%;}
+
+.accordion .accordionHeader.hover { background-position:0 -25px;}
+.accordion .accordionHeader h2 { background-repeat:no-repeat; background-position:100% -50px;}
+.accordion .accordionHeader.hover h2 { background-position:100% -75px;}
+.accordion .accordionHeader .collapsable { background-position:100% -100px;}
+.accordion .accordionHeader.hover .collapsable { background-position:100% -125px;}
+.accordion .accordionHeader h2 span { background-position:0 -150px;}
+
+.toggleCollapse, .toggleCollapse div { background:url(./images/toggleSidebar.png) repeat-x;}
+.toggleCollapse { border-style:solid; border-width:1px 1px 0 1px; border-color:#b8d0d6; background-color:#e7eff0;}
+.toggleCollapse h2 { color:#183152;}
+
+
+/* Accordion */
+.accordion .accordionHeader, .accordion .accordionHeader h2, .accordion .accordionHeader h2 span { color:#183152; background:url(./images/accordion.png);}
+.accordion { border-color:#b8d0d6; background:#FFF;}
+.accordion .accordionHeader { background-color:#eaf4ff;}
+.accordion .accordionContent { border-color:#b8d0d6;}
+
+
+.contentTable{ 	width:100%;height:100%;}
+.contentTable .navleft{ width:230px; }
+
+.contentTable  .contentTablesplit{ width:4px;	 }
+
+.contentTd{
+	 text-align: center; 
+	 border-bottom:1px solid #8C8C8C;
+	 border-right:1px solid #8C8C8C;
+}

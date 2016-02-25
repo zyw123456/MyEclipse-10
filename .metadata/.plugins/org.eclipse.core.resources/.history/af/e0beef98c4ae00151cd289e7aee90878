@@ -1,0 +1,286 @@
+package com.sinoway.common.util;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * 创建于:2013-12-03<br>
+ * 版权所有(C) 2013 深圳市银之杰科技股份有限公司<br>
+ * 时间工具类
+ * 
+ * @author lxy
+ * @version 1.0
+ */
+public class DateUtil {
+
+	public static final SimpleDateFormat dateFormat10Len = new SimpleDateFormat(
+			"yyyy-MM-dd");
+	public static final SimpleDateFormat dateFormat8Len = new SimpleDateFormat(
+			"yyyyMMdd");
+	public static final SimpleDateFormat dateFormatDateTime = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
+	public static final SimpleDateFormat dateFormatHMS = new SimpleDateFormat(
+			"HH:mm:ss");
+	public static final SimpleDateFormat dateFromatHMSS = new SimpleDateFormat(
+			"HHmmssSSS");
+	public static final SimpleDateFormat fileDateFormat = new SimpleDateFormat(
+			"yyyy/MM/dd/HH/mm/");
+	public static final SimpleDateFormat dateFormatHMS8Len = new SimpleDateFormat(
+			"HHmmss");
+
+	/**
+	 * 得到当前的日期
+	 * 
+	 * @return 当前的日期的字符串，格式为：yyyy-MM-dd，如：2013-12-20
+	 * @author 李水野
+	 */
+	public static String getCurrentDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(new Date());
+	}
+
+	/**
+	 * 得到当前的日期 当前的日期的字符串，格式为：yyyyMMdd，如：20131220
+	 * @return 
+	 */
+	public static String getCurrentDate8Len(){
+		return dateFormat8Len.format(new Date());
+	}
+	
+	/**
+	 * 得到当前的日期 当前的时间的字符串，格式为：HHmmssSSS，如：201312020
+	 * @return
+	 */
+	public static String getCurrentTimeHMSS() {
+		return dateFromatHMSS.format(new Date());
+	}
+	
+	/**
+	 * 得到当前的时间
+	 * 
+	 * @return 当前时间的字符串，格式为：HH:mm:ss，如： 16:57:20
+	 * @author 李水野
+	 */
+	public static String getCurrentTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		return sdf.format(new Date());
+	}
+
+	/**
+	 * 得到当前的时间，包含毫秒
+	 * 
+	 * @return 当前时间的字符串，格式为：HH:mm:ss SSS，如： 16:57:20 876
+	 * @author 李水野
+	 */
+	public static String getCurrentTimeMillis() {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss SSS");
+		return sdf.format(new Date());
+	}
+
+	/**
+	 * 转换日期格式为字符串
+	 * 
+	 * @param date
+	 *            Date类型时间
+	 * @param format
+	 *            例：yyyy、yyyy-MM、yyyy-MM-dd、yyyy-MM-dd HH:mm:ss等
+	 * @return 格式化后的时间字符串
+	 * @author RickyChen
+	 */
+	public static String formatDateToString(Date date, String format) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
+
+	/**
+	 * 转换字符串日期格式为另一种字符串
+	 * 
+	 * @param date
+	 *            字符串日期 yyyy-MM-dd
+	 * @param format
+	 *            yyyy、yyyy-MM、yyyyMM、yyyy-MM-dd HH:mm:ss等
+	 * @return 格式化后的时间
+	 * @author RickyChen
+	 */
+	public static String formatDateStr10ToString(String dateStr, String format) {
+		Date date = null;
+		try {
+			date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return formatDateToString(date, format);
+	}
+
+	/**
+	 * 更改年份<br>
+	 * 2014-07-31 前进3年，结果2017-07-31<br>
+	 * 2014-07-31 倒退3年，结果2011-07-31
+	 * 
+	 * @param date
+	 *            时间
+	 * @param count
+	 *            数量：1,3，-2等
+	 * @return 更改后的时间
+	 * @author Rickychen
+	 */
+	public static Date changeYear(Date date, int count) {
+		String year = formatDateToString(date, "yyyy");
+		String month = formatDateToString(date, "MM");
+		String day = formatDateToString(date, "dd");
+		int int_year = new Integer(year).intValue();
+		Date newDate = null;
+		try {
+			newDate = new SimpleDateFormat("yyyyMMdd").parse((int_year + count)
+					+ month + day);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return newDate;
+	}
+
+	/**
+	 * 更改年份<br>
+	 * 2014-07-31 前进3年，结果2017-07-31<br>
+	 * 2014-07-31 倒退3年，结果2011-07-31
+	 * 
+	 * @param date
+	 *            时间 yyyy-MM-dd
+	 * @param count
+	 *            数量：1,3，-2等
+	 * @return 修改年份后的时间
+	 * @throws ParseException
+	 *             转换错误
+	 * @author Rickychen
+	 */
+	public static String changeYear(String date, int count)
+			throws ParseException {
+		Date dateAfter = changeYear(
+				new SimpleDateFormat("yyyy-MM-dd").parse(date), count);
+		return formatDateToString(dateAfter, "yyyy-MM-dd");
+	}
+
+	public static Date toDate10Len(String value) {
+		Date date = null;
+		try {
+			date = dateFormat10Len.parse(value);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public static Date[] toDate10Len(String value, String split) {
+		String[] values = value.split(split);
+		Date[] dates = new Date[values.length];
+		for (int i = 0; i < values.length; i++) {
+			dates[i] = toDate10Len(values[i]);
+		}
+		return dates;
+	}
+
+	public static Date toDate8Len(String value) {
+		Date date = null;
+		try {
+			date = dateFormat8Len.parse(value);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public static Date[] toDate8Len(String value, String split) {
+		String[] values = value.split(split);
+		Date[] dates = new Date[values.length];
+		for (int i = 0; i < values.length; i++) {
+			dates[i] = toDate8Len(values[i]);
+		}
+		return dates;
+	}
+
+	public static Date toDateTime(String value) {
+		Date date = null;
+		try {
+			date = dateFormatDateTime.parse(value);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	/**
+	 * <li>HH:mm:ss字符参数转换为当天Date时间</li>
+	 * 
+	 * @param valueHMS
+	 * @return
+	 */
+	public static Date toDateTimeHMS(String valueHMS) {
+		Date date = new Date();
+		String dateStr = null;
+		try {
+			dateStr = toStringDateTime(date).substring(0, 11) + valueHMS;
+			date = toDateTime(dateStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public static Date[] toDateTime(String value, String split) {
+		String[] values = value.split(split);
+		Date[] dates = new Date[values.length];
+		for (int i = 0; i < values.length; i++) {
+			dates[i] = toDateTime(values[i]);
+		}
+		return dates;
+	}
+
+	public static Date[] toDateTime(String value, String split,
+			String appendTime) {
+		String[] values = value.split(split);
+		Date[] dates = new Date[values.length];
+		for (int i = 0; i < values.length; i++) {
+			dates[i] = toDateTime(values[i] + appendTime);
+		}
+		return dates;
+	}
+
+	public static Timestamp toTimestamp(Date date, final SimpleDateFormat format) {
+		String dateStr = "";
+		if (format == dateFormat10Len) {
+			dateStr = toString10Len(date);
+			return new Timestamp(toDate10Len(dateStr).getTime());
+		} else if (format == dateFormat8Len) {
+			dateStr = toString8Len(date);
+			return new Timestamp(toDate8Len(dateStr).getTime());
+		} else if (format == dateFormatDateTime) {
+			dateStr = toStringDateTime(date);
+			return new Timestamp(toDateTime(dateStr).getTime());
+		}
+		return null;
+	}
+
+	public static String toString10Len(Date date) {
+		return dateFormat10Len.format(date);
+	}
+
+	public static String toString8Len(Date date) {
+		return dateFormat8Len.format(date);
+	}
+
+	public static String toStringDateTime(Date date) {
+		return dateFormatDateTime.format(date);
+	}
+
+	public static String toStringDateTimeHMS(Date date) {
+		return dateFormatHMS.format(date);
+	}
+
+	public static String toStringDateTimeHMSS(Date date) {
+		return dateFromatHMSS.format(date);
+	}
+	
+
+}

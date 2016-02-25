@@ -1,0 +1,56 @@
+package com.sinoway.mcp.service.strade.util;
+
+
+
+/**
+ * 电信token实体
+ * @author jintao
+ *
+ * @date 2016-1-16 上午11:21:40
+ */
+
+public class Token {  
+  
+    private static Token instance = null;  
+    private String tokenid = "-1";
+    private long time;
+    //单例模式
+    private Token() {  
+    }  
+    //防止多线程下创建对象问题
+    private static synchronized void syncInit() {  
+        if (instance == null) {  
+            instance = new Token();  
+        }  
+    }  
+  
+    public static Token getInstance() {  
+        if (instance == null) {  
+            syncInit();  
+        }  
+        return instance;  
+    }
+
+	public String getTokenid() {
+		return tokenid;
+	}
+
+	public void setTokenid(String tokenid) {
+		this.tokenid = tokenid;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public static void setInstance(Token instance) {
+		Token.instance = instance;
+	}  
+  
+   
+}  
+

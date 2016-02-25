@@ -1,0 +1,22 @@
+package com.sinoway.test.action;
+
+import com.yzj.wf.base.action.BaseAction;
+import com.yzj.wf.common.WFLogger;
+/**
+ * 测试demo
+ * @author zhangyanwei
+ *
+ */
+public class TestAction extends BaseAction{
+	private static final long serialVersionUID = 481077790366808497L;
+	
+	WFLogger logger = WFLogger.getLogger(TestAction.class);
+	
+	public String findCreditrptList(){
+		
+		
+		
+		return SUCCESS;
+	}
+
+}

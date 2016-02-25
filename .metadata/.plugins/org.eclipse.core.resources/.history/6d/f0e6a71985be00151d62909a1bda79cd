@@ -1,0 +1,46 @@
+package com.sinoway.common.parse;
+
+import junit.framework.TestCase;
+import net.sf.json.JSONObject;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import com.sinoway.common.service.consumer.LogRecordConsumerService;
+import com.sinoway.common.util.GUIDGenerator;
+import com.sinoway.mcp.service.FDatExptrnlogService;
+import com.sinoway.mcp.service.FDatOvertrnlogService;
+import com.sinoway.mcp.service.FLogTrnflwService;
+
+public class TestLogService extends TestCase{
+
+	public static void main(String[] args) {
+		LogRecordConsumerService l = new LogRecordConsumerService();
+		ApplicationContext ap = new FileSystemXmlApplicationContext("D:\\Users\\dell\\Workspaces\\MyEclipse 10\\sinoway_mcp\\conf\\spring\\applicationContext.xml");
+		FDatExptrnlogService fDatExptrnlogService = (FDatExptrnlogService )ap.getBean("fDatExptrnlogService");
+		
+		FLogTrnflwService fLogTrnflwService = (FLogTrnflwService )ap.getBean("fLogTrnflwService");
+		
+		
+		FDatOvertrnlogService fDatOvertrnlogService = (FDatOvertrnlogService )ap.getBean("fLogTrnflwService");
+		
+		l.setfDatExptrnlogService(fDatExptrnlogService);
+		
+		l.setfLogTrnflwService(fLogTrnflwService);
+		
+		l.setfDatOvertrnlogService(fDatOvertrnlogService);
+		
+		
+		JSONObject obj = new JSONObject();
+		obj.put("regid", GUIDGenerator.generateId());
+		obj.put("fromip", "34543");
+		obj.put("logtype", "0");
+		obj.put("fromip", "wer");
+		obj.put("resmsg", "354");
+		obj.put("toip", "67865");
+		l .doMsg(obj.toString());
+		
+	}
+
+	
+}

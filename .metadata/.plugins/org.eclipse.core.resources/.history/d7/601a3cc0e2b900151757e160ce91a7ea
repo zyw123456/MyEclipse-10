@@ -1,0 +1,180 @@
+package com.sinoway.mcp.service.strade.gzt.service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.base.entity.BCfgdefFnttrnaddr;
+import com.sinoway.common.constant.ServerConstant.ResSta;
+import com.sinoway.common.constant.SystemConstant.STradeResFlg;
+import com.sinoway.common.entity.CoreMsgHeader;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.exception.STradeProcessException;
+import com.sinoway.common.service.server.GeneralSTradeProcService;
+import com.sinoway.common.util.DesUtil;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.entity.FDatMetatrnflw;
+import com.sinoway.mcp.service.strade.gzt.ws.QueryValidatorServices;
+import com.sinoway.mcp.service.strade.gzt.ws.QueryValidatorServicesService;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+/**
+ * 国政通身份认证子交易
+ * @author zhangyanei
+ * 1.0
+ * 2016-1-11
+ */
+public class StQueryValidatorService implements  GeneralSTradeProcService {
+ 
+	
+
+
+	@Override
+	public GeneralBusEntity busLaunch(GeneralBusEntity entity)
+			throws STradeProcessException {
+		DesUtil desUtil = DesUtil.getInstance();
+		try{
+			
+			byte[] coremsg = entity.getCoreMsg();
+			String coremsgstr = new String(coremsg,"UTF8"); 
+			JSONObject jo =(JSONObject) JSONObject.parse(coremsgstr);
+			//拼接供应商的报文
+			JSONObject supplyJson = jo.getJSONArray("bodys").getJSONObject(0);
+			
+			//拼接转换后的报文（请求时）
+			StringBuffer sendBefore = new StringBuffer();
+			sendBefore.append(supplyJson.getString("prsnnam"))
+			          .append(",")
+			          .append(supplyJson.getString("idcard"));
+			
+			String username = desUtil.encrypt("sinowaycredit00ws","12345678","12345678", "gbk");
+			String password = desUtil.encrypt("sinowaycredit00ws__me5R!Di","12345678" ,"12345678","gbk"); 
+			String dataSource =desUtil.encrypt("1A020201","12345678","12345678" ,"gbk"); 
+			String params = desUtil.encrypt(sendBefore.toString(),"12345678","12345678" ,"gbk"); ;
+			QueryValidatorServicesService service = new QueryValidatorServicesService();
+			
+			QueryValidatorServices s = service.getQueryValidatorServices();
+			
+			
+			//解密后的串	
+			 String  decodestr  = null;
+			try{
+				decodestr  = s.querySingle(username,password,dataSource, params);
+			}catch(Exception e){
+				entity.setResSta(ResSta.F.getValue());
+				entity.setErrMsg(e.getMessage());
+				//判断如果是超时 或者是出现异常
+				if(e.getMessage().equals("Read timed out")){
+				 entity.getStrdflw().setRespflg(STradeResFlg.SUPTMOUT.getValue());
+				}else{
+				 entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				}
+				//给核心的响应状态和描述
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(e.getMessage());
+				throw new Exception(e);
+			}
+			
+			String  resptr = null;
+			try{ 
+			  resptr = desUtil.decrypt(decodestr, "12345678", "12345678", "gbk");
+			}catch(Exception e){
+				entity.setResSta(ResSta.F.getValue());
+				entity.setErrMsg(e.getMessage());
+				entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(e.getMessage());
+				throw new Exception(e);
+			}
+ 			Document document = DocumentUtil.strToDomByDefDecode(resptr);
+ 			//Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("D:\\userCheck.xml");
+ 		
+ 			//请求message 状态和描述
+ 			Element reqstatus = (Element)XPathAPI.selectSingleNode(document, "/data/message/status");
+ 			Element reqvalue = (Element)XPathAPI.selectSingleNode(document, "/data/message/value");
+ 			
+ 			//查询message 状态和描述
+ 			Element status = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/message/status");
+ 			Element value = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/message/value");
+ 			
+ 			if(reqstatus.getTextContent().equals(ResSta.F.getValue()) && status.getTextContent().equals(ResSta.F.getValue())){
+ 				entity.setResSta(ResSta.S.getValue());
+				entity.setErrMsg(reqvalue.getTextContent());
+				entity.getStrdflw().setRespflg(STradeResFlg.SUCCESS.getValue());
+				entity.getCoreHeader().setStatus(ResSta.S.getValue());
+				entity.getCoreHeader().setResult(value.getTextContent());
+ 			}else if(reqstatus.getTextContent().equals(ResSta.F.getValue()) && !status.getTextContent().equals(ResSta.F.getValue())){
+ 				entity.setResSta(ResSta.S.getValue());
+				entity.setErrMsg(reqvalue.getTextContent());
+				entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(value.getTextContent());	
+ 			}
+ 			
+ 			//实体参数
+ 			Element name = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/name");
+ 			Element sex2 = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/sex2");
+ 			Element birthday2 = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/birthday2");
+ 			Element compResult = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/compResult");
+ 			Element policeadd = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/policeadd");
+ 			Element identitycard = (Element)XPathAPI.selectSingleNode(document, "/data/policeCheckInfos/policeCheckInfo/identitycard");
+ 		   //拼接响应后的转化报文
+ 			JSONObject repObj = new JSONObject();
+			repObj.put("prsnnam", name.getTextContent());
+			repObj.put("sex", sex2.getTextContent()); 
+			repObj.put("birthday", birthday2.getTextContent());  
+			repObj.put("idcradChkRes", compResult.getTextContent()); 
+			repObj.put("cretOrg", policeadd.getTextContent());
+			repObj.put("idcard", identitycard.getTextContent());
+			entity.setUpMsg(params.getBytes("UTF8"));// 转化后的请求数据
+			entity.setCoreMsg(repObj.toJSONString().getBytes("UTF8"));// 给核心的数据
+			entity.setDownMsg(resptr.getBytes("UTF8"));// 转换前的响应数据
+			FDatMetatrnflw sEntity = entity.getStrdflw();
+		
+			sEntity.getReqmsg();// 请求报文路径
+			sEntity.getRespmsg();// 响应报文路径
+			
+		
+		}catch(Throwable e){
+			entity.setResSta(ResSta.F.getValue());
+			entity.setErrMsg(e.getMessage());
+			entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+			entity.getCoreHeader().setStatus(ResSta.F.getValue());
+			entity.getCoreHeader().setResult(e.getMessage());
+			e.printStackTrace();
+		}
+			
+		return entity;
+	}
+
+	@Override
+	public GeneralBusEntity resRecive(GeneralBusEntity entity)
+			throws STradeProcessException {
+	   return null;
+	}
+
+	@Override
+	public GeneralBusEntity getRes(GeneralBusEntity entity)
+			throws STradeProcessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initCfg(BCfgdefFnttrnaddr entity) {
+
+		
+	}
+	
+	public static void main(String[] args) {
+		GeneralBusEntity i = new GeneralBusEntity();
+		StQueryValidatorService  service = new StQueryValidatorService();
+		try {
+			service.busLaunch(i);
+		} catch (STradeProcessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-1-4 11:51:21 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.wrn.entity.WfDatCerditWarnDtel" table="WF_DAT_CERDITWARNDTEL">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="warnDtlJrn" type="string">
+            <column name="WARNDTLJRN" length="32" not-null="true" />
+        </property>
+        <property name="trnCod" type="string">
+            <column name="TRNCOD" length="8"  not-null="true" />
+        </property>
+        <property name="trnNam" type="string">
+            <column name="TRNNAM" length="64" />
+        </property>
+        <property name="prsnNam" type="string">
+            <column name="PRSNNAM" length="32" />
+        </property>
+        <property name="credtNo" type="string">
+            <column name="CREDTNO" length="32" />
+        </property>
+        <property name="datOri" type="string">
+            <column name="DATORI" length="4" />
+        </property>
+        <property name="reality" type="string">
+            <column name="REALITY" length="4" />
+        </property>
+        <property name="warnTim" type="string">
+            <column name="WARNTIM" length="9" />
+        </property>
+        <property name="warnDte" type="string">
+            <column name="WARNDTE" length="8" />
+        </property>
+        <property name="recvDte" type="string">
+            <column name="RECVDTE" length="8" />
+        </property>
+        <property name="recvTim" type="string">
+            <column name="RECVTIM" length="9" />
+        </property>
+        <property name="warnDtls" type="string">
+            <column name="WARNDTLS" length="500" />
+        </property>
+    </class>
+</hibernate-mapping>

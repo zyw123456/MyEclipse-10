@@ -1,0 +1,46 @@
+package com.sinoway.common.parse;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.alibaba.fastjson.JSONObject;
+
+public class TestEncode {
+	
+	
+	public void exxianchengchi(){
+		
+		for(int i =0 ;i<5;i++){
+			
+			ExecutorService service = Executors.newScheduledThreadPool(i);
+			service.submit(new TestThread());
+			service.shutdown();
+			
+		}
+		
+	}
+	
+	class TestThread implements Runnable{
+
+		public void run() {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("调用的正在使用的线程"+Thread.currentThread().getName());
+			
+		}
+		
+	}
+   
+	public static void main(String[] args) {
+	
+		
+		TestEncode  code =   new TestEncode();
+		code.exxianchengchi();
+		
+	}
+}

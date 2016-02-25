@@ -1,0 +1,129 @@
+package com.sinoway.common.service.parse;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jdom.input.SAXBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.parse.GeneralJsonMsgParser;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+
+/**
+ * 通用json报文转换器(json转化为xml)
+ * 
+ * @author zhangyanwei
+ * @version 1.0 2016-01-04
+ */
+public class TestTranXml {
+	 /** 
+	     * 转换一个xml格式的字符串到json格式 
+	    *  
+	     * @param xml 
+	     *            xml格式的字符串 
+	     * @return 成功返回json 格式的字符串;失败反回null 
+    */  
+   @SuppressWarnings("unchecked")  
+	    public static  String xml2JSON(String xml) {  
+	        JSONObject obj = new JSONObject();  
+	       try {  
+	            InputStream is = new ByteArrayInputStream(xml.getBytes("utf-8"));  
+	           SAXBuilder sb = new SAXBuilder();  
+	            Document doc = (Document) sb.build(is);  
+	           Element root = doc.getDocumentElement();  
+	           obj.put(root.getTagName(), iterateElement(root));  
+	            return obj.toString();  
+	       } catch (Exception e) {  
+	           e.printStackTrace();  
+           return null;  
+	      }  
+	   }  
+	  
+	    /** 
+	     * 转换一个xml格式的字符串到json格式 
+	     *  
+	     * @param file 
+	     *            java.io.File实例是一个有效的xml文件 
+	     * @return 成功反回json 格式的字符串;失败反回null 
+	     */  
+	    @SuppressWarnings("unchecked")  
+	    public static String xml2JSON(File file) {  
+	        JSONObject obj = new JSONObject();  
+	      try {  
+	           SAXBuilder sb = new SAXBuilder();  
+	            Document doc = (Document) sb.build(file);  
+	           Element root = doc.getDocumentElement();  
+           obj.put(root.getTagName(), iterateElement(root));  
+	            return obj.toString();  
+	       } catch (Exception e) {  
+	            e.printStackTrace();  
+	           return null;  
+	       }  
+	    }  
+	  
+	    /** 
+	    * 一个迭代方法 
+	    *  
+     * @param element 
+	    *            : org.jdom.Element 
+	     * @return java.util.Map 实例 
+	     */  
+	   @SuppressWarnings("unchecked")  
+	   private static Map  iterateElement(Element element) {  
+	       List jiedian = (List) element.getChildNodes();  
+	       Element et = null;  
+	        Map obj = new HashMap();  
+	       List list = null;  
+	       for (int i = 0; i < jiedian.size(); i++) {  
+	           list = new LinkedList();  
+	           et = (Element) jiedian.get(i);  
+           if (et.getTextContent().equals("")) {  
+	               if (et.getChildNodes().getLength() == 0)  
+                   continue;  
+               if (obj.containsKey(et.getTagName())) {  
+                   list = (List) obj.get(et.getTagName());  
+               }  
+               list.add(iterateElement(et));  
+	                obj.put(et.getTagName(), list);  
+           } else {  
+               if (obj.containsKey(et.getTagName())) {  
+	                   list = (List) obj.get(et.getTagName());  
+                }  
+	               list.add(et.getTextContent());  
+	                obj.put(et.getTagName(), list);  
+	            }  
+        }  
+	        return obj;  
+   }  
+	  
+	   // 测试  
+   public static void main(String[] args) {  
+	       System.out.println( ("<MapSet>"  
+               + "<MapGroup id='Sheboygan'>" + "<Map>"  
+               + "<Type>MapGuideddddddd</Type>"  
+	               + "<SingleTile>true</SingleTile>" + "<Extension>"  
+	               + "<ResourceId>ddd</ResourceId>" + "</Extension>" + "</Map>"  
+	                + "<Map>" + "<Type>ccc</Type>" + "<SingleTile>ggg</SingleTile>"  
+              + "<Extension>" + "<ResourceId>aaa</ResourceId>"  
+	               + "</Extension>" + "</Map>" + "<Extension />" + "</MapGroup>"  
+	                + "<ddd>" + "33333333" + "</ddd>" + "<ddd>" + "444" + "</ddd>"  
+               + "</MapSet>"));  
+	   }  
+
+	
+
+}

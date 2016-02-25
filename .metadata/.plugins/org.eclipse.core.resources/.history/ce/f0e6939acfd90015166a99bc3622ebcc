@@ -1,0 +1,50 @@
+var flag =0;
+var idArrayPeople;
+var isTeam = false;
+var delOrgId = null;
+var isFuzzyQuery = false;
+/**
+ * 展示子账户列表
+ */
+function showPeople() {
+	isFuzzyQuery = false;
+	//$("#myTb2 tr").eq(1).nextAll().remove(); 
+	$("#myTb2").empty();
+	 idArray = new Array();
+	$.ajax({
+		url : "queryCurChildren.action",
+		type : "post",
+		data : "",
+		beforeSend : function(XMLHttpRequest) {
+			XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		},
+		async : true,
+		success : function(data, textStatus) {
+				if (data != null) {
+					var obj = JSON.parse(data);
+					var tbBody = "";
+					if(obj != null){
+						for(var i=0;i<obj.length;i++){
+							idArray[i] = obj[i];
+							tbBody += "<tr align='center' height='30' class='peoTr'><td><div style='width:182px;height:25px;background:#eeeeee;-moz-border-radius: 4px;-webkit-border-radius: 4px;'><a  href='javascript:showPeopleDetail("+i+")'>" + obj[i].peopleCode+ "</a></div></td></tr>";
+						}
+						$("tr").remove(".peoTr");
+						//$("#myTb").append(tbBody);
+						$("#newTable").append(tbBody);
+					}
+				}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("加载信息erro:" + textStatus + errorThrown);
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+		}
+	});
+}
+
+/**
+ * 页面初始化
+ */
+$(document).ready(function() {
+		showPeople();
+});

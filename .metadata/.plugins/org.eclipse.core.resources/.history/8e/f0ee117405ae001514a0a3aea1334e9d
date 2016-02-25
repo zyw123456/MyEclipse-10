@@ -1,0 +1,49 @@
+package com.sinoway.base.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.sinoway.common.frame.ServiceImpl;
+
+/**
+ * 存储过程通用的方法
+ * @author user
+ *
+ */
+@Service("procedureService")
+public class ProcedureService extends ServiceImpl {
+
+	
+	/**
+	 * 表导出文件方法,使用存储过程调用,Map使用put()方法传入两个参数
+	 * 返回字段结构如下
+	 * a|b|C|20151108
+	 * @param map
+	 * 		FILEPATH: 文件保存路径
+	 * 		SQLSTATEMENT: SQL语句:可带where条件字符串用单引号引起
+	 * 				如 select * from tableName where id=''			
+	 * @return 
+	 */
+	public String exportTableToFile(Map<String,Object> map){
+		queryForObject("ProcedureMapper.exportTableToFile", map);
+		return (String) map.get("RES");
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		ProcedureService procedureService = (ProcedureService) SpringUtil
+				.getBean("procedureService");
+		Map<String , Object> map = new HashMap<String, Object>();
+		map.put("FILEPATH", "F:/test.DAT");
+		map.put("SQLSTATEMENT", "SELECT * FROM B_CFGDEF_COMPUSR where id='21231'");
+		map.put("RES", "");
+		System.out.println("返回状态:" + procedureService.exportTableToFile(map));
+		System.out.println("查询语句:" + map.get("SQLSTATEMENT"));
+		System.out.println("文件路径: " + map.get("FILEPATH"));
+		System.exit(0);
+	}
+	
+}

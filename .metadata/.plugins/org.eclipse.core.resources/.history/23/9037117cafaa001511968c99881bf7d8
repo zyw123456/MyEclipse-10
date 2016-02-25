@@ -1,0 +1,26 @@
+package com.sinoway.common.service.cfg.impl;
+
+import com.sinoway.common.service.cfg.CommonProductService;
+
+
+public class CommonDefProductService implements CommonProductService{
+
+	@Override
+	public Object addprdInfo(Object prdInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object editprdInfo(Object prdInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object delprdInfo(Object prdInfo) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

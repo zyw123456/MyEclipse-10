@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://www.springframework.org/schema/beans">
+
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Spring XML Beans Schema, version 3.2
+	Authors: Juergen Hoeller, Rob Harrop, Mark Fisher, Chris Beams
+
+	This defines a simple and consistent way of creating a namespace
+	of JavaBeans objects, managed by a Spring BeanFactory, read by
+	XmlBeanDefinitionReader (with DefaultBeanDefinitionDocumentReader).
+
+	This document type is used by most Spring functionality, including
+	web application contexts, which are based on bean factories.
+
+	Each "bean" element in this document defines a JavaBean.
+	Typically the bean class is specified, along with JavaBean properties
+	and/or constructor arguments.
+
+	A bean instance can be a "singleton" (shared instance) or a "prototype"
+	(independent instance). Further scopes can be provided by extended
+	bean factories, for example in a web environment.
+
+	References among beans are supported, that is, setting a JavaBean property
+	or a constructor argument to refer to another bean in the same factory
+	(or an ancestor factory).
+
+	As alternative to bean references, "inner bean definitions" can be used.
+	Singleton flags of such inner bean definitions are effectively ignored:
+	inner b

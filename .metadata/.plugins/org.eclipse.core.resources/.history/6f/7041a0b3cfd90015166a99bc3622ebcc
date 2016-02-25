@@ -1,0 +1,116 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>账户管理--测试模块</title>
+    <link rel="stylesheet" href="../windforce/sinoway/common/css/main.css">
+	<link rel="stylesheet" href="../windforce/sinoway/common/css/bootstrap.min.css">
+	
+    <script type="text/javascript"
+		src='<%=request.getContextPath()%>/common/js/jquery/jquery-1.7.1.js'></script>
+	<script type="text/javascript"
+		src='<%=request.getContextPath()%>/common/js/jquery/jquery-ui-1.8.18.custom.js'></script>
+	<script type="text/javascript"
+		src='<%=request.getContextPath()%>/common/js/jquery/jquery.json-2.4.js'></script>
+	<script type="text/javascript"
+		src='<%=request.getContextPath()%>/sinoway/acc/js/accChildList.js'></script>
+    <style type="text/css">
+    #popupcontent{
+		position: absolute; 
+		visibility: hidden; 
+		overflow: hidden; 
+		border:1px solid #CCC; 
+		background-color:#F9F9F9; 
+		border:1px solid #333; 
+		padding:5px; 
+		top:200px;
+		left:400px;
+		width:400px;
+		height:200px
+    }
+    #statusbar{
+    	position:relative;
+    	visibility: hidden;
+    	left:45%
+    }
+    body{
+		background-color: #eeeeee;
+		width: 94%;
+		}	
+    </style>    
+  </head>
+  
+  <body>
+  	<div class="report_right" > 
+  		<div class="page_style" align="center">
+			<img src="../windforce/sinoway/common/images/u34.png" style="left:150px;top:40px;width:75%;height:45px;position: absolute;z-index: 1">
+			<img src="../windforce/sinoway/common/images/u145.png" style="left:152px;top:45px;height:35px;width:10%;position: absolute;z-index: 2;">
+			<span style="left:160px;top:50px;position:absolute;color:#FFFFFF;z-index: 3;font-size:16px;">子账户设置</span>
+			<br><br>
+			<br><br><br>
+			<span style="left:0;top:100px;position:absolute;z-index:4;width:82%;" align="right">
+				<span width="20%;">
+					<img id="u29_img" src="../windforce/sinoway/common/images/u29.png" style="height:25px;width:25px;"/>
+					<a href="sinoway/acc/accChildAdd.jsp">
+						<span style="color:#000000;font-size:16px;" >新增新权限</span>
+					</a>&nbsp;
+				</span>
+			</span>
+			<br>
+			<table align="center" width="800" height="360" border="1" cellspacing="0" cellpadding="0" >
+		    	<tr valign="top">
+		    		<td align="center" width="30%" >
+<!-- 		    		<div style="width:240;height:400;float:left; overflow-y:scroll;border-width: 5px;overflow-x:hidden"> -->
+		    			<table   cellspacing="0" width="240" id="myTb" >
+		    				<tr height="" bgcolor="#eee"><td width="180px"><div style="background: #eee;width:" align="center" ><input type="text"  id="queryData" placeholder="搜索" name="peopleCode"  onkeyup="JudgeGoMehod()" autocomplete ="off" style="width: 160px;vertical-align:middle"><img alt="" src="<%=basePath%>/sinoway/acc/images/query.png" style="cursor:pointer; vertical-align:middle"></div></td></tr>
+<!-- 		    				 <tr align="center" height="30"><td><input type="button"  value="使用人" onclick="fuzzyFindPeople()"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="使用团队" onclick="showTeam()"/></td></tr> -->
+		     				<tr align="center" height="30"><td><div  style='width:123px;height:30px;background:#eee;-moz-border-radius: 2px;-webkit-border-radius: 2px;float:left; cursor: pointer' onclick="fuzzyFindPeople()">使用人</div><div  style='width:123px;height:30px;background:#eee;-moz-border-radius: 2px;-webkit-border-radius: 2px;float:right ;cursor: pointer' onclick="showTeam()">使用团队</div></td></tr>
+		     				 <tr>
+		     				 	<td>
+		     				 	  <div style="width:251;height:360;float:left; overflow-y:auto;border-width: 5px;overflow-x:hidden; " >
+		     				 		<table id="newTable" cellspacing="0"  style="width:240px; text-align:center">
+		     				 		</table>
+		     				 		</div>
+		     				 	</td>
+		     				 </tr>
+		    			</table>
+<!-- 		    			</div> -->
+		    		</td>
+		    		<td align="center">
+		    		<table  cellspacing="0" width="577" id="myT"  >
+<!-- 		    				<tr><td colspan="4">&nbsp;</td></tr> -->
+		    				<tr height="30" bgcolor="#eee">
+		    					<th style="text-align: center;">姓名</th>
+		    					<th style="text-align: center;">团队</th>
+		    					<th style="text-align: center;">状态</th>
+		    					<th style="text-align: center;">操作</th>
+		    				</tr>
+		    			</table>
+		    		<div style="float:left;height:360;border-width: 5px;border-color:black;overflow-y:auto;overflow-x:hidden ;width: 577"  >
+		    			<table  cellspacing="0" width="577" id="myTb2"  >
+		    			</table>
+		    			</div>
+		    		</td>
+		    	</tr>
+		    </table>
+		    <div id="popupcontent">
+		     <div id='statusbar'><input type='button' onclick="hidePopup()" value='关闭' ></div>
+		    	<table id="myTb3" align="center" >
+		    	<caption>删除子账户</caption>
+		    	<tr><td colspan="3">请您确认是否需要删除以下子账户</td></tr>
+		    	<tr><td>姓名</td><td>团队</td><td>状态</td></tr>
+		    	</table>
+		    	<input type="hidden" id="sid" >
+		    	<p align='center'><input type='button' value='确认删除' onclick="del()"></p>
+		    </div>
+		 </div> 
+  </body>
+</html>

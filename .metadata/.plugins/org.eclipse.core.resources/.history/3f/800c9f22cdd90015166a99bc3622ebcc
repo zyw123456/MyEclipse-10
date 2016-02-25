@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<!-- 查询登录父账号下的所有子账号 -->
+<query name="AccDao.queryChildren"
+		cacheable="true">
+		<![CDATA[
+			select p from PeopleInfo p where p.parntCode=:parntCode and peopleState=:peopleState
+		]]>
+	</query>
+
+</hibernate-mapping>

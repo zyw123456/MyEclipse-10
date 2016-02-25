@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <!--<link rel="icon" href="favicon.ico" type="image/x-icon" />-->
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/font-awesome.min.css">
+    <link rel="stylesheet" href="style/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="style/table.css">
+    <link rel="stylesheet" href="style/common.css">
+    <link rel="stylesheet" href="style/mains.css">
+    <!--[if lte IE 9]>
+    <script src="js/respond.js"></script>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+    <title>二维码管理</title>
+</head>
+<body>
+<header class="container-fluid top">
+    <div class="container logo_top">
+        <img src="images/login_home.png">
+    </div>
+    <div class="container" >
+        <ul class="nav nav-pills nav-justified">
+            <li><a href="#">首页</a></li>
+            <li ><a href="#">个人报告</a></li>
+            <li><a href="##">反欺诈云</a></li>
+            <li><a href="#">天警云</a></li>
+            <li class="active" ><a href="#">策略管理</a></li>
+            <li><a href="#">账号管理</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container top-margin-20">
+        <div class="col-md-2 col-sm-2 list-group" id="leftheight">
+            <a href="#" class="list-group-item ">策略列表</a>
+            <a href="#" class="list-group-item ">报告模块</a>
+            <a href="#" class="list-group-item ">反欺诈云模块</a>
+            <a href="#" class="list-group-item ">天警云模块</a>
+            <a href="#" class="list-group-item active">二维码管理</a>
+        </div>
+        <div class="col-md-10 col-sm-10 bg-color-white right-con-shadow" id="rightheight">
+            <div class="col-md-12 col-sm-12">
+                <div class="row">
+                <h4 class="text-left" >二维码管理</h4>
+                <table id="manager5" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                           <th>更新时间</th>
+                           <th>编号</th>
+                           <th>二维码</th>
+                           <th>包含内容</th>
+                           <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                           <th>----</th>
+                           <th>----</th>
+                           <th>----</th>
+                           <th>----</th>
+                           <th><a href="javascript:void(0);" id="newcreat"> 新建二维码</a> </th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                           <td>20151012</td>
+                           <td>qazwsx</td>
+                           <td>二维码</td>
+                           <td>
+                            <span>基本信息</span> <span>公积金</span>
+                           </td>
+                           <td ><a  href="##">下载</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void (0);" data-toggle="modal" data-target="#myModal1">删除</a></td>
+                        </tr>
+                        <tr>
+                           <td>20151012</td>
+                           <td>qazwsx</td>
+                           <td>二维码</td>
+                           <td>
+                               <span>基本信息</span> <span>公积金</span> <span>央行报告</span>
+                           </td>
+                           <td ><a  href="##">下载</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void (0);" data-toggle="modal" data-target="#myModal1">删除</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 top-margin-20 bg-color-gray2" id="firststep">
+                <div class="col-md-12 col-sm-12">
+                    <h5 class="text-center">请选择二维码所需数据项</h5>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="row checkbox">
+                        <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                            <input type="checkbox" value="" name="checklist">基本信息
+                        </label>
+
+                        <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                            <input type="checkbox" value="" name="checklist">公积金信息
+                        </label>
+
+                        <label class="col-md-4 col-sm-4 font-s-14 checkbox-padding">
+                            <input type="checkbox" value="" name="checklist">央行报告
+                        </label>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-md-offset-3">
+                            <a href="javascript:void (0);" class="usual-botton" id="save">保存</a>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                            <a href="javascript:void (0);" class="usual-botton cancel" id="cancel">取&nbsp;&nbsp;消</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">是否要删除</h4>
+            </div>
+            <div class="modal-body text-center">
+                <span>确定要删除吗？</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="del">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+
+<script src="js/datatables/jquery-1.12.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function(){
+        var table = $('#manager5').DataTable( {
+            searching:false,
+            paging:false,
+            pageLength: 7,
+            "ordering": false,
+            "lengthChange": false,
+            "language": {
+                "lengthMenu": "_MENU_ 条记录每页",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)",
+                "paginate": {
+                    "previous": " < ",
+                    "next": ">"
+                }
+            },
+        } );
+        var conheight =  $(window).height() - $(".top").height() - $(".foot").parent().height() - 40;
+        var heightleft = $("#leftheight").height();
+        var heightright = $("#rightheight").height();
+        var realheight;
+        realheight = heightleft > heightright?heightleft:heightright;
+        if(conheight > realheight){
+            $("#rightheight").css("min-height" ,conheight);
+            $("#leftheight").css("min-height",conheight);
+        };
+    });
+    $('#del').click(function () {
+        table.row().remove().draw(false);
+        $('#myModal1').modal('hide')
+
+    });
+    $(".cancel").click(function(){
+        $("#firststep").hide();
+    });
+    $("#newcreat").click(function(){
+        $("#firststep").show();
+    });
+</script>
+</body>
+</html>

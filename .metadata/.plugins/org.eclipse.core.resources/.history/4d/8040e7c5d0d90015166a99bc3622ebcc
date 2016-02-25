@@ -1,0 +1,5 @@
+package com.sinoway.test.service;
+
+public interface ITestDemoService {
+
+}

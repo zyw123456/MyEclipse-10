@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgrefFntinouttrn" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgrefFntinouttrn" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- 包括：原交易编码、子交易编码 -->
+    <result column="INTRNCOD" property="intrncod" jdbcType="VARCHAR" />
+    <!-- OUTTRNCOD -->
+    <result column="OUTTRNCOD" property="outtrncod" jdbcType="VARCHAR" />
+    <!-- 0-停用 1-启用 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+    <!-- 0-原交易 1-子交易 -->
+    <result column="TRNTYP" property="trntyp" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			INTRNCOD,
+			OUTTRNCOD,
+			STA,
+			TRNTYP
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="intrncod != null" >	  INTRNCOD = #{intrncod,jdbcType=VARCHAR},	</if>
+    <if test="outtrncod != null" >	  OUTTRNCOD = #{outtrncod,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR},	</if>
+    <if test="trntyp != null" >	  TRNTYP = #{trntyp,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="intrncod != null" >
+		  and INTRNCOD = #{intrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="outtrncod != null" >
+		  and OUTTRNCOD = #{outtrncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+	    <if test="trntyp != null" >
+		  and TRNTYP = #{trntyp,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_FNTINOUTTRN
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgrefFntinouttrn" resultType="java.lang.Integer" >
+    select count(*) from B_CFGREF_FNTINOUTTRN
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_FNTINOUTTRN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgrefFntinouttrn" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGREF_FNTINOUTTRN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGREF_FNTINOUTTRN (ID,
+			INTRNCOD,
+			OUTTRNCOD,
+			STA,
+			TRNTYP)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{intrncod,jdbcType=VARCHAR},
+    #{outtrncod,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{trntyp,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgrefFntinouttrn" >
+    insert into B_CFGREF_FNTINOUTTRN (ID,
+			INTRNCOD,
+			OUTTRNCOD,
+			STA,
+			TRNTYP)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{intrncod,jdbcType=VARCHAR},
+    #{outtrncod,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{trntyp,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGREF_FNTINOUTTRN
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgrefFntinouttrn">
+  	delete from B_CFGREF_FNTINOUTTRN 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGREF_FNTINOUTTRN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgrefFntinouttrn">
+  	update B_CFGREF_FNTINOUTTRN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGREF_FNTINOUTTRN (ID,
+			INTRNCOD,
+			OUTTRNCOD,
+			STA,
+			TRNTYP)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.intrncod,jdbcType=VARCHAR},
+    #{item.outtrncod,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR},
+    #{item.trntyp,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGREF_FNTINOUTTRN 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

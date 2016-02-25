@@ -1,0 +1,94 @@
+
+
+/*  首页  */
+.count{ width:100%; margin:0 auto; }
+.counts{ width:45%;  margin-left:50px; float:left;}
+.counts h2{ font-size:26px; line-height:50px; margin-left:50px;}
+.counts dl{ float:left; margin-left:40px;}
+.counts dt{ font-size:22px; color:#999; font-weight:inherit; line-height:50px;}
+.counts dd{ font-size:22px; line-height:50px;}
+
+.datas_tab{ background-color:#e2e2e2; padding:20px 0;}
+#mytable{ -webkit-box-shadow:0 2px 16px  #999999;-moz-box-shadow:0 2px 16px #999999;float:left; background-color: #FFFFFF;}
+#mytable th{ line-height:50px; padding-left:20px; font-size:22px; font-weight:inherit; }
+#mytable span{vertical-align:middle;}
+#mytable img{vertical-align:middle; display:inline-block;}
+#mytable2 img{vertical-align:middle; display:inline-block;}
+#mytable td{ margin-left:60px; padding:10px 0; padding-left:20px; line-height:26px;}
+
+#mytable2{ -webkit-box-shadow:0 2px 16px  #999999;-moz-box-shadow:0 2px 16px #999999;float:left; height: 490px; background-color: #FFFFFF}
+#mytable2 th{ line-height:50px; padding-left:20px; font-size:22px; font-weight:inherit;}
+#mytable2 td{ margin-left:60px; padding:9px 0; padding-left:20px; text-align:center;}
+#mytable2 .tabthead{ color:#333; font-size:16px; text-align:center;}
+
+
+.tab_report{ margin:10px 10px;}
+.tab_report table{
+	width:100%;
+
+
+	font-size:14px;
+	color:#333333;
+	text-align:center;
+
+}
+
+
+.tab_report table td{
+	border:0;/*细线表格线条颜色*/
+	line-height:40px;
+}
+.tab_report img{ display:inline-block;  vertical-align:middle; margin-right:5px;}
+.tab_report .arome{display:inline-block;  vertical-align:middle; color:#999; font-size:14px;}
+
+.tab_report tr.t1 td {background-color:#fff;}
+.tab_report tr.t2 td {background-color:#eee;}
+.tab_report tr.t3 td {background-color:#ccc;}
+.tab_report th,tfoot tr td{font-weight:bold;text-align:center; }
+.tab_report th{line-height:30px;height:30px; background-color:#FFF; border:0px;}
+.tab_report tfoot tr td{background:#fff;line-height:26px;height:26px;}
+
+.tab_report thead tr td{text-align:center;}
+#page{text-align:center;float:right;}
+#page a,#page a:visited{width:60px;height:22px;line-height:22px;border:1px black solid;display:block;float:left;margin:0 3px;background:#c9c9c9;
+text-decoration:none;}
+#page a:hover{background:#c1c1c1;text-decoration:none;}
+.grayr {padding:2px;font-size:11px;background:#fff;float:right;}
+.grayr a {padding:2px 5px;margin:2px;color:#000;text-decoration:none;;border:1px #c0c0c0 solid;}
+.grayr a:hover {color:#000;border:1px orange solid;}
+.grayr a:active {color:#000;background: #99ffff}
+.grayr span.current {padding:2px 5px;font-weight:bold; margin:2px; color: #303030;background:#fff;border:1px orange solid;}
+.grayr span.disabled {padding:2px 5px;margin:2px;color:#797979;background: #c1c1c1;border:1px #c1c1c1 solid;}
+.datas{ display:inline-block; margin-left:6px;}
+
+/* 反欺诈云查询 */
+.color-red{ color:#F00;}
+.line-height{ line-height:38px;}
+.input-group-addon{ background-color:#636f82; border:0; color:#FFF;}
+.left-margin-10{ margin-left:-15px;}
+.left-margin-2{ margin-left:3px;}
+.top-margin-10{ margin-top:10px;}
+.line-height-60{ line-height:100px;}
+.auto-margin{ margin:0 auto;}
+.btn-primary{ background-color:#38a0b9; border:0;}
+.btn-primary:hover{ background-color:#14748b;}
+.left-margin-20{margin-left:-60px;}
+
+
+/* 策略管理 列表 */
+.align-ver{ vertical-align: middle;}
+.bg-eee{ background-color:#eeeeee;}
+.bg_shu-2{ background-image: url("../images/shu_2.png"); background-repeat: no-repeat; background-position:120px; }
+.bg_shu-3{background-image: url("../images/shu_2.png"); background-repeat: no-repeat;background-position:90px; margin-top: 2px;}
+.btm-margin-20{ margin-bottom: 20px;}
+.r{ position: relative;}
+.p{ position: absolute;top:50%; margin-top: -6px; }
+.p1{ position: absolute;top:50%;right:0; margin-top: -14px;padding-left:0;pidding-right:0; }
+.padding-12{ padding: 12px 0;}
+.btnlab{ line-height:40px; padding:0 10px; display:inline-block; background-color:#38a0b9;font-weight:inherit; font-size:12px;margin-left:10px;}
+
+.right-top-padding{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}

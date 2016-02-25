@@ -1,0 +1,48 @@
+package com.sinoway.rpt.service;
+
+import java.util.List;
+
+import com.sinoway.common.util.datatables.entity.TableReqParams;
+import com.sinoway.rpt.entity.RptSearch;
+import com.sinoway.rpt.entity.WfDatCreditrpt;
+import com.yzj.wf.common.WFException;
+import com.yzj.wf.core.model.po.wrapper.XPeopleInfo;
+
+public interface IWfDatCreditrptService {
+	
+		/**
+		 * 个人征信报告模糊查询加分页
+		 */
+		public List<WfDatCreditrpt> query(TableReqParams params, PageModel pageModel,XPeopleInfo curPeople);
+		/**
+		 * 个人征信报告模糊查询总条数
+		 */
+		public int count(RptSearch rptSearch,XPeopleInfo curPeople);
+		/**
+		 * 批量删除
+		 */
+		public Object delete(String[] ids) throws WFException;
+		
+		/**
+		 * 根据前置流水获取报表
+		 * @param fntjrn
+		 * @return
+		 */
+		public WfDatCreditrpt getWfDatCreditrptByFntjrn(String fntjrn) throws WFException;
+		
+		/**
+		 * 新增或者修改表实体
+		 * @param creditrpt
+		 * @return
+		 */
+		public void saveOrUpdateWfDatCreditrptByfntjrn(WfDatCreditrpt creditrpt) throws WFException;
+		
+		
+		/**
+		 * 根据流转ID查找原报告
+		 * @param rptId
+		 * @return
+		 * @throws WFException
+		 */
+		public WfDatCreditrpt findRedorptByRptId(String rptId) throws WFException;
+}

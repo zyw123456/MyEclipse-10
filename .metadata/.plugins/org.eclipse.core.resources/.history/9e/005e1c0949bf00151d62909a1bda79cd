@@ -1,0 +1,32 @@
+package com.sinoway.common.que;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class TestCatchPool {
+
+	
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String formatted = Integer.toHexString(3464564);
+		SimpleDateFormat  sdfdte = new SimpleDateFormat("yyyyMMdd");
+		System.out.println(formatted +"-----------");
+		StringBuffer buf = new StringBuffer("00000000");
+		buf.replace(8 - formatted.length(), 8, formatted);
+		
+
+		System.out.println(buf.toString());
+		
+		
+		System.out.println(sdfdte.format(new Date()));
+
+
+
+
+	}  
+
+    
+
+}

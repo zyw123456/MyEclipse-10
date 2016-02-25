@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FLogTrnflw" >
+  <resultMap id="BaseResultMap" type="com.sinoway.mcp.entity.FLogTrnflw" >
+    <!-- REGID -->
+	<id column="REGID" property="regid" jdbcType="VARCHAR" />
+
+
+    <!-- FNTTRNJRN -->
+    <result column="FNTTRNJRN" property="fnttrnjrn" jdbcType="VARCHAR" />
+    <!-- 0-客户端 1-核心 2-本地 3-供应商 -->
+    <result column="LAUNCH" property="launch" jdbcType="VARCHAR" />
+    <!-- 0-客户端 1-核心 2-本地 3-供应商 -->
+    <result column="DESTINATION" property="destination" jdbcType="VARCHAR" />
+    <!-- 0-原交易 1-子交易 2- 产品 -->
+    <result column="TRNTYPE" property="trntype" jdbcType="VARCHAR" />
+    <!-- 0-请求发起 1-结果响应 2-结果获取 -->
+    <result column="OPTYPE" property="optype" jdbcType="VARCHAR" />
+    <!-- TRNDTE -->
+    <result column="TRNDTE" property="trndte" jdbcType="VARCHAR" />
+    <!-- TRNTIM -->
+    <result column="TRNTIM" property="trntim" jdbcType="VARCHAR" />
+    <!-- REGDAT -->
+    <result column="REGDAT" property="regdat" jdbcType="VARCHAR" />
+    <!-- REGTIM -->
+    <result column="REGTIM" property="regtim" jdbcType="VARCHAR" />
+    <!-- 存储报文地址 -->
+    <result column="REQMSG" property="reqmsg" jdbcType="VARCHAR" />
+    <!-- 存储报文地址 -->
+    <result column="RESMSG" property="resmsg" jdbcType="VARCHAR" />
+    <!-- RESFLG -->
+    <result column="RESFLG" property="resflg" jdbcType="VARCHAR" />
+    <!-- FROMIP -->
+    <result column="FROMIP" property="fromip" jdbcType="VARCHAR" />
+    <!-- TOIP -->
+    <result column="TOIP" property="toip" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    REGID,
+			FNTTRNJRN,
+			LAUNCH,
+			DESTINATION,
+			TRNTYPE,
+			OPTYPE,
+			TRNDTE,
+			TRNTIM,
+			REGDAT,
+			REGTIM,
+			REQMSG,
+			RESMSG,
+			RESFLG,
+			FROMIP,
+			TOIP
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="fnttrnjrn != null" >	  FNTTRNJRN = #{fnttrnjrn,jdbcType=VARCHAR},	</if>
+    <if test="launch != null" >	  LAUNCH = #{launch,jdbcType=VARCHAR},	</if>
+    <if test="destination != null" >	  DESTINATION = #{destination,jdbcType=VARCHAR},	</if>
+    <if test="trntype != null" >	  TRNTYPE = #{trntype,jdbcType=VARCHAR},	</if>
+    <if test="optype != null" >	  OPTYPE = #{optype,jdbcType=VARCHAR},	</if>
+    <if test="trndte != null" >	  TRNDTE = #{trndte,jdbcType=VARCHAR},	</if>
+    <if test="trntim != null" >	  TRNTIM = #{trntim,jdbcType=VARCHAR},	</if>
+    <if test="regdat != null" >	  REGDAT = #{regdat,jdbcType=VARCHAR},	</if>
+    <if test="regtim != null" >	  REGTIM = #{regtim,jdbcType=VARCHAR},	</if>
+    <if test="reqmsg != null" >	  REQMSG = #{reqmsg,jdbcType=VARCHAR},	</if>
+    <if test="resmsg != null" >	  RESMSG = #{resmsg,jdbcType=VARCHAR},	</if>
+    <if test="resflg != null" >	  RESFLG = #{resflg,jdbcType=VARCHAR},	</if>
+    <if test="fromip != null" >	  FROMIP = #{fromip,jdbcType=VARCHAR},	</if>
+    <if test="toip != null" >	  TOIP = #{toip,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="regid != null" >
+		 and REGID = #{regid,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="fnttrnjrn != null" >
+		  and FNTTRNJRN = #{fnttrnjrn,jdbcType=VARCHAR}
+		</if>
+	    <if test="launch != null" >
+		  and LAUNCH = #{launch,jdbcType=VARCHAR}
+		</if>
+	    <if test="destination != null" >
+		  and DESTINATION = #{destination,jdbcType=VARCHAR}
+		</if>
+	    <if test="trntype != null" >
+		  and TRNTYPE = #{trntype,jdbcType=VARCHAR}
+		</if>
+	    <if test="optype != null" >
+		  and OPTYPE = #{optype,jdbcType=VARCHAR}
+		</if>
+	    <if test="trndte != null" >
+		  and TRNDTE = #{trndte,jdbcType=VARCHAR}
+		</if>
+	    <if test="trntim != null" >
+		  and TRNTIM = #{trntim,jdbcType=VARCHAR}
+		</if>
+	    <if test="regdat != null" >
+		  and REGDAT = #{regdat,jdbcType=VARCHAR}
+		</if>
+	    <if test="regtim != null" >
+		  and REGTIM = #{regtim,jdbcType=VARCHAR}
+		</if>
+	    <if test="reqmsg != null" >
+		  and REQMSG = #{reqmsg,jdbcType=VARCHAR}
+		</if>
+	    <if test="resmsg != null" >
+		  and RESMSG = #{resmsg,jdbcType=VARCHAR}
+		</if>
+	    <if test="resflg != null" >
+		  and RESFLG = #{resflg,jdbcType=VARCHAR}
+		</if>
+	    <if test="fromip != null" >
+		  and FROMIP = #{fromip,jdbcType=VARCHAR}
+		</if>
+	    <if test="toip != null" >
+		  and TOIP = #{toip,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from F_LOG_TRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.mcp.entity.FLogTrnflw" resultType="java.lang.Integer" >
+    select count(*) from F_LOG_TRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from F_LOG_TRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.mcp.entity.FLogTrnflw" >
+    select 
+    <include refid="base_column_list" />
+    from F_LOG_TRNFLW
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into F_LOG_TRNFLW (REGID,
+			FNTTRNJRN,
+			LAUNCH,
+			DESTINATION,
+			TRNTYPE,
+			OPTYPE,
+			TRNDTE,
+			TRNTIM,
+			REGDAT,
+			REGTIM,
+			REQMSG,
+			RESMSG,
+			RESFLG,
+			FROMIP,
+			TOIP)
+    values (
+	#{regid,jdbcType=VARCHAR},
+
+
+    #{fnttrnjrn,jdbcType=VARCHAR},
+    #{launch,jdbcType=VARCHAR},
+    #{destination,jdbcType=VARCHAR},
+    #{trntype,jdbcType=VARCHAR},
+    #{optype,jdbcType=VARCHAR},
+    #{trndte,jdbcType=VARCHAR},
+    #{trntim,jdbcType=VARCHAR},
+    #{regdat,jdbcType=VARCHAR},
+    #{regtim,jdbcType=VARCHAR},
+    #{reqmsg,jdbcType=VARCHAR},
+    #{resmsg,jdbcType=VARCHAR},
+    #{resflg,jdbcType=VARCHAR},
+    #{fromip,jdbcType=VARCHAR},
+    #{toip,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.mcp.entity.FLogTrnflw" >
+    insert into F_LOG_TRNFLW (REGID,
+			FNTTRNJRN,
+			LAUNCH,
+			DESTINATION,
+			TRNTYPE,
+			OPTYPE,
+			TRNDTE,
+			TRNTIM,
+			REGDAT,
+			REGTIM,
+			REQMSG,
+			RESMSG,
+			RESFLG,
+			FROMIP,
+			TOIP)
+    values (
+	#{regid,jdbcType=VARCHAR},
+
+
+    #{fnttrnjrn,jdbcType=VARCHAR},
+    #{launch,jdbcType=VARCHAR},
+    #{destination,jdbcType=VARCHAR},
+    #{trntype,jdbcType=VARCHAR},
+    #{optype,jdbcType=VARCHAR},
+    #{trndte,jdbcType=VARCHAR},
+    #{trntim,jdbcType=VARCHAR},
+    #{regdat,jdbcType=VARCHAR},
+    #{regtim,jdbcType=VARCHAR},
+    #{reqmsg,jdbcType=VARCHAR},
+    #{resmsg,jdbcType=VARCHAR},
+    #{resflg,jdbcType=VARCHAR},
+    #{fromip,jdbcType=VARCHAR},
+    #{toip,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from F_LOG_TRNFLW
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.mcp.entity.FLogTrnflw">
+  	delete from F_LOG_TRNFLW 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update F_LOG_TRNFLW 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	REGID = #{regid}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.mcp.entity.FLogTrnflw">
+  	update F_LOG_TRNFLW 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	REGID = #{regid}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into F_LOG_TRNFLW (REGID,
+			FNTTRNJRN,
+			LAUNCH,
+			DESTINATION,
+			TRNTYPE,
+			OPTYPE,
+			TRNDTE,
+			TRNTIM,
+			REGDAT,
+			REGTIM,
+			REQMSG,
+			RESMSG,
+			RESFLG,
+			FROMIP,
+			TOIP)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.regid,jdbcType=VARCHAR},
+
+
+    #{item.fnttrnjrn,jdbcType=VARCHAR},
+    #{item.launch,jdbcType=VARCHAR},
+    #{item.destination,jdbcType=VARCHAR},
+    #{item.trntype,jdbcType=VARCHAR},
+    #{item.optype,jdbcType=VARCHAR},
+    #{item.trndte,jdbcType=VARCHAR},
+    #{item.trntim,jdbcType=VARCHAR},
+    #{item.regdat,jdbcType=VARCHAR},
+    #{item.regtim,jdbcType=VARCHAR},
+    #{item.reqmsg,jdbcType=VARCHAR},
+    #{item.resmsg,jdbcType=VARCHAR},
+    #{item.resflg,jdbcType=VARCHAR},
+    #{item.fromip,jdbcType=VARCHAR},
+    #{item.toip,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from F_LOG_TRNFLW 
+  	where 
+  	REGID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.regid,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

@@ -1,0 +1,163 @@
+package com.sinoway.mcp.service.dxp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.base.entity.BCfgdefFnttrnaddr;
+import com.sinoway.common.constant.ServerConstant.ResSta;
+import com.sinoway.common.constant.SystemConstant.STradeResFlg;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.exception.STradeProcessException;
+import com.sinoway.common.service.server.GeneralSTradeProcService;
+import com.sinoway.common.util.HttpUtils;
+import com.sinoway.common.util.Utils;
+import com.sinoway.mcp.entity.FDatMetatrnflw;
+import com.sinoway.mcp.service.dxp.util.StringUtil;
+
+
+/**
+ * 国政通电信手机号验证
+ * @author zhangyanei
+ * 1.0
+ * 2016-1-11
+ */
+public class StTelcomPhoneValidatorService implements  GeneralSTradeProcService {
+ 
+	
+
+	@Override
+	public GeneralBusEntity busLaunch(GeneralBusEntity entity)
+			throws STradeProcessException {
+		
+		try{
+			
+			byte[] coremsg = entity.getCoreMsg();
+			
+			String coremsgstr = new String(coremsg,"UTF8"); 
+			JSONObject jo =(JSONObject) JSONObject.parse(coremsgstr);
+			//拼接供应商的报文
+			JSONObject supplyJson = jo.getJSONArray("bodys").getJSONObject(0);
+			
+			//拼接转换后的报文（请求时）
+	
+			Map<String,String> params = new HashMap<String,String>();
+//			String all = "ref="+Constant.CHINATELECOM_REF+"&password="+MD5Util.MD5(Constant.CHINATELECOM_PWD)+"&seed="+Utils.getNowTime("yyyyMMdd");
+		   StringBuffer url = new StringBuffer();
+		   url.append("http://111.235.158.136:8080/bdapi/restful")
+		      .append("/user/verifyIdNameByMdn/")
+		      .append("huadao")
+		      .append(Utils.getCustSign("huadao", "huadao123456")+".xml?")
+		      .append("mdn="+supplyJson.getString("phone"))
+		      .append("&mdnTransType=Clear")
+		      .append("&idType=idCard")
+		      .append("&idNoHash="+Utils.gzt_bank_md5(supplyJson.getString("idcard")))
+		      .append("&nameHash="+Utils.gzt_bank_md5(supplyJson.getString("prsnnam")));
+			System.out.println(url.toString()+"++++=url");
+			params.put("mdn", supplyJson.getString("phone"));
+			params.put("mdnTransType", "Clear");
+			params.put("idType", "idCard ");
+			params.put("idNoHash", Hex.encodeHexString(Utils.gzt_bank_md5(supplyJson.getString("idcard")).getBytes()));
+			params.put("nameHash", Hex.encodeHexString(Utils.gzt_bank_md5(supplyJson.getString("prsnnam")).getBytes()));
+			
+			//解密后的串	
+			 String  decodestr  = null;
+			try{
+				decodestr  = HttpUtils.httpPost(url.toString(), params);
+			}catch(Exception e){
+				entity.setResSta(ResSta.F.getValue());
+				entity.setErrMsg(e.getMessage());
+				//判断如果是超时 或者是出现异常
+				if(e.getMessage().equals("Read timed out")){
+				 entity.getStrdflw().setRespflg(STradeResFlg.SUPTMOUT.getValue());
+				}else{
+				 entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				}
+				//给核心的响应状态和描述
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(e.getMessage());
+				throw new STradeProcessException(e);
+			}
+			
+			entity.setDownMsg(decodestr.getBytes("UTF8"));// 转换前的响应数据(还没有解密)
+			JSONObject  resptr = null;
+			try{ 
+				resptr =(JSONObject) JSONObject.parse(decodestr);
+			}catch(Exception e){
+				entity.setResSta(ResSta.F.getValue());
+				entity.setErrMsg(e.getMessage());
+				entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(e.getMessage());
+				throw new STradeProcessException(e);
+			}
+			entity.setDownMsg(resptr.getBytes("UTF8"));// 转换前的响应数据
+ 			if(resptr.getString("status").equals("1")){
+ 				entity.setResSta(ResSta.S.getValue());
+				entity.setErrMsg(resptr.getString("errorDesc"));
+				FDatMetatrnflw sEntity = entity.getStrdflw();
+				sEntity.setRespflg(STradeResFlg.SUCCESS.getValue());
+				entity.getCoreHeader().setStatus(ResSta.S.getValue());
+				entity.getCoreHeader().setResult(resptr.getString("errorDesc"));
+	 		   //拼接响应后的转化报文
+	 			JSONObject repObj = new JSONObject();
+	 			JSONObject backObj = new JSONObject();
+	 			backObj.put("mobileChkRes",resptr.getString("checkResult"));
+	 			repObj.put("mobileChkInf", backObj);
+				entity.setUpMsg(params.toString().getBytes());// 转化后的请求数据
+				entity.setCoreMsg(repObj.toJSONString().getBytes());// 给核心的数据
+				entity.setDownMsg(decodestr.getBytes());// 转换前的响应数据
+ 			}else{
+ 				entity.setResSta(ResSta.F.getValue());
+				entity.setErrMsg(resptr.getString("errorDesc"));
+				entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+				entity.getCoreHeader().setStatus(ResSta.F.getValue());
+				entity.getCoreHeader().setResult(resptr.getString("errorDesc"));	
+ 			}
+ 			
+		}catch(Throwable e){
+			entity.setResSta(ResSta.F.getValue());
+			entity.setErrMsg(e.getMessage());
+			entity.getStrdflw().setRespflg(STradeResFlg.ERROR.getValue());
+			entity.getCoreHeader().setStatus(ResSta.F.getValue());
+			entity.getCoreHeader().setResult(e.getMessage());
+			e.printStackTrace();
+		}
+			
+		return entity;
+	}
+
+	@Override
+	public GeneralBusEntity resRecive(GeneralBusEntity entity)
+			throws STradeProcessException {
+	   return null;
+	}
+
+	@Override
+	public GeneralBusEntity getRes(GeneralBusEntity entity)
+			throws STradeProcessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initCfg(BCfgdefFnttrnaddr entity) {
+
+		
+	}
+	
+	public static void main(String[] args) {
+		GeneralBusEntity i = new GeneralBusEntity();
+		StTelcomPhoneValidatorService  service = new StTelcomPhoneValidatorService();
+		try {
+			service.busLaunch(i);
+		} catch (STradeProcessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

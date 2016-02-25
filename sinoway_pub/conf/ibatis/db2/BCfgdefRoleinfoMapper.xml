@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefRoleinfo" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefRoleinfo" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- ROLECOD -->
+    <result column="ROLECOD" property="rolecod" jdbcType="VARCHAR" />
+    <!-- ROLENAM -->
+    <result column="ROLENAM" property="rolenam" jdbcType="VARCHAR" />
+    <!-- 描述角色 -->
+    <result column="ROLEDESC" property="roledesc" jdbcType="VARCHAR" />
+    <!-- PRDCOD -->
+    <result column="PRDCOD" property="prdcod" jdbcType="VARCHAR" />
+    <!-- PRDNAM -->
+    <result column="PRDNAM" property="prdnam" jdbcType="VARCHAR" />
+    <!-- 产品交易码不分等级时，值默认为1 -->
+    <result column="ROLEPRDLEV" property="roleprdlev" jdbcType="VARCHAR" />
+    <!-- 1.注册时,所有父机构默认拥有该角色
+0.不是 -->
+    <result column="DEFORGROLE" property="deforgrole" jdbcType="VARCHAR" />
+    <!-- 1.机构注册时,是否是机构内默认用户角色
+0.不是 -->
+    <result column="DEFUSRROLE" property="defusrrole" jdbcType="VARCHAR" />
+    <!-- STA -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+    <!-- SORT -->
+    <result column="SORT" property="sort" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			ROLECOD,
+			ROLENAM,
+			ROLEDESC,
+			PRDCOD,
+			PRDNAM,
+			ROLEPRDLEV,
+			DEFORGROLE,
+			DEFUSRROLE,
+			STA,
+			SORT
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="rolecod != null" >	  ROLECOD = #{rolecod,jdbcType=VARCHAR},	</if>
+    <if test="rolenam != null" >	  ROLENAM = #{rolenam,jdbcType=VARCHAR},	</if>
+    <if test="roledesc != null" >	  ROLEDESC = #{roledesc,jdbcType=VARCHAR},	</if>
+    <if test="prdcod != null" >	  PRDCOD = #{prdcod,jdbcType=VARCHAR},	</if>
+    <if test="prdnam != null" >	  PRDNAM = #{prdnam,jdbcType=VARCHAR},	</if>
+    <if test="roleprdlev != null" >	  ROLEPRDLEV = #{roleprdlev,jdbcType=VARCHAR},	</if>
+    <if test="deforgrole != null" >	  DEFORGROLE = #{deforgrole,jdbcType=VARCHAR},	</if>
+    <if test="defusrrole != null" >	  DEFUSRROLE = #{defusrrole,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR},	</if>
+    <if test="sort != null" >	  SORT = #{sort,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="rolecod != null" >
+		  and ROLECOD = #{rolecod,jdbcType=VARCHAR}
+		</if>
+	    <if test="rolenam != null" >
+		  and ROLENAM = #{rolenam,jdbcType=VARCHAR}
+		</if>
+	    <if test="roledesc != null" >
+		  and ROLEDESC = #{roledesc,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdcod != null" >
+		  and PRDCOD = #{prdcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdnam != null" >
+		  and PRDNAM = #{prdnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="roleprdlev != null" >
+		  and ROLEPRDLEV = #{roleprdlev,jdbcType=VARCHAR}
+		</if>
+	    <if test="deforgrole != null" >
+		  and DEFORGROLE = #{deforgrole,jdbcType=VARCHAR}
+		</if>
+	    <if test="defusrrole != null" >
+		  and DEFUSRROLE = #{defusrrole,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+	    <if test="sort != null" >
+		  and SORT = #{sort,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_ROLEINFO
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefRoleinfo" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_ROLEINFO
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_ROLEINFO
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefRoleinfo" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_ROLEINFO
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_ROLEINFO (ID,
+			ROLECOD,
+			ROLENAM,
+			ROLEDESC,
+			PRDCOD,
+			PRDNAM,
+			ROLEPRDLEV,
+			DEFORGROLE,
+			DEFUSRROLE,
+			STA,
+			SORT)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{rolecod,jdbcType=VARCHAR},
+    #{rolenam,jdbcType=VARCHAR},
+    #{roledesc,jdbcType=VARCHAR},
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{roleprdlev,jdbcType=VARCHAR},
+    #{deforgrole,jdbcType=VARCHAR},
+    #{defusrrole,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{sort,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefRoleinfo" >
+    insert into B_CFGDEF_ROLEINFO (ID,
+			ROLECOD,
+			ROLENAM,
+			ROLEDESC,
+			PRDCOD,
+			PRDNAM,
+			ROLEPRDLEV,
+			DEFORGROLE,
+			DEFUSRROLE,
+			STA,
+			SORT)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{rolecod,jdbcType=VARCHAR},
+    #{rolenam,jdbcType=VARCHAR},
+    #{roledesc,jdbcType=VARCHAR},
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{roleprdlev,jdbcType=VARCHAR},
+    #{deforgrole,jdbcType=VARCHAR},
+    #{defusrrole,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{sort,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_ROLEINFO
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefRoleinfo">
+  	delete from B_CFGDEF_ROLEINFO 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_ROLEINFO 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefRoleinfo">
+  	update B_CFGDEF_ROLEINFO 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_ROLEINFO (ID,
+			ROLECOD,
+			ROLENAM,
+			ROLEDESC,
+			PRDCOD,
+			PRDNAM,
+			ROLEPRDLEV,
+			DEFORGROLE,
+			DEFUSRROLE,
+			STA,
+			SORT)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.rolecod,jdbcType=VARCHAR},
+    #{item.rolenam,jdbcType=VARCHAR},
+    #{item.roledesc,jdbcType=VARCHAR},
+    #{item.prdcod,jdbcType=VARCHAR},
+    #{item.prdnam,jdbcType=VARCHAR},
+    #{item.roleprdlev,jdbcType=VARCHAR},
+    #{item.deforgrole,jdbcType=VARCHAR},
+    #{item.defusrrole,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR},
+    #{item.sort,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_ROLEINFO 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

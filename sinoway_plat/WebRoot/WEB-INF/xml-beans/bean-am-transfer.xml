@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- 转授权服务 -->
+	<bean id="transferPowerInfoService" class="com.yzj.wf.am.transfer.service.TransferPowerInfoService">
+		<property name="transferPowerInfoDao" ref="transferPowerInfoDao" />
+		<property name="transferPowerInfoLogDao" ref="transferPowerInfoLogDao" />
+		<property name="poService" ref="POService" />
+		<property name="transferPowerInfoExtendService" ref="transferPowerInfoExtendService" />
+		<property name="amService" ref="AMService" />
+	</bean>
+	<!-- 转授权的扩展服务 -->
+	<bean id="transferPowerInfoExtendService"
+		class="com.yzj.wf.am.transfer.service.TransferPowerInfoExtendService">
+		<property name="poService" ref="POService" />
+		<property name="transferPowerInfoDao" ref="transferPowerInfoDao" />
+		<property name="enableSupervisePeople">
+			<bean
+				class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetObject">
+					<ref bean="xmlParamManager" />
+				</property>
+				<property name="targetMethod">
+					<value>getParamValueByName</value>
+				</property>
+				<property name="arguments">
+					<list>
+						<value>WF_CORE_PARAM</value>
+						<value>enableSupervisePeople</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 转授权的权限扩展服务实现类 -->
+	<bean id="transferPowerAMExtendService"
+		class="com.yzj.wf.am.transfer.service.TransferPowerAMExtendService">
+		<property name="amService" ref="AMService" />
+		<property name="poService" ref="POService" />
+		<property name="transferPowerInfoService" ref="transferPowerInfoService" />
+		<property name="transferPowerInfoRoleGroupSids" ref="transferPowerInfoRoleGroupSids" />
+	</bean>
+
+	<!-- 转授权的岗位信息SID -->
+	<bean id="transferPowerInfoRoleGroupSids" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+<!-- 				<value>000000000000000transfer_group_id</value> -->
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 权限扩展服务的列表 -->
+	<bean id="amExtendServices" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				 <ref bean="transferPowerAMExtendService" /> 
+			</list>
+		</constructor-arg>
+	</bean>
+
+</beans>

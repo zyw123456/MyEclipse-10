@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefTrnblack" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefTrnblack" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- TRNCOD -->
+    <result column="TRNCOD" property="trncod" jdbcType="VARCHAR" />
+    <!-- TRNNAM -->
+    <result column="TRNNAM" property="trnnam" jdbcType="VARCHAR" />
+    <!-- HANDUPDTE -->
+    <result column="HANDUPDTE" property="handupdte" jdbcType="VARCHAR" />
+    <!-- HANDUPTIM -->
+    <result column="HANDUPTIM" property="handuptim" jdbcType="VARCHAR" />
+    <!-- DURATION -->
+    <result column="DURATION" property="duration" jdbcType="VARCHAR" />
+    <!-- 1表示使用中
+0表示未使用
+-1表示已销毁 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			TRNCOD,
+			TRNNAM,
+			HANDUPDTE,
+			HANDUPTIM,
+			DURATION,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="trncod != null" >	  TRNCOD = #{trncod,jdbcType=VARCHAR},	</if>
+    <if test="trnnam != null" >	  TRNNAM = #{trnnam,jdbcType=VARCHAR},	</if>
+    <if test="handupdte != null" >	  HANDUPDTE = #{handupdte,jdbcType=VARCHAR},	</if>
+    <if test="handuptim != null" >	  HANDUPTIM = #{handuptim,jdbcType=VARCHAR},	</if>
+    <if test="duration != null" >	  DURATION = #{duration,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="trncod != null" >
+		  and TRNCOD = #{trncod,jdbcType=VARCHAR}
+		</if>
+	    <if test="trnnam != null" >
+		  and TRNNAM = #{trnnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="handupdte != null" >
+		  and HANDUPDTE = #{handupdte,jdbcType=VARCHAR}
+		</if>
+	    <if test="handuptim != null" >
+		  and HANDUPTIM = #{handuptim,jdbcType=VARCHAR}
+		</if>
+	    <if test="duration != null" >
+		  and DURATION = #{duration,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_TRNBLACK
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefTrnblack" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_TRNBLACK
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_TRNBLACK
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefTrnblack" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_TRNBLACK
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_TRNBLACK (ID,
+			TRNCOD,
+			TRNNAM,
+			HANDUPDTE,
+			HANDUPTIM,
+			DURATION,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{trncod,jdbcType=VARCHAR},
+    #{trnnam,jdbcType=VARCHAR},
+    #{handupdte,jdbcType=VARCHAR},
+    #{handuptim,jdbcType=VARCHAR},
+    #{duration,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefTrnblack" >
+    insert into B_CFGDEF_TRNBLACK (ID,
+			TRNCOD,
+			TRNNAM,
+			HANDUPDTE,
+			HANDUPTIM,
+			DURATION,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{trncod,jdbcType=VARCHAR},
+    #{trnnam,jdbcType=VARCHAR},
+    #{handupdte,jdbcType=VARCHAR},
+    #{handuptim,jdbcType=VARCHAR},
+    #{duration,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_TRNBLACK
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefTrnblack">
+  	delete from B_CFGDEF_TRNBLACK 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_TRNBLACK 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefTrnblack">
+  	update B_CFGDEF_TRNBLACK 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_TRNBLACK (ID,
+			TRNCOD,
+			TRNNAM,
+			HANDUPDTE,
+			HANDUPTIM,
+			DURATION,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.trncod,jdbcType=VARCHAR},
+    #{item.trnnam,jdbcType=VARCHAR},
+    #{item.handupdte,jdbcType=VARCHAR},
+    #{item.handuptim,jdbcType=VARCHAR},
+    #{item.duration,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_TRNBLACK 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

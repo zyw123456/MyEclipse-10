@@ -1,0 +1,157 @@
+package com.test.gzt;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.test.util.Base64;
+import com.test.util.Constant;
+import com.test.util.DESUtil;
+import com.test.util.HttpClientUtils;
+import com.test.util.MD5Util;
+import com.test.util.Utils;
+
+
+public class Gzt_servers {
+	QueryValidatorServices port;
+	public  Gzt_servers(QueryValidatorServices port){
+		this.port=port;
+	}
+	
+	public String getGztServers(String type ,String params) throws Exception{
+		if (params  == null){
+			return null;
+		}
+		String res = null;
+	
+			if(params.split(";").length>0){
+				res =	 port.queryBatch(Utils.encodeParam(Constant.GZT_USERNAME), Utils.encodeParam(Constant.GZT_PASSWORD), Utils.encodeParam(type), Utils.encodeParam(params));
+			}else{
+				res = port.querySingle(Utils.encodeParam(Constant.GZT_USERNAME), Utils.encodeParam(Constant.GZT_PASSWORD), Utils.encodeParam(type), Utils.encodeParam(params));
+			}
+		
+		byte[] decode = Base64.decode(res);
+		return new String(DESUtil.decode(Constant.GZT_KEY, decode),"gbk");
+	}
+	
+	public String BankCard() throws Exception{
+		String url = Constant.GZT_BANKCARD_AUTH_TEST_URL+"cardNameCheck_"+Constant.GZT_ICPCODE;
+		Map<String,String> param = new HashMap<String,String>();
+		String stid = "152403052188";
+		String cardnum = "5527422814434931";
+		String name = "测试二";
+		String order_id = "1000111112";
+		param.put("stid", stid);
+		param.put("cardnum",cardnum);
+		param.put("name", name);
+		param.put("order_id", order_id);
+		String tempSign = stid + cardnum +  name + order_id + Constant.GZT_BANK_AUTH_KEY;
+		String md5str = Utils.gzt_bank_md5(tempSign);
+		param.put("code", md5str);
+		String httpPost = HttpClientUtils.sendPostSSLRequest(url, param,"utf-8");
+		System.out.println(httpPost);
+		return httpPost;
+	}
+	
+	
+	public String  passengerStatid() throws Exception{
+		String url = Constant.GZT_PLANE_URL+Constant.GZT_PASSENGERSTATID_URL;
+		String name = "xxx";
+		String pid = "写入身份证号码";
+		String gid = "";
+		int imonth = 6;
+		String md5 =gid+Constant.GZT_PASSENGERSTATID_HASHCODE+imonth+name+pid+Constant.GZT_PASSENGERSTATID_KEY+"20160106";
+		String md5str =  Utils.gzt_bank_md5(md5);
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("HashCode", Constant.GZT_PASSENGERSTATID_HASHCODE);
+		param.put("name", name);
+		param.put("pid", pid);
+		param.put("gid","");
+		param.put("imonth", ""+imonth);
+		param.put("sign", md5str);
+		String httpPost = HttpClientUtils.sendPostSSLRequest(url, param,"utf-8");
+		return httpPost;
+		
+	}
+	/**
+	 * 
+	 * @param phone_number
+	 * @param certType
+	 * @param certCode
+	 * @param username
+	 * @return
+	 * @throws Exception 
+	 */
+	public String shortPhone(String phone_number,String certType,String certCode,String userName) throws Exception{
+		String response = null;
+		switch (Utils.matchesPhoneNumber(phone_number)) {
+		case 1: //移动
+			break;
+		case 2:  //联通
+		response = 	unioncom(phone_number, certType, certCode, userName);
+			
+			break;
+		case 3 ://电信
+			
+			response = chinaTelecom(phone_number, certCode, userName);
+			break;
+		case 4: //错误
+			System.out.println("输入有误111");
+			break;
+		default:
+			System.out.println("输入有误"); 
+			break;
+		}
+		
+		
+		return response;
+	}
+	
+
+	/**
+	 * 调用联通接口
+	 * @param phone_number
+	 * @param certType
+	 * @param certCode
+	 * @param username
+	 * @return
+	 * @throws Exception 
+	 */
+	public String unioncom(String phone_number,String certType,String certCode,String userName) throws Exception{
+		Map<String,String> params = new HashMap<String,String>();
+		String curTime  = Utils.getNowTime("yyyyMMddHHmmss");
+		String sequence = Utils.getCharAndNumr(8);
+		String url = Constant.UNIONCOM_POSTURL_IDENT;
+		String all = phone_number+"_"+Constant.UNIONCOM_ORGCODE+"_"+Constant.UNIONCOM_ROGPWD+"_"+curTime+"_"+sequence;
+		params.put("sendTelNo", phone_number);
+		params.put("certType",certType);//0101代表身份证
+		params.put("certCode", certCode);
+		params.put("userName", userName);
+		params.put("orgCode", Constant.UNIONCOM_ORGCODE);
+		params.put("CurTime",curTime );
+		params.put("sequence",sequence );
+		params.put("orgSeq", MD5Util.MD5(all));
+		return HttpClientUtils.httpPost(url, params);
+	}
+	
+	public String chinaTelecom(String phone_number,String  certCode,String userName) throws Exception{
+		Map<String,String> params = new HashMap<String,String>();
+//		String all = "ref="+Constant.CHINATELECOM_REF+"&password="+MD5Util.MD5(Constant.CHINATELECOM_PWD)+"&seed="+Utils.getNowTime("yyyyMMdd");
+		String url = Constant.CHINATELECOM_POSTURL+Constant.CHINATELECOM_PHONEBASEURL+Constant.CHINATELECOM_REF+"/"+Utils.getCustSign(Constant.CHINATELECOM_REF, Constant.CHINATELECOM_PWD)+".xml?";
+		url+="mdn="+phone_number;
+		url+="&mdnTransType=Clear";
+		url+="&idType=idCard";
+		url+="&idNoHash="+Utils.gzt_bank_md5(certCode);
+		url+="&nameHash="+Utils.gzt_bank_md5(userName);
+//		params.put("mdn", phone_number);
+//		params.put("mdnTransType", "Clear");
+//		params.put("idType", "idCard ");
+//		params.put("idNoHash", Hex.encodeHexString(Utils.gzt_bank_md5(certCode).getBytes()));
+//		params.put("nameHash", Hex.encodeHexString(Utils.gzt_bank_md5(userName).getBytes()));
+		String httpPost = HttpClientUtils.executeGet(url);
+		return httpPost;
+	}
+
+}

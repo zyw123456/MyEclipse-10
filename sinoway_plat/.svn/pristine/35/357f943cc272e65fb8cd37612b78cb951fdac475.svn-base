@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="StmManagerService" class="com.sinoway.stm.service.impl.StmManagerService">
+		<property name="prdDao" ref="PrdDao"></property>
+		<property name="poOrganizeinfoService" ref="PoOrganizeinfoService"></property>
+		<property name="stmMsgtrnService" ref="StmMsgtrnService"></property>
+	</bean>
+	<bean id="StmMsgtrnService" class="com.sinoway.stm.service.impl.StmMsgtrnService">
+		<property name="httpProviderService" ref="HttpProviderService"></property>
+	</bean>
+</beans>

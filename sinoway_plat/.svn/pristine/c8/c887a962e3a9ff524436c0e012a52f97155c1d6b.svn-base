@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configs>
+	<!-- WF框架内部参数配置 -->
+	<ParamGroup name="WF_CORE_PARAM" memo="WF内部参数">
+		<!-- 资源刷新时间 beam-am.xml line 16 -->
+		<Param name="refreshWait" type="String">60000</Param>
+
+		<!-- 默认密码beam-po.xml line 40 -->
+		<Param name="defaultPassword" type="String">888888</Param>
+
+		<!-- 在最近几次修改密码中密码是不能相同的。beam-po.xml line 41 -->
+		<Param name="passwordRecordsLength" type="String">6</Param>
+
+		<!-- 密码锁定错误次数spring-security-base.xml line 74 -->
+		<Param name="maxErrTime" type="String">30</Param>
+
+		<!-- 密码强度 -->
+		<Param name="pwdStrengthLevel" type="String">3</Param>
+
+		<!-- 系统运行状态 run:运行状态，debug：调式状态 -->
+		<Param name="sysRunMode" type="String">run</Param>
+
+		<!-- 系统启动状态 true：第一次启动，false：不是第一次启动 -->
+		<Param name="isFirstStart" type="Boolean">false</Param>
+
+		<!-- 密码过期时间 -->
+		<Param name="passwordActiveInterval" type="String">90</Param>
+
+		<!-- 密码过期前提示周期 -->
+		<Param name="passwordInfoInterval" type="String">7</Param>
+
+		<!-- 密码过期后是否允许登陆进行密码修改 -->
+		<Param name="loginableAfterPwdOutOfDate" type="String">true</Param>
+		
+		<!-- 是否支持通过工作时间管理用户登录 true:工作时间外登录需授权 false:无登录时间限制-->
+		<Param name="enableLoginTime" type="Boolean">false</Param>
+		
+		<!-- 是否屏蔽任务菜单，默认不屏蔽 ! block:屏蔽,unblock:不屏蔽 -->
+		<Param name="isBlockTaskMenu" type="String">unblock</Param>
+
+		<!-- 是否启用CRUD（增、删、查、改）限制,true:启用,false：不启用。默认不启用 -->
+		<Param name="enableCRUD" type="Boolean">false</Param>
+
+		<!-- 管理人员是否可以修改自己信息，true：可修改,false：不能修改。 -->
+		<Param name="enableModifiedOwnInfo" type="Boolean">true</Param>
+
+		<!-- 管理人员是否可以修改自己机构信息，true：可修改,false：不能修改。 -->
+		<Param name="enableModifiedOwnOrg" type="Boolean">true</Param>
+
+		<!-- 管理人员是否可以删除自己机构信息，true：可修改,false：不能修改。默认能修改 -->
+		<Param name="enableDeleteOwnOrg" type="Boolean">true</Param>
+
+		<!-- 是否屏蔽修改密码功能，true：屏蔽,false：不屏蔽。默认不屏蔽 -->
+		<Param name="blockModifyPwdFun" type="Boolean">false</Param>
+
+		<!-- 工作流任务查询配置，按人员SID：sid，按人员代码：code。默认按sid -->
+		<Param name="taskQueryParam" type="String">sid</Param>
+
+		<!-- 日志切换开关，true：打开，false：关闭 。默认关闭。此功能若需开放请联系应用开发部 -->
+		<Param name="enableLogTrigger" type="Boolean">true</Param>
+
+		<!-- 复核授权机构验证开关，true：授权人员所属机构只能是操作人员的直属上级机构或者同一机构，false：不限制 -->
+		<Param name="enableAuthOrgLimit" type="Boolean">false</Param>
+		
+		<!-- 接受转授权名单过滤切换开关，true:打开，false，关闭 -->
+		<Param name="enableManageTransferPeople" type="Boolean">true</Param>
+
+		<!-- 转授权预约是否支持监交人员开关，true:是，false:否 -->
+		<Param name="enableSupervisePeople" type="Boolean">true</Param>
+		
+		<!-- 机构显示级别限制：1、*:不限制，所有机构全部显示；2、具体数字（例如：5）：只显示0~5级别的机构，包括第5级别 -->
+		<Param name="orgViewLevelLimit" type="String">*</Param>
+
+		<!-- 是否启用模块热键功能：true：启用，false：不启用 -->
+		<Param name="enableHotKeyFun" type="String">false</Param>
+
+		<!-- 是否启用离线审批功能功能：true：启用，false：不启用 -->
+		<Param name="enableOfflineApproveFun" type="Boolean">false</Param>
+
+		<!-- 是否单点登录和普通登录共存，true：共存； false：不共存，为单点登录 -->
+		<Param name="isDefaultAndSSO" type="Boolean">false</Param>
+
+		<!-- 机构名称是否允许重复，true：允许，false：不允许。 -->
+		<Param name="enableOrgNameRepeat" type="Boolean">false</Param>
+
+		<!-- 是否按指定机构导出所有人员信息，true：导出指定机构及其下级机构人员信息，false:导出所有人 -->
+		<Param name="enableExportPeopleByOrg" type="Boolean">false</Param>
+
+		<!-- 总行管理员是否可以管理分行一般人员(可以管理分行管理员)，分行管理员是否可以管理所属分行及其下属分行其他管理员 -->
+		<Param name="enableHeadManageBranchGeneralPeople" type="Boolean">true</Param>
+
+		<!-- 重置密码是，是否邮件发送随机密码。true：是，false：否 -->
+		<Param name="enableRandomPwdForResetPwd" type="Boolean">false</Param>
+
+		<!-- 模块名称是否允许重复，true：允许，false：不允许 -->
+		<Param name="enableModuleNameRepeat" type="Boolean">true</Param>
+		
+		<!-- 当机构存在子机构时，是否允许对该机构进行机构迁移。true:允许,false:不允许 -->
+		<Param name="enableMigrateParentOrg" type="Boolean">false</Param>
+		
+		<!-- 当修改机构时，是否允许对该机构的机构类型进行修改。true:允许,false:不允许 -->
+		<Param name="enableEditOrgTypeForOrg" type="Boolean">false</Param>
+	</ParamGroup>
+</Configs>

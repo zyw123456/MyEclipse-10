@@ -1,0 +1,61 @@
+package com.sinoway.common.parse;
+
+import javax.xml.transform.TransformerException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.exception.DomParseException;
+import com.sinoway.common.service.parse.GeneralJsonTradeMsgTransfer;
+import com.sinoway.common.util.DocumentUtil;
+import com.sinoway.mcp.exception.JsonMsgParseException;
+import com.sinoway.mcp.exception.TradeMsgTransfException;
+import com.sun.org.apache.xpath.internal.XPathAPI;
+
+public class TestTradeParseP000004 {
+
+	
+	public  static void in(){
+		
+		GeneralJsonTradeMsgTransfer  trade = new GeneralJsonTradeMsgTransfer();
+	 try {
+		Document dom = DocumentUtil.filePToDomByDecode("E:/XML_IBankServerMapsTemplate1.xml", "UTF-8");
+		
+		Element el = (Element) XPathAPI.selectSingleNode(dom, "/TRADETEMPLATE/TRADE[@ID='P0000004']/MESSAGE[@TYPE='1']/OBJ");
+		
+		
+		JSONObject json = new JSONObject();
+		  json.put("idcard","idcard");
+		System.out.println("输出的模板内容：：："+trade.transfJsonMsgByJTemp(el, json, json, "", true, new GeneralBusEntity()));
+		
+	} catch (DomParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (TransformerException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JsonMsgParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (TradeMsgTransfException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+	}
+	
+	public static void out (){
+		
+		Documnet dom = DocumentUtil.filePToDomByDecode("E:/XML_IBankServerMapsTemplate1.xml", "utf-8");
+		
+	}
+	public static void main(String[] args) {
+	in();	
+	}
+
+}

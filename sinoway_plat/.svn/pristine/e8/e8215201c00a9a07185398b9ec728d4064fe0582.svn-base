@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="sinoway_plat">
+        <wb-resource deploy-path="/" source-path="/WebRoot" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="com.yzj.wf.am.security.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.am.security/com.yzj.wf.am.security">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.common.db.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.common.db/com.yzj.wf.common.db">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.common.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.common/com.yzj.wf.common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.as.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.as/com.yzj.wf.as">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.as.manager.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.as.manager/com.yzj.wf.as.manager">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bpm.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bpm/com.yzj.wf.bpm">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bpm.monitor.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bpm.monitor/com.yzj.wf.bpm.monitor">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.am.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.am/com.yzj.wf.am">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.core/com.yzj.wf.core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.cache.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.cache/com.yzj.wf.cache">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bpm.lwe.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bpm.lwe/com.yzj.wf.bpm.lwe">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bpm.lwe.bpmn.model.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bpm.lwe.bpmn.model/com.yzj.wf.bpm.lwe.bpmn.model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.am.auth.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.am.auth/com.yzj.wf.am.auth">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bizlog.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bizlog/com.yzj.wf.bizlog">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.bizlog.core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.bizlog.core/com.yzj.wf.bizlog.core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.ui.custompage.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.ui.custompage/com.yzj.wf.ui.custompage">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.yzj.wf.base.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.yzj.wf.base/com.yzj.wf.base">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/windforce/WebRoot/WEB-INF/classes"/>
+        <property name="me-merge-utility-modules" value="true"/>
+        <property name="me-struts-base-pkg"/>
+        <property name="context-root" value="/sinoway_plat"/>
+    </wb-module>
+</project-modules>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefTrnjrn" >
+  <resultMap id="BaseResultMap" type="com.sinoway.common.entity.BCfgdefTrnjrn" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- SYSCOD -->
+    <result column="SYSCOD" property="syscod" jdbcType="VARCHAR" />
+    <!-- JRNDTE -->
+    <result column="JRNDTE" property="jrndte" jdbcType="VARCHAR" />
+    <!-- JRNVAL -->
+    <result column="JRNVAL" property="jrnval" jdbcType="VARCHAR" />
+    <!-- STA -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			SYSCOD,
+			JRNDTE,
+			JRNVAL,
+			STA
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="syscod != null" >	  SYSCOD = #{syscod,jdbcType=VARCHAR},	</if>
+    <if test="jrndte != null" >	  JRNDTE = #{jrndte,jdbcType=VARCHAR},	</if>
+    <if test="jrnval != null" >	  JRNVAL = #{jrnval,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="syscod != null" >
+		  and SYSCOD = #{syscod,jdbcType=VARCHAR}
+		</if>
+	    <if test="jrndte != null" >
+		  and JRNDTE = #{jrndte,jdbcType=VARCHAR}
+		</if>
+	    <if test="jrnval != null" >
+		  and JRNVAL = #{jrnval,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_TRNJRN
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.common.entity.BCfgdefTrnjrn" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_TRNJRN
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_TRNJRN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.common.entity.BCfgdefTrnjrn" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_TRNJRN
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_TRNJRN (ID,
+			SYSCOD,
+			JRNDTE,
+			JRNVAL,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{syscod,jdbcType=VARCHAR},
+    #{jrndte,jdbcType=VARCHAR},
+    #{jrnval,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.common.entity.BCfgdefTrnjrn" >
+    insert into B_CFGDEF_TRNJRN (ID,
+			SYSCOD,
+			JRNDTE,
+			JRNVAL,
+			STA)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{syscod,jdbcType=VARCHAR},
+    #{jrndte,jdbcType=VARCHAR},
+    #{jrnval,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_TRNJRN
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.common.entity.BCfgdefTrnjrn">
+  	delete from B_CFGDEF_TRNJRN 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_TRNJRN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.common.entity.BCfgdefTrnjrn">
+  	update B_CFGDEF_TRNJRN 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntityProperties" parameterType="map">
+  	update B_CFGDEF_TRNJRN 
+	  	set	
+	    <if test="trnjrn.syscod != null" >	  SYSCOD = #{trnjrn.syscod,jdbcType=VARCHAR},	</if>
+	    <if test="trnjrn.jrndte != null" >	  JRNDTE = #{trnjrn.jrndte,jdbcType=VARCHAR},	</if>
+	    <if test="trnjrn.jrnval != null" >	  JRNVAL = #{trnjrn.jrnval,jdbcType=VARCHAR},	</if>
+	    <if test="trnjrn.sta != null" >	  STA = #{trnjrn.sta,jdbcType=VARCHAR}	</if>
+		  	
+    where
+	 	ID = #{trnjrn.id} 
+	 	AND JRNVAL=#{jrnval}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_TRNJRN (ID,
+			SYSCOD,
+			JRNDTE,
+			JRNVAL,
+			STA)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.syscod,jdbcType=VARCHAR},
+    #{item.jrndte,jdbcType=VARCHAR},
+    #{item.jrnval,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_TRNJRN 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

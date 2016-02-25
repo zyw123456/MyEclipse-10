@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefPrdinfo" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefPrdinfo" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- PRDCOD -->
+    <result column="PRDCOD" property="prdcod" jdbcType="VARCHAR" />
+    <!-- PRDNAM -->
+    <result column="PRDNAM" property="prdnam" jdbcType="VARCHAR" />
+    <!-- APPCOD -->
+    <result column="APPCOD" property="appcod" jdbcType="VARCHAR" />
+    <!-- APPNAM -->
+    <result column="APPNAM" property="appnam" jdbcType="VARCHAR" />
+    <!-- 验证类产品；
+个人报告类；
+反欺诈报告类；
+天警云类
+金融类数据监测
+电商类数据监测
+个人被查询类数据监测
+公共信息类数据监测 -->
+    <result column="PRDTYP" property="prdtyp" jdbcType="VARCHAR" />
+    <!-- 0、不是默认产品
+1、是默认产品 -->
+    <result column="ISDEFULT" property="isdefult" jdbcType="VARCHAR" />
+    <!-- PARNTCOD -->
+    <result column="PARNTCOD" property="parntcod" jdbcType="VARCHAR" />
+    <!-- CRETDAY -->
+    <result column="CRETDAY" property="cretday" jdbcType="VARCHAR" />
+    <!-- 0:启用，1:停用 -->
+    <result column="STA" property="sta" jdbcType="VARCHAR" />
+    <!-- MEMO -->
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			PRDCOD,
+			PRDNAM,
+			APPCOD,
+			APPNAM,
+			PRDTYP,
+			ISDEFULT,
+			PARNTCOD,
+			CRETDAY,
+			STA,
+			MEMO
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="prdcod != null" >	  PRDCOD = #{prdcod,jdbcType=VARCHAR},	</if>
+    <if test="prdnam != null" >	  PRDNAM = #{prdnam,jdbcType=VARCHAR},	</if>
+    <if test="appcod != null" >	  APPCOD = #{appcod,jdbcType=VARCHAR},	</if>
+    <if test="appnam != null" >	  APPNAM = #{appnam,jdbcType=VARCHAR},	</if>
+    <if test="prdtyp != null" >	  PRDTYP = #{prdtyp,jdbcType=VARCHAR},	</if>
+    <if test="isdefult != null" >	  ISDEFULT = #{isdefult,jdbcType=VARCHAR},	</if>
+    <if test="parntcod != null" >	  PARNTCOD = #{parntcod,jdbcType=VARCHAR},	</if>
+    <if test="cretday != null" >	  CRETDAY = #{cretday,jdbcType=VARCHAR},	</if>
+    <if test="sta != null" >	  STA = #{sta,jdbcType=VARCHAR},	</if>
+    <if test="memo != null" >	  MEMO = #{memo,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="prdcod != null" >
+		  and PRDCOD = #{prdcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdnam != null" >
+		  and PRDNAM = #{prdnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="appcod != null" >
+		  and APPCOD = #{appcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="appnam != null" >
+		  and APPNAM = #{appnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="prdtyp != null" >
+		  and PRDTYP = #{prdtyp,jdbcType=VARCHAR}
+		</if>
+	    <if test="isdefult != null" >
+		  and ISDEFULT = #{isdefult,jdbcType=VARCHAR}
+		</if>
+	    <if test="parntcod != null" >
+		  and PARNTCOD = #{parntcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="cretday != null" >
+		  and CRETDAY = #{cretday,jdbcType=VARCHAR}
+		</if>
+	    <if test="sta != null" >
+		  and STA = #{sta,jdbcType=VARCHAR}
+		</if>
+	    <if test="memo != null" >
+		  and MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_PRDINFO
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_PRDINFO
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_PRDINFO
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_PRDINFO
+    <include refid="base_column_where"></include>
+  </select>
+  
+   <select id="searchProductByPrdcod" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_PRDINFO
+   where PRDCOD = #{prdcod}
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_PRDINFO (ID,
+			PRDCOD,
+			PRDNAM,
+			APPCOD,
+			APPNAM,
+			PRDTYP,
+			ISDEFULT,
+			PARNTCOD,
+			CRETDAY,
+			STA,
+			MEMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{appcod,jdbcType=VARCHAR},
+    #{appnam,jdbcType=VARCHAR},
+    #{prdtyp,jdbcType=VARCHAR},
+    #{isdefult,jdbcType=VARCHAR},
+    #{parntcod,jdbcType=VARCHAR},
+    #{cretday,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{memo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo" >
+    insert into B_CFGDEF_PRDINFO (ID,
+			PRDCOD,
+			PRDNAM,
+			APPCOD,
+			APPNAM,
+			PRDTYP,
+			ISDEFULT,
+			PARNTCOD,
+			CRETDAY,
+			STA,
+			MEMO)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{prdcod,jdbcType=VARCHAR},
+    #{prdnam,jdbcType=VARCHAR},
+    #{appcod,jdbcType=VARCHAR},
+    #{appnam,jdbcType=VARCHAR},
+    #{prdtyp,jdbcType=VARCHAR},
+    #{isdefult,jdbcType=VARCHAR},
+    #{parntcod,jdbcType=VARCHAR},
+    #{cretday,jdbcType=VARCHAR},
+    #{sta,jdbcType=VARCHAR},
+    #{memo,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_PRDINFO
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo">
+  	delete from B_CFGDEF_PRDINFO 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_PRDINFO 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrdinfo">
+  	update B_CFGDEF_PRDINFO 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	PRDCOD = #{prdcod}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_PRDINFO (ID,
+			PRDCOD,
+			PRDNAM,
+			APPCOD,
+			APPNAM,
+			PRDTYP,
+			ISDEFULT,
+			PARNTCOD,
+			CRETDAY,
+			STA,
+			MEMO)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.prdcod,jdbcType=VARCHAR},
+    #{item.prdnam,jdbcType=VARCHAR},
+    #{item.appcod,jdbcType=VARCHAR},
+    #{item.appnam,jdbcType=VARCHAR},
+    #{item.prdtyp,jdbcType=VARCHAR},
+    #{item.isdefult,jdbcType=VARCHAR},
+    #{item.parntcod,jdbcType=VARCHAR},
+    #{item.cretday,jdbcType=VARCHAR},
+    #{item.sta,jdbcType=VARCHAR},
+    #{item.memo,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_PRDINFO 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

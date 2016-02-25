@@ -1,0 +1,598 @@
+package com.sinoway.common.util;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import com.sinoway.common.exception.DomParseException;
+
+
+/**
+ * 通用XML解析工具
+ * @author Liuzhen
+ * @version 1.0
+ * 2015-11-3
+ */
+public class DocumentUtil {
+	
+	// 默认编码格式
+	private static String DEFAULT_ENCODE = "utf-8";
+	
+	/**
+	 * 将指定路径下的文件解析成dom对象，使用默认编码格式
+	 * @param filePath 指定的路径
+	 * @param 指定的编码格式
+	 * @return
+	 * @throws DomParseException
+	 */
+	public static Document filePToDomByDefDecode(String filePath) throws DomParseException{
+		
+		return filePToDomByDecode(filePath,DEFAULT_ENCODE);
+		
+	}
+	
+	/**
+	 * 将指定路径下的文件解析成dom对象，指定编码格式
+	 * @param filePath 指定的路径
+	 * @param 指定的编码格式
+	 * @return
+	 * @throws DomParseException
+	 */
+	public static Document filePToDomByDecode(String filePath,String decode) throws DomParseException{
+		
+		if(filePath == null || "".equals(filePath))
+			throw new DomParseException("将参数路径下的文件解析成dom对象错误： 路径不能为空");
+		
+		File xmlFile = new File(filePath);
+		
+		return fileToDomByDecode(xmlFile,decode);
+		
+	}
+	
+	/**
+	 * 将指定路径下的文件解析成dom对象，不指定编码格式
+	 * @param filePath
+	 * @return
+	 * @throws DomParseException
+	 */
+	public static Document filePToDomByNoDecode(String filePath) throws DomParseException{
+		
+		if(filePath == null || "".equals(filePath))
+			throw new DomParseException("将参数路径下的文件解析成dom对象错误： 路径不能为空");
+		
+		File xmlFile = new File(filePath);
+		
+		return fileToDomByNoDecode(xmlFile);
+		
+	}
+	/**
+	 * 将文件解析成dom对象,使用默认编码格式
+	 * @param xmlFile 要解析的xml文件
+	 * @return 解析完成的dom对象
+	 * @throws DomParseException
+	 */
+	public static Document fileToDomByDefDecode(File xmlFile) throws DomParseException{
+		
+		return fileToDomByDecode(xmlFile,DEFAULT_ENCODE);
+			
+	}
+	
+	/**
+	 * 将文件解析成dom对象,指定编码格式
+	 * @param xmlFile 要解析的xml文件
+	 * @param 编码格式
+	 * @return 解析完成的dom对象
+	 * @throws DomParseException
+	 */
+	public static Document fileToDomByDecode(File xmlFile,String decode) throws DomParseException{
+		
+		return strToDomByNoDecode(getFileStrByDecode(xmlFile, decode));
+	}
+	
+	/**
+	 * 将文件解析成dom对象,不指定编码格式
+	 * @param xmlFile 要解析的xml文件
+	 * @return 解析完成的dom对象
+	 * @throws DomParseException
+	 */
+	public static Document fileToDomByNoDecode(File xmlFile) throws DomParseException{
+		
+		return strToDomByNoDecode(getFileStrByNoDecode(xmlFile));
+	
+	}
+	
+	
+	/**
+	 * 使用指定的字符集获取文件中的字符内容
+	 * @param file 要获取字符串内容的文件
+	 * @param decode 字符集
+	 * @return 获取到的字符串
+	 * @throws DomParseException
+	 */
+	private static String getFileStrByDecode(File file,String decode) throws DomParseException{
+		
+		if(decode == null || "".equals(decode))
+			throw new DomParseException("获取文件内容失败：字符编码不能为空");
+		
+		String str = getFileStrByNoDecode(file);
+		
+		if(str != null){
+			try {
+				str = URLDecoder.decode(str, decode);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				throw new DomParseException("获取文件内容失败：不支持的字符编码，编码格式： " + decode);
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new DomParseException("获取文件内容失败：使用指定字符集解码时发生未知异常，编码格式： " + decode);
+			}
+		}
+		
+		return str;
+	}
+	
+	/**
+	 * 获取文件的字符内容,不通过编码格式
+	 * @param file 要获取字符内容的文件
+	 * @return 获取到的字符串
+	 * @throws DomParseException
+	 */
+	private static String getFileStrByNoDecode(File file) throws DomParseException{
+		
+		if(file == null)
+			throw new DomParseException("获取文件字符内容错误：文件不能为空");
+		if(!file.exists())
+			throw new DomParseException("获取文件字符内容错误：文件不存在");
+		if(file.isDirectory())
+			throw new DomParseException("获取文件字符内容错误：不能指定为文件夹，路径： " + file.getAbsolutePath());
+		
+		FileInputStream  fins = null;
+		InputStreamReader isr = null;
+		BufferedReader br = null;
+		
+		try {
+			fins = new FileInputStream(file);
+			
+			isr = new InputStreamReader(fins);
+			
+			br = new BufferedReader(isr);
+			
+			String line = null;
+			
+			StringBuffer fileContent = new StringBuffer();
+			while((line = br.readLine()) != null){
+				fileContent.append(line);
+			}
+			line = null;
+			
+			return fileContent.toString();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new DomParseException("获取文件字符内容错误： 文件不存在");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new DomParseException("获取文件字符内容错误：I/O读取异常");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new DomParseException("获取文件字符内容错误： 未知异常");
+		}finally{
+			if(br != null){
+				try {
+					br.close();
+					br = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(isr != null){
+				try {
+					isr.close();
+					isr = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(fins != null){
+				try {
+					fins.close();
+					fins = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 把字符串转换成document对象，使用默认编码
+	 * @param xmlStr 要转换的字符串
+	 * @return 转换完成的document对象
+	 */
+	public static Document strToDomByDefDecode(String xmlStr) throws DomParseException{
+		
+		return strToDomByDecode(xmlStr,DEFAULT_ENCODE);
+	}
+	
+	/**
+	 * 把字符串转换成document对象，使用默认编码
+	 * @param xmlStr 要转换的字符串
+	 * @return 转换完成的document对象
+	 * @throws DomParseException 
+	 */
+	public static Document strToDomByDecode(String xmlStr,String decode) throws DomParseException{
+		if(xmlStr == null || "".equals(xmlStr))
+			throw new DomParseException("字符串转换成document对象失败： 要转换的字符串不能为空");
+
+		if(decode == null || "".equals(decode))
+			throw new DomParseException("字符串转换成document对象失败：编码格式不能为空");
+		
+		String str = null;
+		try {
+			
+			str = URLDecoder.decode(xmlStr, decode);
+			
+		}catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： 不支持的编码格式");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： 使用指定字符集解码时发生未知异常");
+		}
+		
+		return strToDomByNoDecode(str);
+	}
+	
+	/**
+	 * 把字符串转换成document对象，不使用编码
+	 * @param xmlStr 要转换的字符串
+	 * @return 转换完成的document对象
+	 * @throws DomParseException 
+	 */
+	public static Document strToDomByNoDecode(String xmlStr) throws DomParseException{
+		
+		if(xmlStr == null || "".equals(xmlStr))
+			throw new DomParseException("字符串转换成document对象失败：要转换的字符串不能为空");
+		
+		StringReader reader = null;
+		
+		DocumentBuilderFactory bf = null;
+		
+		DocumentBuilder builder = null;
+		
+		InputSource is = null;
+		
+		Document dom= null;
+		try {
+			reader = new StringReader(xmlStr);
+			
+			bf = DocumentBuilderFactory.newInstance();
+			
+			builder = bf.newDocumentBuilder();
+			
+			is = new InputSource(reader);
+			
+			dom = builder.parse(is);
+		
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： 生成DocumentFactory失败");
+		} catch (SAXException e) {
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： sax解析异常");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： IO异常");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new DomParseException("字符串转换成document对象失败： 未知异常");
+		}finally{
+			is = null;
+			builder = null;
+			bf = null;
+			if(reader != null){
+				reader.close();
+				reader = null;
+			}
+			
+		}
+		
+		return dom;
+	}
+	
+	/**
+	 * 把dom转换成字符串，不使用编码格式
+	 * @param dom 要转换的dom对象
+	 * @return 转换完成的字符串
+	 */
+	public static String domToStrByNoDecode(Document dom) throws DomParseException{
+		
+		if(dom == null)
+			throw new DomParseException("dom转换成字符串错误： dom对象不能为空");
+		
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer t = null;
+		ByteArrayOutputStream bos = null;
+		DOMSource doms = null;
+		StreamResult sr =  null;
+		try {
+			t = tf.newTransformer();
+			//t.setOutputProperty("encoding", "utf-8");
+			bos = new ByteArrayOutputStream();
+			
+			doms = new DOMSource(dom);
+			
+			sr =  new StreamResult(bos);
+			
+			t.transform(doms, sr);
+			
+//			String xmlStr = bos.toString("utf-8");
+			String xmlStr = bos.toString();
+			t = null;
+			tf = null;
+			doms = null;
+			sr = null;
+			return xmlStr;
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+			throw new DomParseException("dom转换成字符串错误：获取Transformer失败");
+		} catch (TransformerException e) {
+			e.printStackTrace();
+			throw new DomParseException("dom转换成字符串错误：转换异常");
+			
+		} 
+//		catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//			throw new DomParseException("dom转换成字符串错误：不支持的编码格式");
+//		}
+		finally{
+			if(bos !=null){
+				try {
+					bos.close();
+					bos = null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+	
+	/**
+	 * 把dom转换成字符串，指定编码格式
+	 * @param dom 要转换的dom对象
+	 * @param decode 编码格式
+	 * @return 转换完成的字符串
+	 */
+	public static String domToStrByDecode(Document dom,String decode) throws DomParseException{
+		
+		if(decode == null || "".equals(decode))
+			throw new DomParseException("dom转换成字符串错误：编码格式不能为空");
+		
+		String xmlStr = domToStrByNoDecode(dom);
+		
+		try {
+			xmlStr = URLDecoder.decode(xmlStr, decode);
+			
+			return xmlStr;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new DomParseException("dom转换成字符串错误：不支持的编码格式");
+
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new DomParseException("dom转换成字符串错误：使用指定字符集编码时发生未知异常");
+
+		}
+	}
+	
+	/**
+	 * 把dom转换成字符串，使用默认编码格式
+	 * @param dom 要转换的dom对象
+	 * @param decode 编码格式
+	 * @return 转换完成的字符串
+	 */
+	public static String domToStrByDefDecode(Document dom) throws DomParseException{
+		return domToStrByDecode(dom,DEFAULT_ENCODE);
+	}
+	
+	/**
+	 * 将字符串保存成文件，若文件已存在将覆盖
+	 * @param str 要保存的字符串
+	 * @param file 目标文件
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean strToFile(String str,File file) throws DomParseException{
+		if(str == null)
+			throw new DomParseException("将字符串保存成文件错误：字符串不能为null");
+		
+		if(file == null)
+			throw new DomParseException("将字符串保存成文件错误：file不能为null");
+		
+		if(file.isDirectory())
+			throw new DomParseException("将字符串保存成文件错误：不能指定为文件夹");
+		
+		if(!file.exists()){
+			try {
+				file.createNewFile();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new DomParseException("将字符串保存成文件错误：创建文件失败，路径：" + file.getAbsolutePath());
+			}
+		}
+		FileOutputStream fos = null;
+		boolean flg = false;
+		try {
+			fos = new FileOutputStream(file);
+			fos.write(str.getBytes());
+			fos.flush();
+			fos.close();
+			flg = true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new DomParseException("将字符串保存成文件错误：文件不存在，路径：" + file.getAbsolutePath());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new DomParseException("将字符串保存成文件错误：文件写入失败，路径：" + file.getAbsolutePath());
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new DomParseException("将字符串保存成文件错误：未知异常，路径：" + file.getAbsolutePath());
+		}finally{
+			if(fos != null){
+				try {
+					fos.close();
+					fos = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return flg;
+	}
+	
+	/**
+	 * 将字符串保存在指定路径的文件中，若文件已存在将覆盖
+	 * @param str 要保存的字符串
+	 * @param filePath 文件路径
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean strToFileP(String str,String filePath) throws DomParseException{
+		boolean flg = false;
+		
+		if(filePath == null || "".equals(filePath))
+			throw new DomParseException("将字符串保存成文件错误：文件路径不能为空");
+		
+		File file = new File(filePath);
+		
+		flg = strToFile(str,file);
+		
+		file = null;
+		
+		return flg;
+	}
+	
+	/**
+	 * 将dom对象保存成文件,不指定编码格式
+	 * @param dom 要保存的dom对象
+	 * @param file 目标文件
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFileByNoDecode(Document dom,File file) throws DomParseException{
+		return strToFile(domToStrByNoDecode(dom), file);
+	}
+	
+	/**
+	 * 将dom对象保存成文件,指定编码格式
+	 * @param dom 要保存的dom对象
+	 * @param file 目标文件
+	 * @param decode 编码格式
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFileByDecode(Document dom,File file,String decode) throws DomParseException{
+		return strToFile(domToStrByDecode(dom,decode), file);
+	}
+	
+	/**
+	 * 将dom对象保存成文件,使用默认编码格式
+	 * @param dom 要保存的dom对象
+	 * @param file 目标文件
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFileByDefDecode(Document dom,File file) throws DomParseException{
+		return domToFileByDecode(dom,file,DEFAULT_ENCODE);
+	}
+	
+	/**
+	 * 将dom对象保存指定路径下的文件,不使用编码格式
+	 * @param dom 要保存的dom对象
+	 * @param filePath 目标文件路径
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFilePByNoDecode(Document dom,String filePath) throws DomParseException{
+		return strToFileP(domToStrByNoDecode(dom), filePath);
+	}
+	
+	/**
+	 * 将dom对象保存指定路径下的文件,不使用编码格式
+	 * @param dom 要保存的dom对象
+	 * @param filePath 目标文件路径
+	 * @param decode 编码格式
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFilePByDecode(Document dom,String filePath,String decode) throws DomParseException{
+		return strToFileP(domToStrByDecode(dom,decode), filePath);
+	}
+	
+	/**
+	 * 将dom对象保存指定路径下的文件,不使用编码格式
+	 * @param dom 要保存的dom对象
+	 * @param filePath 目标文件路径
+	 * @return 是否成功
+	 * @throws DomParseException
+	 */
+	public static boolean domToFilePByDefDecode(Document dom,String filePath) throws DomParseException{
+		return strToFileP(domToStrByDecode(dom,DEFAULT_ENCODE), filePath);
+	}
+	
+	
+	public static Map<String,Object> readxml(InputStream in,String charset) throws DocumentException{
+		Map<String,Object> map = new HashMap<String, Object>();
+		SAXReader reader = new SAXReader();
+		reader.setEncoding(charset);  
+		  org.dom4j.Document document = reader.read(in);
+		  Element root = document.getRootElement();
+		  List<Element> childElements = root.elements();
+		  for (Element child : childElements) {
+		   List<Element> elementList = child.elements();
+		   for (Element ele : elementList) {
+			   map.put(ele.getName(), ele.getText());
+		   }
+
+		  }
+		  return map;
+	}
+	
+	
+	
+}

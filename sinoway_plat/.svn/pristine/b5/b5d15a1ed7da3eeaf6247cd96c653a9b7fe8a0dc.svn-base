@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-1-4 11:51:21 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.wrn.entity.WfDatCerditwarn" table="WF_DAT_CERDITWARN">
+        <id name="warnid" type="string">
+            <column name="WARNID" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="trnbtchid" type="string">
+            <column name="TRNBTCHID" length="30" not-null="true" />
+        </property>
+        <property name="prsnnam" type="string">
+            <column name="PRSNNAM" length="32" not-null="true" />
+        </property>
+        <property name="credtyp" type="string">
+            <column name="CREDTYP" length="8" />
+        </property>
+        <property name="credtno" type="string">
+            <column name="CREDTNO" length="32" />
+        </property>
+        <property name="prsncod" type="string">
+            <column name="PRSNCOD" length="32" not-null="true" />
+        </property>
+        <property name="loantyp" type="string">
+            <column name="LOANTYP" length="6" />
+        </property>
+        <property name="loanamt" type="string">
+            <column name="LOANAMT" length="10" />
+        </property>
+        <property name="loanlmt" type="string">
+            <column name="LOANLMT" length="6" />
+        </property>
+        <property name="loansrtdte" type="string">
+            <column name="LOANSRTDTE" length="16" />
+        </property>
+        <property name="loanenddte" type="string">
+            <column name="LOANENDDTE" length="16" />
+        </property>
+        <property name="warntyp" type="string">
+            <column name="WARNTYP" length="10" />
+        </property>
+        <property name="rptnam" type="string">
+            <column name="RPTNAM" length="64" />
+        </property>
+        <property name="prdcod" type="string">
+            <column name="PRDCOD" length="8" />
+        </property>
+        <property name="prdnam" type="string">
+            <column name="PRDNAM" length="64" />
+        </property>
+        <property name="datcmitori" type="string">
+            <column name="DATCMITORI" length="8" />
+        </property>
+        <property name="warndte" type="string">
+            <column name="WARNDTE" length="8" />
+        </property>
+        <property name="warntim" type="string">
+            <column name="WARNTIM" length="12" />
+        </property>
+        <property name="sta" type="string">
+            <column name="STA" length="2">
+                <comment>
+                0&#161;&#162;&#213;&#253;&#212;&#218;&#180;&#166;&#192;&#237;&#163;&#172;1&#161;&#162;&#210;&#209;&#205;&#234;&#179;&#201;&#163;&#172;2&#161;&#162;&#205;&#163;&#211;&#195;&#163;&#168;&#201;&#190;&#179;&#253;&#163;&#169;</comment>
+            </column>
+        </property>
+        <property name="warnmoddte" type="string">
+            <column name="WARNMODDTE" length="8" />
+        </property>
+        <property name="warnmodtim" type="string">
+            <column name="WARNMODTIM" length="12" />
+        </property>
+        <property name="peoplecode" type="string">
+            <column name="PEOPLECODE" length="32" />
+        </property>
+        <property name="orgno" type="string">
+            <column name="ORGNO" length="32" />
+        </property>
+        <property name="parntcode" type="string">
+            <column name="PARNTCODE" length="32" />
+        </property>
+        <property name="usrid" type="string">
+            <column name="USRID" length="32" />
+        </property>
+        <property name="p_usrid" type="string">
+            <column name="P_USRID" length="32" />
+        </property>
+        <property name="corgno" type="string">
+            <column name="CORGNO" length="32" />
+        </property>
+        <property name="cporgno" type="string">
+            <column name="CPORGNO" length="32" />
+        </property>
+    </class>
+</hibernate-mapping>

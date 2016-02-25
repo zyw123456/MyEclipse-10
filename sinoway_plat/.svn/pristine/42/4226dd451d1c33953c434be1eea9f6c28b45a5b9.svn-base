@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+
+    <class name="com.sinoway.common.entity.WfCfgrefTrninele" table="WF_CFGREF_TRNINELE">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="trncod" type="string">
+            <column name="TRNCOD" length="8" />
+        </property>
+        <property name="chnlcod" type="string">
+            <column name="CHNLCOD" length="8" />
+        </property>
+        <property name="elecod" type="string">
+            <column name="ELECOD" length="20" />
+        </property>
+        <property name="pelecod" type="string">
+            <column name="PELECOD" length="20" />
+        </property>
+        <property name="elenam" type="string">
+            <column name="ELENAM" length="20" />
+        </property>
+        <property name="sort" type="string">
+            <column name="SORT" length="3" />
+        </property>
+        <property name="maxlen" type="string">
+            <column name="MAXLEN" length="4" />
+        </property>
+        <property name="minlen" type="string">
+            <column name="MINLEN" length="4" />
+        </property>
+        <property name="datatype" type="string">
+            <column name="DATATYPE" length="4" />
+        </property>
+        <property name="issbc" type="string">
+            <column name="ISSBC" length="1" />
+        </property>
+        <property name="isnull" type="string">
+            <column name="ISNULL" length="1" />
+        </property>
+        <property name="sta" type="string">
+            <column name="STA" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

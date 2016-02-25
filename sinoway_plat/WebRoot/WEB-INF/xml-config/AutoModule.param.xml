@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configs>
+	<ParamGroup name="AUTOTASK" memo="自动任务">
+		<Param name="CACHEREFRESHJOB" type="AutoTaskModule" desc="缓存自动刷新服务"
+			ThreadCount="1" AutoStart="true" StartTime="" Interval="60000"
+			RepeatCount="" EndTime="" BusInfo="">CACHEREFRESHJOB
+		</Param>
+		<Param name="LWEAUTOMTI" type="AutoTaskModule" desc="LWE多实例任务节点合并处理程序"
+			ThreadCount="1" AutoStart="true" StartTime="" Interval="1000"
+			RepeatCount="" EndTime="" BusInfo="">LWEAUTOMTI
+		</Param>
+	</ParamGroup>
+</Configs>

@@ -1,0 +1,56 @@
+@CHARSET "UTF-8";
+#fadDiv {
+	position: absolute;
+	left: 30%;
+	top: 40%;
+	width: 600px;
+	height: 100px;
+	float: left;
+	visibility: hidden;
+}
+
+#wrnDiv {
+	position: absolute;
+	left: 30%;
+	top: 60%;
+	width: 600px;
+	height: 100px;
+	float: left;
+	visibility: hidden;
+}
+
+#rptDiv {
+	position: absolute;
+	left: 30%;
+	top: 80%;
+	width: 600px;
+	height: 100px;
+	float: left;
+	visibility: hidden;
+}
+
+.innerDiv {
+	background-color: gray;
+	visibility: hidden;
+	float: left;
+	font-size: 13px;
+	color: #FFF;
+	width:180;
+	position:absolute;
+}
+
+#dispDiv{
+	visibility: hidden;
+	position:fixed;
+	width:180;
+	top:20;
+	left:20;
+}
+.innerDiv td {
+	font-size: 13px;
+	color: #FFF;
+}
+
+li {
+	float: left;
+}

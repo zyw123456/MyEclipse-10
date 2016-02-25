@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<import resource="action-mm.xml" />
+	<import resource="action-dk.xml" />
+	<import resource="action-am.xml" />
+	<import resource="action-am-transfer.xml" />
+<!-- 	<import resource="action-po-v1.5.xml" /> -->
+	<import resource="action-po.xml" />
+	<import resource="action-cache.xml" />
+	<import resource="action-auth.xml" />
+	<import resource="action-pam.xml" />
+	<!-- <import resource="action-pm.xml" /> -->
+	<import resource="action-bizlog.xml" />
+	<import resource="action-app.xml"/>
+	<import resource="action-fad.xml" />
+	<import resource="action-hp.xml"/>
+	<import resource="action-acc.xml"/>
+	<import resource="action-stm.xml"/>
+	<import resource="action-rpt.xml"/>
+	<import resource="action-acc-child.xml"/>
+	<import resource="action-wrn.xml"/>
+	<import resource="action-hp.xml"/>
+	<import resource="action-checksession.xml"/>
+	<import resource="action-test.xml"/>
+	
+</beans>

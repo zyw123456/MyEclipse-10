@@ -1,0 +1,18 @@
+package com.sinoway.mcp.queue;
+
+import com.sinoway.mcp.queue.exception.QueueOperatException;
+import com.sinoway.mcp.queue.producer.MessageProducer;
+
+public class Test {
+
+	public static void main(String[] args) {
+		MessageProducer m = new MessageProducer();
+		
+		try {
+			m.sendData("123321", "liuzhen");
+		} catch (QueueOperatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

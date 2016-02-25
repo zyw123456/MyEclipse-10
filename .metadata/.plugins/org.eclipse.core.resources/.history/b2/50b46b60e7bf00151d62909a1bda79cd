@@ -1,0 +1,9 @@
+package com.sinoway.common.parse;
+
+public class TestTradeParseP000004 {
+
+	public static void main(String[] args) {
+		
+	}
+
+}

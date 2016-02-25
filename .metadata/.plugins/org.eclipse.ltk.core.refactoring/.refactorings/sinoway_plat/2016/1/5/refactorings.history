@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 2 elements to &apos;WEB-INF&apos;&#x0D;&#x0A;- Original project: &apos;sinoway_plat&apos;&#x0D;&#x0A;- Destination element: &apos;WEB-INF&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     jquery.json-2.4.js&#x0D;&#x0A;     jquery-1.7.1.js" description="Copy files" element1="WebRoot/common/js/jquery/jquery.json-2.4.js" element2="WebRoot/common/js/jquery/jquery-1.7.1.js" files="2" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1453806117107" target="/sinoway_pubTest02/WebContent/WEB-INF" units="0" version="1.0"/>
+</session>

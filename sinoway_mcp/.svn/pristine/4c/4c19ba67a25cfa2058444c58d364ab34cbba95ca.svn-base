@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+		<package name="struts-base" extends="struts-default" abstract="true" namespace="/">
+		<interceptors>
+			<!-- 定义session time out拦截器 -->
+			<interceptor name="sessionout" class="com.yzj.svm.filter.SessionOutInterceptor" />
+			<interceptor-stack name="b2cplatPrivInterceptor">
+				<interceptor-ref name="defaultStack"/>
+<!-- 			<interceptor-ref name="sessionout" /> -->
+			</interceptor-stack>
+			
+		</interceptors>
+		
+		<default-interceptor-ref name="b2cplatPrivInterceptor"/>
+		
+		<default-action-ref name="notFound"/>
+		
+		<global-results>
+			 <result name="error">/error.jsp</result>
+			 <result name="forwardToSessionout">/sessionout.jsp</result>
+		</global-results>
+		
+		<global-exception-mappings>
+		     <exception-mapping result="error" exception="java.lang.Exception"/>
+		</global-exception-mappings>		
+		
+		<action name="notFound">     
+		     <result>/error.jsp</result>     
+		</action>
+	</package>
+</struts>

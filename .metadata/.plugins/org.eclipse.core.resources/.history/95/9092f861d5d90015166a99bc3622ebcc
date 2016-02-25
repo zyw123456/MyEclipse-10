@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<bean id="springContextHelper" class="com.yzj.wf.base.util.SpringContextHelper" />
+
+	<!-- 国际化配置 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<!-- spring security -->
+				<value>/WEB-INF/xml-security/messages_zh_CN</value>
+				<!-- wf -->
+				<value>classpath:i18n/WF</value>
+			</list>
+		</property>
+	</bean>
+
+	<import resource="bean-as.xml" />
+	<import resource="bean-am.xml" />
+	<import resource="bean-am-transfer.xml" />
+	<import resource="bean-dk.xml" />
+	<import resource="bean-mm.xml" />
+	<import resource="bean-pam.xml" />
+	<import resource="bean-pamui.xml" />
+	<!-- <import resource="bean-pm.xml" /> -->
+	<import resource="bean-po.xml" />
+	<import resource="bean-cache.xml" />
+	<import resource="bean-bpm.xml" />
+	<import resource="bean-bizlog.xml" />
+	<import resource="bean-as-client.xml" />
+	<import resource="bean-common.xml" />
+	<import resource="bean-app.xml" />
+	<import resource="bean-fad.xml" />
+	<import resource="bean-stm.xml" />
+	<import resource="bean-rpt.xml" />
+	<import resource="bean-acc-child.xml" />
+	<import resource="bean-acc.xml" />
+	<!-- plat xiehao 2015.12.24 -->
+	<import resource="bean-plat-cache.xml" />
+	<import resource="bean-wrn.xml" />
+	<import resource="bean-hp.xml" />
+	<import resource="bean-aop.xml" />
+	<import resource="bean-aop.xml" />
+</beans>

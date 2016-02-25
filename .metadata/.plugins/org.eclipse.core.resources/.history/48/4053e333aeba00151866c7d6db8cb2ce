@@ -1,0 +1,59 @@
+package com.sinoway.common.parse;
+
+import java.io.UnsupportedEncodingException;
+
+import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSONArray;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.exception.STradeProcessException;
+import com.sinoway.mcp.service.strade.gzt.service.StLinkPhoneValidatorService;
+
+public class TestWsData {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		GeneralBusEntity entity = new GeneralBusEntity();
+		
+		JSONObject  enObj = new JSONObject();
+		
+		JSONObject header = new JSONObject();
+		header.put("", "");
+		
+		JSONArray  bodys = new JSONArray();
+		JSONObject perObj = new  JSONObject();
+		perObj.put("prsnnam", "靳涛");
+		perObj.put("idcard", "152104199101123517");
+		perObj.put("phone", "13811075842");
+		perObj.put("cycle", "12");
+		perObj.put("orgCode", "chinadatagroup");
+		perObj.put("certType", "0101");
+	
+		bodys.add(perObj);
+		
+		enObj.put("bodys", bodys);
+		try {
+			entity.setCoreMsg(enObj.toString().getBytes("UTF8"));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println("test json --------------"+enObj.toString());
+	//	StQueryValidatorService sq = new StQueryValidatorService();
+	//	StProQueryCareerInfoService sq  = new StProQueryCareerInfoService();
+		
+		StLinkPhoneValidatorService sq = new StLinkPhoneValidatorService();
+		
+		try {
+			sq.busLaunch(entity);
+		} catch (STradeProcessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//{header:{},bodys:[{}]}
+
+	}
+
+}

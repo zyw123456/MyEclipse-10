@@ -1,0 +1,89 @@
+package com.sinoway.rpt.action;
+
+
+
+import com.sinoway.common.entity.PageModel;
+import com.sinoway.common.util.Constant;
+import com.sinoway.common.util.JsonBinder;
+import com.sinoway.common.util.datatables.entity.TableReqParams;
+import com.sinoway.rpt.entity.RptSearch;
+import com.sinoway.rpt.entity.WfDatCreditrptUtil;
+import com.sinoway.rpt.entity.TransString;
+import com.sinoway.rpt.service.IWfDatCreditrptService;
+import com.yzj.wf.base.action.BaseAction;
+import com.yzj.wf.common.WFException;
+
+@SuppressWarnings("serial")
+public class WfDatCreditrptAction extends BaseAction{
+	private IWfDatCreditrptService wfatCreditrptService;
+	private String frontObjStr;
+	
+	/**
+	 * @Description 模糊查询加分页
+	 * @return
+	 */
+	public String query(){
+		WfDatCreditrptUtil trnobj = transStrToObj();
+		
+		TableReqParams params = tranStrToObj(reqParams);
+		if(null == trnobj){
+			trnobj = new WfDatCreditrptUtil();
+		}
+		if(null != trnobj.getRptStr() && !"".equals(trnobj.getRptStr())){
+			trnobj.setRptSearch(JsonBinder.fromJson(trnobj.getRptStr(),RptSearch.class));
+		}
+		if(trnobj.getPageStr() != null && !"".equals(trnobj.getPageStr())){
+			trnobj.setPageModel(JsonBinder.fromJson(trnobj.getPageStr(),PageModel.class));
+		}
+		if(null == trnobj.getPageModel()){
+			trnobj.setPageModel(new PageModel());
+		}
+		
+		trnobj.setRptList(wfatCreditrptService.query(trnobj.getRptSearch(),trnobj.getPageModel(),this.getCurrentPeople()));
+		trnobj.getPageModel().setCount(wfatCreditrptService.count(trnobj.getRptSearch(),this.getCurrentPeople()));
+		frontObjStr = JsonBinder.toJson(trnobj.getRptList());
+		trnobj.setPageStr(JsonBinder.toJson(trnobj.getPageModel()));
+		trnobj.setRptStr(JsonBinder.toJson(trnobj.getRptSearch()));
+		TransString t = new TransString();
+		t.setFrontObjStr(frontObjStr);
+		t.setPageStr(trnobj.getPageStr());
+		t.setRptStr(trnobj.getRptStr());
+		String transString = JsonBinder.toJson(t);
+		trnobj.setRetPam(transString);
+		tranObjToStr(trnobj);
+		return SUCCESS;
+	}
+	/**
+	 * 批量删除
+	 * @return
+	 */
+	public String delete(){
+		WfDatCreditrptUtil trnobj = transStrToObj();
+		try {
+			String[] idArray = trnobj.getIds().split(",");
+			wfatCreditrptService.delete(idArray);
+		} catch (WFException e) {
+			e.printStackTrace();
+		}
+		return this.query();
+	}
+	
+	public void setWfatCreditrptService(IWfDatCreditrptService wfatCreditrptService) {
+		this.wfatCreditrptService = wfatCreditrptService;
+	}
+	
+	private WfDatCreditrptUtil transStrToObj(){
+		return JsonBinder.fromJson(frontObjStr, WfDatCreditrptUtil.class);
+	}
+	private void tranObjToStr(WfDatCreditrptUtil trnObj){
+		frontObjStr=JsonBinder.toJson(trnObj);
+	}
+	public String getFrontObjStr() {
+		return frontObjStr;
+	}
+
+	public void setFrontObjStr(String frontObjStr) {
+		this.frontObjStr = frontObjStr;
+	}
+
+}

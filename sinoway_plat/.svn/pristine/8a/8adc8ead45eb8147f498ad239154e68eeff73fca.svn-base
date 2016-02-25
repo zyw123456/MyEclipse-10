@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<!--查询业务流水号 -->
+	<query name="JrnrptDao.findJrnrptBySyscodAndJrndte"
+		cacheable="true">
+		<![CDATA[
+			select jrn from com.sinoway.common.entity.WfCfgdefJrnrpt as jrn where jrn.syscod = :syscod and jrn.jrndte = :jrndte
+		]]>
+	</query>
+	
+	<query name="JrnrptDao.updateByConditions">
+		<![CDATA[
+			update com.sinoway.common.entity.WfCfgdefJrnrpt as jrn 
+			set jrn.syscod = :syscod,
+				jrn.jrndte = :jrndte,
+				jrn.jrnval = :jrnval,
+				jrn.sta = :sta
+			where jrn.id = :id
+			and jrn.jrnval = :jrnvaltemp
+		]]>
+	</query>	
+</hibernate-mapping>

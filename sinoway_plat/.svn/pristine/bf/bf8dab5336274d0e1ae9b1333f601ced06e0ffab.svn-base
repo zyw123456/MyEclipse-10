@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="fadManagerInit" namespace="/" extends="struts-default">
+		<action name="fraudManager_*" class="fraudAction" method="{1}">
+			<result name="list">/sinoway/fad/fadList.jsp</result>
+			<result name="add">/sinoway/fad/addFad.jsp</result>
+		</action>
+	</package>
+	
+	<package name="fadAction" namespace="/" extends="json-default">
+		<action name="fraud_*" class="fraudAction" method="{1}">
+			<result type="json"></result>
+		</action>
+		<action name="findFraudByrptid" class="fraudAction" method="findFraudByrptid">
+			<result type="json"></result>
+		</action>
+		<!-- 报告流转 -->
+		<action name="cheatTansferReport" class="fraudAction" method="cheatTansferReport">
+			<result type="json"></result>
+		</action>
+		<!-- 查询报告流转页面元素 +原报告元素 -->	
+		<action name="findTrninele" class="fraudAction" method="findTrninele">
+			<result type="json"></result>
+		</action>
+		<!-- 查询报告页面元素 -->	
+		<action name="findPageElecod" class="fraudAction" method="findPageElecod">
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>    

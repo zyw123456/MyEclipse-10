@@ -1,0 +1,22 @@
+package com.sinoway.common.parse;
+
+import com.alibaba.fastjson.JSONObject;
+
+public class TestEncode {
+	
+	class TestThread implements Runnable{
+
+		public void run() {
+			
+			
+		}
+		
+	}
+   
+	public static void main(String[] args) {
+	
+		
+	
+		
+	}
+}

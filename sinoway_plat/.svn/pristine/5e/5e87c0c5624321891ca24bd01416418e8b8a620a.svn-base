@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" -->
+<!-- "http://www.springframework.org/dtd/spring-beans.dtd"> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="jobRegister" class="com.yzj.wf.as.core.JobRegisterImpl" depends-on="ResAllocor" />
+	
+	<bean id="ResAllocor" class="com.yzj.wf.as.core.ResAllocor" init-method="init" >
+		<property name="xpm">
+			<ref bean="xmlParamManager" />
+		</property>
+	</bean>
+	<bean id="autoFrameworkService" class="com.yzj.wf.as.core.AutoFrameworkService" />
+	
+	<!--  
+	<bean id="managerService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="rmi://127.0.0.1:8000/ManagerURL" />
+		<property name="serviceInterface" value="com.yzj.wf.as.common.IManagerService" />
+	</bean>
+	<bean id="autoConsoleService" class="com.yzj.wf.as.console.AutoConsoleService" init-method="init" >
+		<property name="afService">
+			<ref bean="autoFrameworkService" />
+		</property>
+		<property name="managerService">
+			<ref bean="managerService" />
+		</property>
+		<property name="servicePort">
+			<value>1199</value>
+		</property>
+	</bean>-->
+<!-- 	<bean class="org.springframework.remoting.rmi.RmiServiceExporter"> 
+		<property name="serviceName" value="AutoURL" />
+		<property name="service" ref="autoConsoleService" />
+		<property name="serviceInterface" value="com.yzj.wf.as.common.IAutoConsoleService" />
+		<property name="registryPort" value="1199" />
+	</bean>-->
+	
+	<bean id="cacheRefreshJob" class="com.yzj.wf.cache.job.CacheRefreshJob"
+		init-method="init">
+		<property name="jobRegister" ref="jobRegister" />
+		<property name="cacheService" ref="cacheService" />
+		<property name="cacheManagerExtends" ref="cacheManagerExtends" />
+		<!-- 设置需要刷新的节点（集群当前节点名称） -->
+		<property name="clusterNode" value="serverA" />
+		<property name="autoType" value="CACHEREFRESHJOB" />
+	</bean>
+	<bean id="cacheManagerExtends" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- <entry key="cacheMarkName" value-ref="cacheRefresher" /> -->
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

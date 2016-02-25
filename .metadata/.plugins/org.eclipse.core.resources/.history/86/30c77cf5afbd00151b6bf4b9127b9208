@@ -1,0 +1,64 @@
+package com.sinoway.mcp.service.yimei.task;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Singleton {
+
+  private static Singleton instance = null ;
+	
+  private Map<String,String> map = new HashMap<String,String>();
+    
+  private Singleton (){
+	  try{
+		init ();  
+	  }catch(Exception e){
+		  e.printStackTrace();
+	  }
+  }
+  
+  private static Singleton getInstance(){
+	  
+	  if(instance == null){
+		  instance = new  Singleton();
+		  
+	  }
+	  
+	  
+	  return instance;
+	  
+  }
+  
+  
+  
+  public synchronized  void  init(){
+	  if(instance == null){
+		  map.put("test1", "1");
+		  map.put("test2", "2");
+	  }
+	  
+  }
+	
+	public static void main(String[] args) {
+		
+		
+		Singleton  instesce = Singleton.getInstance();
+
+		Iterator  iteratoe = instesce.map.keySet().iterator();
+		while(iteratoe.hasNext()){
+			String str= (String) iteratoe.next();
+			
+			System.out.println(str);
+			
+			
+			
+		}
+		
+		Scanner  scanner = new Scanner (null);
+		
+
+	}
+
+}

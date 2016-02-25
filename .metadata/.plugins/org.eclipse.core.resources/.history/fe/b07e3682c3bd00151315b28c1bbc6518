@@ -1,0 +1,545 @@
+package com.sinoway.mcp.service.dxp.util;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sinoway.base.cache.BCfgdefChnltrdCache;
+import com.sinoway.base.cache.BCfgdefFntkeyinfoCache;
+import com.sinoway.base.cache.BCfgdefFntsrvinfoCache;
+import com.sinoway.base.cache.BCfgdefFntsrvportCache;
+import com.sinoway.base.cache.BCfgdefFnttrnaddrCache;
+import com.sinoway.base.cache.BCfgdefFnttrninfoCache;
+import com.sinoway.base.cache.BCfgdefQueueCache;
+import com.sinoway.base.cache.BCfgdefSysparamCache;
+import com.sinoway.base.cache.BCfgrefFntinouttrnCache;
+import com.sinoway.base.entity.BCfgdefChnltrd;
+import com.sinoway.base.entity.BCfgdefFntkeyinfo;
+import com.sinoway.base.entity.BCfgdefFntsrvinfo;
+import com.sinoway.base.entity.BCfgdefFntsrvport;
+import com.sinoway.base.entity.BCfgdefFnttrnaddr;
+import com.sinoway.base.entity.BCfgdefFnttrninfo;
+import com.sinoway.base.entity.BCfgdefQueue;
+import com.sinoway.base.entity.BCfgdefSysparam;
+import com.sinoway.base.entity.BCfgrefFntinouttrn;
+import com.sinoway.common.constant.SystemConstant.QueType;
+import com.sinoway.common.constant.SystemConstant.SOPtrnTypt;
+import com.sinoway.common.entity.DesEntity;
+
+/**
+ * 系统配置参数工具
+ * @author Liuzhen
+ * @version 1.0
+ * 2015-11-19
+ */
+public class SystemCfgUtil {
+
+	private static BCfgrefFntinouttrnCache inouttrdCache = null;	// 内外交易码缓存
+	private static BCfgdefSysparamCache sysParmCache = null; // 系统参数缓存
+	private static BCfgdefFntsrvinfoCache serInfoCache = null;// 服务器信息缓存
+	private static BCfgdefFntsrvportCache serPortCache = null;// 服务器端口配置信息缓存
+	private static BCfgdefFnttrninfoCache tradeCfgCache=null;// 交易配置缓存
+	private static BCfgdefQueueCache queInfoCache = null; //队列信息缓存
+	private static BCfgdefChnltrdCache chnlCfgCache = null;// 渠道配置信息缓存
+	private static BCfgdefFnttrnaddrCache addrCache = null;// 交互地址缓存
+	private static BCfgdefFntkeyinfoCache desCache = null;// 密钥信息缓存
+	
+	private static Map<String,String> oinOutTrMap = null;// 内外原交易码map  内部交易码为key
+	private static Map<String,String> ooutInTrMap = null;// 内外原交易码map  外部交易码为key
+	private static Map<String,String> sinOutTrMap = null;// 内外交易码map  内部交易码为key
+	private static Map<String,String> soutInTrMap = null;// 内外交易码map  外部交易码为key
+	private static Map<String,BCfgdefFntsrvinfo> serInfoMap = null;// 服务器配置信息
+	private static Map<String,Map<String,BCfgdefFntsrvport>> serPortInfoMap = null;// 服务器端口配置信息
+	private static Map<String,BCfgdefChnltrd> chnlOcfgInfMap = null;// 渠道原交易配置
+	private static Map<String,BCfgdefChnltrd> chnlPcfgInfMap = null;// 渠道产品配置
+	private static Map<String,BCfgdefChnltrd> chnlScfgInfMap = null;// 渠道子交易配置
+	private static Map<String,BCfgdefChnltrd> chnlCfgInfMap = null; // 渠道配置
+	private static Map<String,BCfgdefFnttrninfo> tradeCfgInfMap = null;// 渠道交易信息配置
+	private static Map<String,DesEntity> desInfMap = null;
+	/**
+	 * 初始化方法
+	 * @throws Exception
+	 */
+	public void init() throws Exception{
+
+		// 初始化内外交易码
+		initInOutTrn();
+		
+		// 初始化服务器信息
+		initSerInfo();
+		
+		// 初始化渠道交易配置信息
+		initChnlCfgInf();
+		
+		// 初始化队列配置信息
+		initTradeCfg();
+		
+		// 初始化密钥信息
+		initDesInf();
+		
+	}
+	
+	/**
+	 * 通过渠道号获取密钥信息
+	 * @param chnlCode
+	 * @return
+	 */
+	public static DesEntity getDesKeyInfByChnl(String chnlCode){
+		try{
+			if(desInfMap.containsKey(chnlCode))
+				return desInfMap.get(chnlCode);
+			
+		}catch(Exception e){
+			
+		}
+		return null;
+	}
+	/**
+	 * 通过编码获取交易地址信息
+	 * @param code
+	 * @return
+	 */
+	public static BCfgdefFnttrnaddr getAddrInfByCode(String code){
+		try{
+			
+			if(addrCache.get(code) != null)
+				return (BCfgdefFnttrnaddr)addrCache.getNewData(code);
+		}catch(Exception e){
+			
+		}
+		
+		return null;
+		
+	}
+	
+	/**
+	 * 获取渠道 交易配置信息
+	 * @param chnlCod 渠道号
+	 * @param code 交易码 或  产品码
+	 * @param trnType 交易类型
+	 * @return
+	 */
+	public static BCfgdefChnltrd getChnlCfgInf(String chnlCod,String code,String trnType){
+		
+		try{
+			// 原交易
+			if(SOPtrnTypt.O.getValue().equals(trnType)){
+				if(chnlOcfgInfMap.containsKey(chnlCod + "_" + code))
+					return chnlOcfgInfMap.get(chnlCod + "_" + code);
+				
+				if(chnlOcfgInfMap.containsKey(code))
+					return chnlOcfgInfMap.get(code);
+				
+				return chnlOcfgInfMap.get(chnlCod);
+			// 子交易
+			}else if(SOPtrnTypt.S.getValue().equals(trnType)){
+				if(chnlScfgInfMap.containsKey(chnlCod + "_" + code))
+					return chnlScfgInfMap.get(chnlCod + "_" + code);
+				
+				return chnlScfgInfMap.get(code);
+			// 产品 
+			}else if(SOPtrnTypt.P.getValue().equals(trnType)){
+				if(chnlPcfgInfMap.containsKey(chnlCod + "_" + code))
+					return chnlPcfgInfMap.get(chnlCod + "_" + code);
+				
+				if(chnlPcfgInfMap.containsKey(code))
+					return chnlPcfgInfMap.get(code);
+				
+				
+				return chnlPcfgInfMap.get(chnlCod);
+			}else{
+				return chnlCfgInfMap.get(chnlCod);
+			}
+		}catch(Exception e){
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 通过交易码获取队列配置信息
+	 * @param chnlCode 渠道号
+	 * @param tradeCode
+	 * @param trnType 交易类型
+	 * @param type 队列类型
+	 * @return
+	 */
+	public static BCfgdefQueue getQueInfoByTrCode(String chnlCode,String code,String trnType,String type){
+		try{
+			 String queCode = "";
+			// 产品配置
+			if(SOPtrnTypt.P.getValue().equals(trnType)){
+				BCfgdefChnltrd entity =  getChnlCfgInf(chnlCode,code,trnType);
+				
+				if(entity != null){
+					if(QueType.REQ.getValue().equals(type)){
+						queCode = entity.getReqque();
+					}else if(QueType.RES.getValue().equals(type)){
+						queCode = entity.getResque();
+					}
+				}
+			// 原交易 子交易
+			}else if(SOPtrnTypt.O.getValue().equals(trnType) || SOPtrnTypt.S.getValue().equals(trnType)){
+				BCfgdefFnttrninfo entity = null;
+				 if(tradeCfgInfMap.get(code + "_" + trnType) != null);
+				 	entity = (BCfgdefFnttrninfo)tradeCfgInfMap.get(code + "_" + trnType);
+				 
+				 if(entity != null){
+					 if(QueType.REQ.getValue().equals(type)){
+							queCode = entity.getReqquecod();
+					 }else if(QueType.RES.getValue().equals(type)){
+							queCode = entity.getResquecod();
+					 }
+					 
+				 }
+			}
+			
+			if(queInfoCache.get(queCode) != null)
+				return  (BCfgdefQueue) queInfoCache.get(queCode);
+			
+		}catch(Exception e){
+			
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 通过ip获取服务器配置信息
+	 * @param ip
+	 * @return
+	 */
+	public static BCfgdefFntsrvinfo getSerInfoByIp(String ip){
+		try{
+			return serInfoMap.get(ip);
+		}catch(Exception e){
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取系统参数配置
+	 * @param code
+	 * @return
+	 */
+	public static String getSysParmValByCode(String code){
+		try{
+			BCfgdefSysparam entity = (BCfgdefSysparam)sysParmCache.get(code);
+			if(entity != null){
+				return entity.getParamval();
+			}
+		}catch(Exception e){
+			
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * 通过外部交易码获取内部交易码
+	 * @param outTr
+	 * @param type
+	 * @return
+	 */
+	public static String getIntrByOutTr(String outTr,SOPtrnTypt type){
+		if(type != null && !"".equals(type)){
+			// 原交易码
+			if(type.getValue().equals(SOPtrnTypt.O.getValue())){
+				return ooutInTrMap.get(outTr);
+			// 子交易码
+			}else if(type.getValue().equals(SOPtrnTypt.S.getValue())){
+				return soutInTrMap.get(outTr);
+			}
+		}
+		return "";
+		
+	}
+	
+	/**
+	 * 通过内部交易码获取外部交易码
+	 * @param outTr
+	 * @param type
+	 * @return
+	 */
+	public static String getOuttrByInTr(String inTr,SOPtrnTypt type){
+		if(type != null && !"".equals(type)){
+			// 原交易码
+			if(type.getValue().equals(SOPtrnTypt.O.getValue())){
+				return oinOutTrMap.get(inTr);
+			// 子交易码
+			}else if(type.getValue().equals(SOPtrnTypt.S.getValue())){
+				return sinOutTrMap.get(inTr);
+			}
+		}
+		return "";
+		
+	}
+	
+	/**
+	 * 通过交易码获取交易配置信息
+	 * @param tradeCode 交易码
+	 * @return
+	 */
+	public static BCfgdefFnttrninfo getTradeCfgByCode(String tradeCode){
+		try{
+			return (BCfgdefFnttrninfo)tradeCfgCache.get(tradeCode);
+		}catch(Exception e){
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 初始化交易配置信息
+	 */
+	private  void initTradeCfg(){
+		
+		tradeCfgInfMap = new HashMap<String,BCfgdefFnttrninfo>();
+		List<String> keys = tradeCfgCache.keys();
+		
+		for(String key:keys){
+			BCfgdefFnttrninfo entity = (BCfgdefFnttrninfo)tradeCfgCache.get(key);
+			
+			String trnCode = entity.getTrncod();// 交易码
+			String trnType = entity.getTrntyp();// 交易类型
+			tradeCfgInfMap.put(trnCode+ "_" + trnType, entity);
+			
+		}
+	}
+	
+	/**
+	 * 初始化渠道原交易 子交易 产品配置信息
+	 */
+	private void initChnlCfgInf(){
+		chnlOcfgInfMap = new HashMap<String,BCfgdefChnltrd>();
+		chnlPcfgInfMap = new HashMap<String,BCfgdefChnltrd>();
+		chnlScfgInfMap = new HashMap<String,BCfgdefChnltrd>();
+		chnlCfgInfMap = new HashMap<String,BCfgdefChnltrd>();
+		List<String> keys = chnlCfgCache.keys();
+		
+		for(String key : keys){
+			BCfgdefChnltrd entity = (BCfgdefChnltrd)chnlCfgCache.get(key);
+			String trnType = entity.getTrntyp();
+			String chnlCode = entity.getChnlcod();
+			// 原交易
+			if(SOPtrnTypt.O.getValue().equals(trnType)){
+				String tradeCode = entity.getIntrncod();
+				if(tradeCode != null && !"".equals(tradeCode)){
+					chnlOcfgInfMap.put(chnlCode + "_" + tradeCode, entity);
+				}else{
+					chnlOcfgInfMap.put(chnlCode, entity);
+				}
+			// 产品
+			}else if (SOPtrnTypt.P.getValue().equals(trnType)){
+				String prdCode = entity.getPrdcod();
+				if(prdCode != null && !"".equals(prdCode)){
+					chnlPcfgInfMap.put(chnlCode + "_" + prdCode, entity);
+				}else{
+					chnlPcfgInfMap.put(chnlCode, entity);
+				}
+			}else if(SOPtrnTypt.S.getValue().equals(trnType)){
+				String tradeCode = entity.getIntrncod();
+				if(tradeCode != null && !"".equals(tradeCode)){
+					chnlScfgInfMap.put(chnlCode + "_" + tradeCode, entity);
+				}else{
+					chnlScfgInfMap.put(chnlCode, entity);
+				}
+			}else{
+				chnlCfgInfMap.put(chnlCode, entity);
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * 初始化内外交易码
+	 */
+	private void initInOutTrn() {
+		
+		oinOutTrMap = new HashMap<String,String>();
+		ooutInTrMap = new HashMap<String,String>();
+		sinOutTrMap = new HashMap<String,String>();
+		soutInTrMap = new HashMap<String,String>();
+		
+		List<String> keys = inouttrdCache.keys();
+		
+		for(String key : keys){
+			
+			BCfgrefFntinouttrn entity = (BCfgrefFntinouttrn)inouttrdCache.get(key);
+			String inCode = entity.getIntrncod();
+			String outCode = entity.getOuttrncod();
+			String trnType = entity.getTrntyp();
+			
+			// 原交易
+			if(SOPtrnTypt.O.getValue().equals(trnType)){
+				oinOutTrMap.put(inCode, outCode);
+				ooutInTrMap.put(outCode, inCode);
+			// 子交易
+			}else if(SOPtrnTypt.S.getValue().equals(trnType)){
+				sinOutTrMap.put(inCode, outCode);
+				soutInTrMap.put(outCode, inCode);
+			}
+		}
+		
+			
+	}
+	
+	/**
+	 * 通过ip获取服务端口信息
+	 * @param ip
+	 * @return
+	 */
+	public static Map<String,BCfgdefFntsrvport> getSerProtInfById(String ip){
+		return serPortInfoMap.get(ip);
+	}
+	
+	/**
+	 * 初始化服务器配置信息
+	 */
+	private void initSerInfo(){
+		serInfoMap = new HashMap<String,BCfgdefFntsrvinfo>();
+		serPortInfoMap = new HashMap<String,Map<String,BCfgdefFntsrvport>>(); 
+		List<String> keys = serInfoCache.keys();
+		
+		for(String key : keys){
+			BCfgdefFntsrvinfo entity = (BCfgdefFntsrvinfo)serInfoCache.get(key);
+			String ip = entity.getServip();
+			String serCod = entity.getServcod();
+			serInfoMap.put(ip, entity);
+			
+			// 解析端口信息
+			Map<String,BCfgdefFntsrvport> portMap = initSerPortInfo(serCod);
+			
+			serPortInfoMap.put(ip, portMap);
+			
+		}
+	}
+	
+	/**
+	 * 初始化一个服务的端口信息
+	 * @param serCode
+	 * @return
+	 */
+	public static Map<String,BCfgdefFntsrvport> initSerPortInfo(String serCode){
+		
+		Map<String,BCfgdefFntsrvport> map = new HashMap<String,BCfgdefFntsrvport>();
+		List<String> keys = serPortCache.keys();
+		for(String key: keys){
+			BCfgdefFntsrvport entity = (BCfgdefFntsrvport)serPortCache.get(key);
+			String port = entity.getPort();
+			String serCod = entity.getServcod();
+			
+			if(serCode.equals(serCod)){
+				map.put(port, entity);
+			}
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * 初始化密钥信息
+	 */
+	public void initDesInf(){
+		desInfMap = new HashMap<String,DesEntity>();
+		List<String> keys = desCache.keys();
+		for(String key : keys){
+			BCfgdefFntkeyinfo entity = (BCfgdefFntkeyinfo)desCache.get(key);
+			String chnlCod = entity.getChnlcod();
+			String keyInf = entity.getKeyval();
+			try{
+				JSONObject json = (JSONObject)JSON.parse(keyInf);
+				
+				String desKey = json.getString("key");
+				String vector  = json.getString("vector");
+				
+				DesEntity keyEntity = new DesEntity();
+				keyEntity.setKey(desKey);
+				keyEntity.setVector(vector);
+				
+				desInfMap.put(chnlCod, keyEntity);
+			}catch(Exception e){
+				
+			}
+		}
+	}
+	/*
+	 * Getter AND  SETTER
+	 */
+	public BCfgrefFntinouttrnCache getInouttrdCache() {
+		return inouttrdCache;
+	}
+	public void setInouttrdCache(BCfgrefFntinouttrnCache inouttrdCache) {
+		this.inouttrdCache = inouttrdCache;
+	}
+
+	public BCfgdefSysparamCache getSysParmCache() {
+		return sysParmCache;
+	}
+
+	public void setSysParmCache(BCfgdefSysparamCache sysParmCache) {
+		this.sysParmCache = sysParmCache;
+	}
+
+	public BCfgdefFntsrvinfoCache getSerInfoCache() {
+		return serInfoCache;
+	}
+
+	public void setSerInfoCache(BCfgdefFntsrvinfoCache serInfoCache) {
+		this.serInfoCache = serInfoCache;
+	}
+
+	public BCfgdefFntsrvportCache getSerPortCache() {
+		return serPortCache;
+	}
+
+	public void setSerPortCache(BCfgdefFntsrvportCache serPortCache) {
+		this.serPortCache = serPortCache;
+	}
+
+	public BCfgdefFnttrninfoCache getTradeCfgCache() {
+		return tradeCfgCache;
+	}
+
+	public void setTradeCfgCache(BCfgdefFnttrninfoCache tradeCfgCache) {
+		this.tradeCfgCache = tradeCfgCache;
+	}
+
+	public BCfgdefQueueCache getQueInfoCache() {
+		return queInfoCache;
+	}
+
+	public void setQueInfoCache(BCfgdefQueueCache queInfoCache) {
+		this.queInfoCache = queInfoCache;
+	}
+
+	public BCfgdefChnltrdCache getChnlCfgCache() {
+		return chnlCfgCache;
+	}
+
+	public void setChnlCfgCache(BCfgdefChnltrdCache chnlCfgCache) {
+		this.chnlCfgCache = chnlCfgCache;
+	}
+
+	public BCfgdefFnttrnaddrCache getAddrCache() {
+		return addrCache;
+	}
+
+	public void setAddrCache(BCfgdefFnttrnaddrCache addrCache) {
+		this.addrCache = addrCache;
+	}
+
+	public static BCfgdefFntkeyinfoCache getDesCache() {
+		return desCache;
+	}
+
+	public static void setDesCache(BCfgdefFntkeyinfoCache desCache) {
+		SystemCfgUtil.desCache = desCache;
+	}
+	
+	
+}

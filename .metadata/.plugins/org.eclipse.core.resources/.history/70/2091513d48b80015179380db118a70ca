@@ -1,0 +1,68 @@
+package com.sinoway.mcp.service.strade.gzt.service;
+
+import com.sinoway.base.entity.BCfgdefFnttrnaddr;
+import com.sinoway.common.entity.GeneralBusEntity;
+import com.sinoway.common.exception.STradeProcessException;
+import com.sinoway.common.service.server.GeneralSTradeProcService;
+import com.sinoway.mcp.entity.FDatMetatrnflw;
+
+/**
+ * 国政通身份认证子交易
+ * @author Liuzhen
+ * 1.0
+ * 2016-1-11
+ */
+public class StQueryValidatorService implements  GeneralSTradeProcService {
+
+	@Override
+	public GeneralBusEntity busLaunch(GeneralBusEntity entity)
+			throws STradeProcessException {
+		
+		try{
+			byte[] coremsg = entity.getCoreMsg();
+			
+			// 获取访问URL
+			// 获取加密密钥  ---> 密钥  向量 
+			// 解析核心传入报文--->拼装请求报文 没有这一步可以不做
+			// 请求数据源-->响应
+			// 拼装返回核心报文[a:asd]  [name:]
+			entity.setDownMsg(null);// 给供应商的报文
+			entity.setCoreMsg(null);// 存转换后的
+			entity.setDownMsg(null);// 转换前的
+			FDatMetatrnflw sEntity = entity.getStrdflw();
+			
+			sEntity.getReqmsg();// 请求报文路径
+			sEntity.getRespmsg();// 响应报文路径
+			
+			// 设置处理状态
+			// entity.setResSta(resSta)
+			//entity.getStrdflw().setRespflg(respflg);
+			
+		}catch(Throwable e){
+			e.printStackTrace();
+			// 要有异常处理
+		}
+		return entity;
+	}
+
+	@Override
+	public GeneralBusEntity resRecive(GeneralBusEntity entity)
+			throws STradeProcessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GeneralBusEntity getRes(GeneralBusEntity entity)
+			throws STradeProcessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initCfg(BCfgdefFnttrnaddr entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,841 @@
+package com.sinoway.fad.action;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.sinoway.common.entity.GeneralRptMsgHeader;
+import com.sinoway.common.entity.GeneralRptResMsg;
+import com.sinoway.common.entity.HttpCommonEntity;
+import com.sinoway.common.entity.HttpResponseCommonEntity;
+import com.sinoway.common.entity.WfCfgrefTrninele;
+import com.sinoway.common.exception.DomParseException;
+import com.sinoway.common.service.IHttpProviderService;
+import com.sinoway.common.util.Constant;
+import com.sinoway.common.util.Constant.IsBatch;
+import com.sinoway.common.util.Constant.MsgType;
+import com.sinoway.common.util.Constant.OrderBy;
+import com.sinoway.common.util.Constant.ResponseStatus;
+import com.sinoway.common.util.Constant.RptStatus;
+import com.sinoway.common.util.DateUtil;
+import com.sinoway.common.util.FileConstant;
+import com.sinoway.common.util.HttpParamUtil;
+import com.sinoway.common.util.JRNGenerator;
+import com.sinoway.common.util.JsonBinder;
+import com.sinoway.common.util.LoadModel;
+import com.sinoway.common.util.VerificationForm;
+import com.sinoway.common.util.datatables.entity.TableReqParams;
+import com.sinoway.common.util.datatables.entity.TableSearchParam;
+import com.sinoway.fad.entity.FraudTrnObjInfo;
+import com.sinoway.fad.parser.PackageAndAnalyzeMessage;
+import com.sinoway.fad.service.IFraudService;
+import com.sinoway.rpt.entity.WfDatCreditrpt;
+import com.sinoway.rpt.service.IRptService;
+import com.sinoway.stm.service.IStmManagerService;
+import com.yzj.wf.am.transfer.action.WebResponseJson;
+import com.yzj.wf.base.action.BasePageAction;
+import com.yzj.wf.base.service.IBasePageService;
+import com.yzj.wf.common.WFException;
+import com.yzj.wf.common.WFLogger;
+import com.yzj.wf.common.cache.Cache;
+import com.yzj.wf.common.cache.CacheEnum;
+import com.yzj.wf.common.cache.CacheFactory;
+import com.yzj.wf.core.model.po.wrapper.XPeopleInfo;
+import com.yzj.wf.plat.entity.WfCfgrefPrddetil;
+
+/**
+ * 反欺诈云的Action类
+ * 
+ * @author 于辉
+ *
+ */
+public class FraudAction extends BasePageAction {
+
+	private static final long serialVersionUID = -8553354241304871720L;
+
+	private WFLogger logger = WFLogger.getLogger(FraudAction.class);
+
+	private IFraudService fraudService;
+	
+	private IHttpProviderService httpProviderService;
+	
+	private IStmManagerService stmManagerService;
+
+	private IBasePageService basePageService;
+
+	private String reqParams; // 请求参数
+	private String resData;   // 相应参数
+	
+	@SuppressWarnings("unused")
+	private IRptService rptService;
+
+	private String fraudObjStr;
+	
+	
+	/**
+	 * 查询报告流转页面元素 +原报告元素
+	 * @throws DomParseException 
+	 * 
+	 */
+	@SuppressWarnings("rawtypes")
+	public String findTrninele() throws DomParseException{
+		FraudTrnObjInfo fraudObj =  transStrToObj();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("res", Constant.getNormal());
+		//查询出原报告已经有的元素
+		
+		List listOldDetil = fraudService.findTranByRptid(fraudObj.getRptid());
+		String elecod = "";
+		String listoldelecod = "";
+		for(int j = 0;j < listOldDetil.size();j++){
+			Object[] objold = (Object[]) listOldDetil.get(j);
+			elecod +="'"+ objold[0] + "',";
+			listoldelecod +=objold[0] + ",";
+		}
+		List<WfCfgrefTrninele> list = fraudService.findTrninele(fraudObj.getPrdcod(),elecod.equals("")?"''":elecod.substring(0, elecod.length()-1));
+		if(StringUtils.isBlank(fraudObj.getReqaddr())){
+			map.put("res", "请求报文地址为空，不能解析报文！");
+			fraudObj.setMap(map);
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+		String reqAdrrJson = FileConstant.getFileConstant(fraudObj.getReqaddr());
+		if(reqAdrrJson.equals(Constant.ResultStatus.RESULTSTATUS_FAIL.getCode())){
+			map.put("res","解析请求报文：找不到指定的文件！");
+			fraudObj.setMap(map);
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+		JSONObject oldElecodJson =JSONObject.fromObject(reqAdrrJson);
+		JSONObject bodyJson =JSONObject.fromObject(oldElecodJson.get("body"));
+		JSONObject trninfoJson =JSONObject.fromObject(bodyJson.get("trninfo"));
+		
+		
+	
+		map.put("LIST", list);
+		map.put("OLDELECOD", listoldelecod);
+		map.put("TRNINFOJSON", trninfoJson);
+		//要显示的已经填过的要素
+		map.put("LISTOLDEDTIL", listOldDetil);
+		fraudObj.setMap(map);
+		tranObjToStr(fraudObj);
+		return SUCCESS;
+	}
+	/**
+	 * 查询报告页面元素
+	 * 
+	 */
+	public String findPageElecod(){
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		List<WfCfgrefTrninele> list = fraudService.findPageElecod(fraudObj.getPrdcod());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("LIST", list.size()==0?"0":list);
+		fraudObj.setMap(map);
+		tranObjToStr(fraudObj);
+		return SUCCESS;
+	}
+	
+	
+	
+	/**
+	 * 反欺诈报告流转
+	 * 
+	 * @return
+	 * @throws Exception 
+	 * @throws WFException
+	 */
+	@SuppressWarnings({"null","unchecked","rawtypes"})
+	public String cheatTansferReport() throws Exception{
+		XPeopleInfo cp= this.getCurrentPeople();
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		WfDatCreditrpt trnObj = new WfDatCreditrpt();
+		String pcode = (null == cp.getParntCode() || "".equals(cp.getParntCode()))?cp.getPeopleCode():cp.getParntCode();
+		if(StringUtils.isBlank(fraudObj.getNewrptid())){
+			fraudObj.setNewrptid(JRNGenerator.generateJrn("P", "1", "00000000"));
+		}
+		if(StringUtils.isBlank(fraudObj.getRptdte())){
+			fraudObj.setRptdte(DateUtil.getCurrentDate8Len());
+		}
+		if(StringUtils.isBlank(fraudObj.getRpttim())){
+			fraudObj.setRpttim(DateUtil.getCurrentTimeHMSS());
+		}
+		
+		if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_RPT.getCode())){
+			trnObj.setRpttyp(Constant.RptTyp.RPTTYP_PRSN_CREDIT.getCode());
+			trnObj.setRptnam(Constant.RptTyp.RPTTYP_PRSN_CREDIT.getValue());
+		}else if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_FAD.getCode())){
+			trnObj.setRpttyp(Constant.RptTyp.RPTTYP_FRAUD.getCode());
+			trnObj.setRptnam(Constant.RptTyp.RPTTYP_FRAUD.getValue());
+		}else if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_VERIF.getCode())){
+			trnObj.setRpttyp(Constant.RptTyp.RPTTYP_VERIFIED.getCode());
+			trnObj.setRptnam(Constant.RptTyp.RPTTYP_VERIFIED.getValue());
+		}
+		//传送核心报文
+		JSONObject jsObj = new JSONObject();
+		//本地报文文件
+		JSONObject fjsObj = new JSONObject();
+		//header拼接		固定元素JSON
+		JSONObject jheader = new JSONObject();
+		jheader.put("clntjrn", fraudObj.getNewrptid());				  	//云平台报告编号
+		jheader.put("clnttrndte", fraudObj.getRptdte());	//云平台处理日期
+		jheader.put("clnttrntime", fraudObj.getRpttim());	//云平台处理时间
+		jheader.put("fnttrnjrn",  "");	//前置流水
+		jheader.put("frnttrndte", "");	//云平台处理时间
+		jheader.put("frnttrntim", "");	//云平台处理时间
+		jheader.put("orgno", cp.getCorgNo()==null?"":cp.getCorgNo());		
+		jheader.put("subusrid", cp.getUsrId());							
+		jheader.put("usrid", (cp.getP_usrId() == null || "".equals(cp.getP_usrId() )) ? cp.getUsrId() : cp.getP_usrId());					 	//核心用户编码 
+		jheader.put("datori", fraudObj.getDatcmitori());	
+		//body拼接  动态元素JSON
+		JSONObject jbody = new JSONObject();
+		//本地请求文件body
+		JSONObject fbody = new JSONObject();
+		//得到产品原交易(缓存形式获取)
+		Cache cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		if(cache == null){
+			cache.setAvailable(false);//下次从cache中获取对象时,会重新load数据
+			cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		}
+		//获得所有的实体		
+		List<WfCfgrefPrddetil> prdDetils= (List<WfCfgrefPrddetil>) cache.getRealValues();
+		//获得本产品拥有的原交易
+		List<String> listPrdDetil = new ArrayList<String>();
+		for(WfCfgrefPrddetil prddtl : prdDetils){
+			if (prddtl.getSta().equals("1") && prddtl.getPrdcod().equals(fraudObj.getPrdcod())) {
+				listPrdDetil.add(prddtl.getTrncod());
+			}
+		}
+		//将原交易转换为jsonarray
+		String ftrncodsStr = StringUtils.join(listPrdDetil.toArray(),",");
+		//拼接交易码
+		fbody.put("trncods", ftrncodsStr);//交易码
+		//查询已经拥有原交易 并做排除
+		if(StringUtils.isBlank(fraudObj.getRtpadrr())||"null".equals(fraudObj.getRtpadrr())){
+			fraudObj.setRetPam("响应报文地址为空，不能解析报文！");
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+		String rtpJSON = FileConstant.getFileConstant(fraudObj.getRtpadrr());
+		if(rtpJSON.equals(Constant.ResultStatus.RESULTSTATUS_FAIL.getCode())){
+			fraudObj.setRetPam("解析响应报文：找不到指定的文件！");
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+			
+		//获取报文中所有的原交易
+		JSONObject josnObj =  JSONObject.fromObject(rtpJSON);
+		JSONObject array =  (JSONObject) josnObj.get("body");
+		for(int i = 0;i<array.size();i++){
+			Set<String> set = array.keySet();
+			for(String key : set){
+				listPrdDetil.remove(key);
+			}
+		}
+	
+		//将原交易转换为jsonarray
+		String trncodsStr = StringUtils.join(listPrdDetil.toArray(),",");
+		//拼接交易码
+		jbody.put("trncods", trncodsStr);//交易码
+		JSONObject jtrninfo = new JSONObject();
+		if(StringUtils.isNotBlank(fraudObj.getDatavar())){
+			JSONObject jo = JSONObject.fromObject("{"+fraudObj.getDatavar().substring(0,fraudObj.getDatavar().length()-1)+"}");
+			//获取页面元素
+			JSONArray japar =JSONArray.fromObject(fraudObj.getJsonpar());
+			List listJson =(List) JSONArray.toCollection(japar,WfCfgrefTrninele.class);
+			Iterator itJson = listJson.iterator();
+			//原报告没有元素JSON拼接
+			while (itJson.hasNext()) {
+				WfCfgrefTrninele wct = (WfCfgrefTrninele)itJson.next();
+				if(wct.getElecod().equals("prsnnam")){
+					 String resPrsn = VerificationForm.VerIfPrsnNam(jo.get(wct.getElecod()).toString());
+					 if(!resPrsn.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+						 logger.error(resPrsn);
+						 fraudObj.setRetPam(resPrsn);
+						 tranObjToStr(fraudObj);
+						return SUCCESS;
+					 }
+					 trnObj.setPrsnnam(jo.get(wct.getElecod()).toString());
+					 jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+				}else if(wct.getElecod().equals("idcard")){
+					 String resPrsncod = VerificationForm.VerIfPrsnCod(jo.get(wct.getElecod()).toString());
+					 if(!resPrsncod.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+						 logger.error(resPrsncod);
+						 fraudObj.setRetPam(resPrsncod);
+						 tranObjToStr(fraudObj);
+						 return SUCCESS;
+					 }
+					 trnObj.setPrsncod(jo.get(wct.getElecod()).toString());
+					 jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+				}else if(wct.getElecod().equals("mobile")){
+					 String resTelno = VerificationForm.VerIfTelNo(jo.get(wct.getElecod()).toString());
+					 if(!resTelno.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+						 logger.error(resTelno);
+						 fraudObj.setRetPam(resTelno);
+						 tranObjToStr(fraudObj);
+						 return SUCCESS;
+					 }
+					trnObj.setTelno(jo.get(wct.getElecod()).toString());
+					jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+				}else if(wct.getElecod().equals("cbcreports")){
+					jtrninfo.put(wct.getElecod(), fraudObj.getCbcreports());
+				}else{
+					jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+				}
+			}
+		}
+		
+		//获取原报告元素
+		if(!fraudObj.getOldelecod().equals("/")){
+			//根据原报告已有元素查询出  元素和值并拼接成json     
+				//获取报文文件 并解析报文Json 拼接成新的请求报文
+				String reqAdrrJson = FileConstant.getFileConstant(fraudObj.getReqaddr());
+				JSONObject oldElecodJson =JSONObject.fromObject(reqAdrrJson);
+				JSONObject bodyJson =JSONObject.fromObject(oldElecodJson.get("body"));
+				JSONObject trninfoJson =JSONObject.fromObject(bodyJson.get("trninfo"));
+				String[] newOldEleJson = fraudObj.getOldelecod().split(",");
+				for(int i=0;i<newOldEleJson.length;i++){
+					String elecod = "";
+					if(newOldEleJson[i].equals("prsnnam")){
+						elecod = newOldEleJson[i];
+						trnObj.setPrsnnam(trninfoJson.get(newOldEleJson[i]).toString());
+					}else if(newOldEleJson[i].equals("idcard")){
+						elecod = newOldEleJson[i];
+						trnObj.setPrsncod(trninfoJson.get(newOldEleJson[i]).toString());
+					}else if(newOldEleJson[i].equals("mobile")){	
+						elecod = newOldEleJson[i];
+						trnObj.setTelno(trninfoJson.get(newOldEleJson[i]).toString());
+					}else{
+						elecod = newOldEleJson[i];
+					}
+					jtrninfo.put(elecod, trninfoJson.get(newOldEleJson[i]).toString());
+				}
+		}
+	
+		
+		//核心报文
+		jbody.put("trninfo", jtrninfo);
+		//本地报文
+		fbody.put("trninfo", jtrninfo);
+		//核心报文
+		jsObj.put("header", jheader);
+		jsObj.put("body", jbody);
+		//本地报文
+		fjsObj.put("header", jheader);
+		fjsObj.put("body", fbody);
+		//报文生成xml文件
+		String rqd = FileConstant.createReqFile(fjsObj.toString(),fraudObj.getNewrptid(),fraudObj.getRptdte(),fraudObj.getRpttim());
+		HttpCommonEntity entity = HttpParamUtil.generateRptRequest(Constant.getChnlcode(),null,IsBatch.IS_NO.getValue(),MsgType.MESSAGE_TYPE_REQUEST.getValue(),jsObj.toString());
+	    entity = httpProviderService.httpCommunicate(entity);		
+	    if(null == entity){
+	    	 logger.error("请求核心接口核心返回为空！");
+			 fraudObj.setRetPam("请求核心接口核心返回为空！");
+			 tranObjToStr(fraudObj);
+			 return SUCCESS;
+	    }
+	    HttpResponseCommonEntity resEntity =  entity.getResponse();
+		String message = (String) resEntity.getReturnObj();
+		if(StringUtils.isBlank(message)){
+			 logger.error("请求核心接口核心返回报文为空！");
+			 fraudObj.setRetPam("请求核心接口核心返回报文为空！");
+			 tranObjToStr(fraudObj);
+			 return SUCCESS;
+		}
+		JSONObject joMes =JSONObject.fromObject(message);
+		JSONObject herder = JSONObject.fromObject(joMes.get("header"));
+		if(herder.getString("status").equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+			trnObj.setFntjrn(herder.getString("fnttrnjrn"));//获取前置流水号
+			trnObj.setRptid(fraudObj.getNewrptid());			
+			trnObj.setRedorptid(fraudObj.getRptid());			
+			trnObj.setPrdcod(fraudObj.getPrdcod());
+			trnObj.setPrdnam(fraudObj.getPrdnam());
+			trnObj.setRptdte(fraudObj.getRptdte());
+			trnObj.setRpttim(fraudObj.getRpttim());
+			trnObj.setCredtyp(Constant.CredTyp.CREDTYP_PRSN.getCode());
+
+			trnObj.setParntcode(pcode);
+			trnObj.setPeoplecode(cp.getPeopleCode());
+			trnObj.setOrgno(cp.getOrgNo());//机构号
+	        trnObj.setUsrid(cp.getUsrId());//报告查询核心人员编码
+			trnObj.setP_usrid((null == cp.getP_usrId()||"".equals(cp.getP_usrId()))?cp.getUsrId():cp.getP_usrId());//报告查询核心父人员编码
+			trnObj.setCorgno(cp.getCorgNo());//报告查询核心机构号
+			trnObj.setCporgno((null == cp.getCporgNo() || "".equals(cp.getCporgNo()))?cp.getCorgNo():cp.getCporgNo());//报告查询核心父机构号
+			
+			trnObj.setRptmoddte(fraudObj.getRptdte());
+			trnObj.setRptmodtim(fraudObj.getRpttim());
+			trnObj.setDatcmitori(Constant.DatCmitori.DatCmitori_PLANT.getCode());
+			//获取报文存放路径
+			trnObj.setReqadrr(rqd);
+			trnObj.setRptsta(RptStatus.STATIS_QUERYIN.getCode());
+			this.fraudService.createReport(trnObj);
+			fraudObj.setRetPam(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode());
+		}else{
+			fraudObj.setRetPam(herder.getString("result"));
+		}
+		tranObjToStr(fraudObj);
+		return SUCCESS;
+	}
+	
+	
+	
+	/**
+	 * 根据传递的参数获取查询报告列表信息
+	 * 
+	 * @return
+	 * @throws WFException
+	 */
+	/**
+	 * 根据传递的参数获取查询报告列表信息
+	 * 
+	 * @return
+	 * @throws WFException
+	 */
+	public String findListByConditions() {
+		XPeopleInfo cp= this.getCurrentPeople();
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		String peopleCode = this.getCurrentPeopleCode();
+		queryBean.setQueryModel(WfDatCreditrpt.class.getName());
+		Map<String, String> param = queryBean.getParams();
+		//判断子账户和主账户
+		String parantCode = cp.getParntCode();
+		if(StringUtils.isBlank(parantCode)){
+			param.put(WfDatCreditrpt.CREDITRPT_PEOPLECODE+"__OR__" + WfDatCreditrpt.CREDITRPT_PARNTCODE, peopleCode);
+		}else if (StringUtils.isNotBlank(peopleCode)) {
+			param.put(WfDatCreditrpt.CREDITRPT_PEOPLECODE, peopleCode);
+		}
+	
+		//设置页面
+		queryBean.setPageNo(Integer.parseInt(fraudObj.getPageNoStr()));
+		queryBean.setPageSize(10);
+		queryBean.setOrderBy(WfDatCreditrpt.CREDITRPT_RPTMODDTE+"_"+WfDatCreditrpt.CREDITRPT_RPTMODTIM );
+		pageBean = this.basePageService.findByPage(queryBean);
+		//ajaxResponsePageMessage(); 
+		fraudObj.setList(pageBean.getData());
+		tranObjToStr(fraudObj);
+
+		queryBean.getParams().clear();
+		queryBean.getExtraParams().clear();
+		return SUCCESS;
+	}
+
+
+	
+
+	
+	
+
+	
+	/**
+	 * 查看报告
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public String findFraudByrptid(){
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		logger.debug("查看报告Action");
+		
+		Map map = new HashMap();
+		map.put("res", Constant.getNormal());
+		//后台获取报告信息
+		WfDatCreditrpt creditrpt = null;
+		try {
+			creditrpt = this.fraudService.getFraudByrptid(fraudObj.getRptid());
+		} catch (WFException e) {
+			e.printStackTrace();
+			map.put("res", "查看报告：查询报告对象失败！");
+			logger.error("查看报告：查询报告对象失败！");
+			ajaxResponseMessage(map);
+			return null;
+		}
+		if(creditrpt == null){
+			map.put("res", "查看报告：查询WfDatCreditrpt对象为空，不能获取到响应报文文件路径！");
+			logger.error("查看报告：查询WfDatCreditrpt对象为空，不能获取到响应报文文件路径！");
+			ajaxResponseMessage(map);
+			return null;
+		}
+		//获得所有的实体
+		String rtpJSON = "";
+		try {
+			rtpJSON = FileConstant.getFileConstant(creditrpt.getRtpadrr());
+		} catch (DomParseException e) {
+			e.printStackTrace();
+			map.put("res", "查看报告：解析响应报文失败！");
+			logger.error("查看报告：解析响应报文失败！");
+			ajaxResponseMessage(map);
+			return null;
+		}
+		if(rtpJSON.equals(Constant.ResultStatus.RESULTSTATUS_FAIL.getCode())){
+			map.put("res", "解析响应报文：找不到指定的文件！");
+			ajaxResponseMessage(map);
+			return null;
+		}
+		map.put("RTPJSON", rtpJSON);
+		//获取报文中所有的原交易
+		JSONObject josnObj =  JSONObject.fromObject(rtpJSON);
+		List<String> trncodes = new ArrayList<String>();
+		JSONObject arjo = (JSONObject) josnObj.get("body");
+		Set<String> set = arjo.keySet();		
+		for(String key : set){
+			trncodes.add(key);
+		}
+		//排序原交易
+		Collections.sort(trncodes,Collator.getInstance(java.util.Locale.CHINA));
+		//获取模板数据
+		JSONArray jsonarry = new JSONArray();
+		for (int i = 0; i < trncodes.size(); i++) {
+			LoadModel loadModel = null;
+			try {
+				loadModel = LoadModel.getInstance();
+			} catch (DomParseException e) {
+				map.put("res", "查看报告：读取模板失败！");
+				logger.error("查看报告：读取模板失败！");
+				ajaxResponseMessage(map);
+				e.printStackTrace();
+				return null;
+			}
+			String load =loadModel.getTradeTemplate("", "", trncodes.get(i));
+			jsonarry.add(load);
+		}
+		
+		map.put("JSONARRY", jsonarry);
+		map.put("creditrpt", creditrpt);
+		//获取请求的报文信息
+		ajaxResponseMessage(map);
+		return null;
+	}
+	
+	/**
+	 * 创建保存一个报告,并向前置发起请求
+	 * 
+	 * @return
+	 * @throws Exception 
+	 */
+	@SuppressWarnings({ "null", "unchecked", "rawtypes" })
+	public String createFraudReport() throws Exception {
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		XPeopleInfo cp= this.getCurrentPeople();
+		WfDatCreditrpt wfFraudrpt = new WfDatCreditrpt();
+		String pcode = (cp.getParntCode()==null || "".equals(cp.getParntCode()))?cp.getPeopleCode():cp.getParntCode();
+		
+		JSONObject jsObj = new JSONObject();
+		if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_RPT.getCode())){
+			wfFraudrpt.setRpttyp(Constant.RptTyp.RPTTYP_PRSN_CREDIT.getCode());
+			wfFraudrpt.setRptnam(Constant.RptTyp.RPTTYP_PRSN_CREDIT.getValue());
+		}else if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_FAD.getCode())){
+			wfFraudrpt.setRpttyp(Constant.RptTyp.RPTTYP_FRAUD.getCode());
+			wfFraudrpt.setRptnam(Constant.RptTyp.RPTTYP_FRAUD.getValue());
+		}else if(fraudObj.getPrttyp().equals(Constant.PrdTyp.PRDTYP_VERIF.getCode())){
+			wfFraudrpt.setRpttyp(Constant.RptTyp.RPTTYP_VERIFIED.getCode());
+			wfFraudrpt.setRptnam(Constant.RptTyp.RPTTYP_VERIFIED.getValue());
+		}
+		if(StringUtils.isBlank(fraudObj.getNewrptid())){
+			fraudObj.setNewrptid(JRNGenerator.generateJrn("P", "1", "00000000"));
+		}
+		if(StringUtils.isBlank(fraudObj.getRptdte())){
+			fraudObj.setRptdte(DateUtil.getCurrentDate8Len());
+		}
+		if(StringUtils.isBlank(fraudObj.getRpttim())){
+			fraudObj.setRpttim(DateUtil.getCurrentTimeHMSS());
+		}
+		wfFraudrpt.setRptid(fraudObj.getNewrptid());
+		//header拼接		固定元素JSON
+		JSONObject jheader = new JSONObject();
+		jheader.put("clntjrn", wfFraudrpt.getRptid());				  	//云平台报告编号
+		jheader.put("clnttrndte", fraudObj.getRptdte());	//云平台处理日期
+		jheader.put("clnttrntime", fraudObj.getRpttim());	//云平台处理时间
+		jheader.put("fnttrnjrn",  "");	//前置流水
+		jheader.put("frnttrndte", "");	//云平台处理时间
+		jheader.put("frnttrntim", "");	//云平台处理时间
+		
+		jheader.put("orgno", cp.getCorgNo()==null?"":cp.getCorgNo());		
+		jheader.put("subusrid", cp.getUsrId());			
+		jheader.put("usrid", (cp.getP_usrId() == null || "".equals(cp.getP_usrId() )) ? cp.getUsrId() : cp.getP_usrId());					 	 
+		jheader.put("datori", fraudObj.getDatcmitori());
+		//body拼接  动态元素JSON
+		JSONObject jbody = new JSONObject();
+		//得到产品原交易(缓存形式获取)
+		Cache cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		if(cache == null){
+			cache.setAvailable(false);//下次从cache中获取对象时,会重新load数据
+			cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		}
+		//获得所有的实体		
+		List<WfCfgrefPrddetil> prdDetils= (List<WfCfgrefPrddetil>) cache.getRealValues();
+		//获得本产品拥有的原交易
+		List<String> trncods = new ArrayList<String>();
+		for(WfCfgrefPrddetil prddtl : prdDetils){
+			if (prddtl.getSta().equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode()) && prddtl.getPrdcod().equals(fraudObj.getPrdcod())) {
+				trncods.add(prddtl.getTrncod());
+			}
+		}
+		
+		
+		//将原交易转换为
+		String trncodsStr = StringUtils.join(trncods.toArray(),",");
+		//拼接交易码
+		jbody.put("trncods", trncodsStr);//交易码
+		JSONObject jtrninfo = new JSONObject();
+		//获取页面元素
+		if(StringUtils.isBlank(fraudObj.getDatavar())){
+			logger.error("页面元素为空，不能提交！");
+			fraudObj.setRetMsg(WebResponseJson.getExceptionInstance().getState());
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+		JSONObject jo = JSONObject.fromObject("{"+fraudObj.getDatavar().substring(0,fraudObj.getDatavar().length()-1)+"}");
+		JSONArray japar =JSONArray.fromObject(fraudObj.getJsonpar());
+		List listJson =(List) JSONArray.toCollection(japar,WfCfgrefTrninele.class);
+		Iterator itJson = listJson.iterator();
+		
+		//报告元素JSON拼接
+		WfCfgrefTrninele wct = null;
+		while (itJson.hasNext()) {
+			wct = (WfCfgrefTrninele)itJson.next();
+			if(wct.getElecod().equals("prsnnam")){
+				 String resPrsn = VerificationForm.VerIfPrsnNam(jo.get(wct.getElecod()).toString());
+				 if(!resPrsn.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+					 logger.error(resPrsn);
+					 fraudObj.setRetMsg(resPrsn);
+					 tranObjToStr(fraudObj);
+					 return SUCCESS;
+				 }
+				 wfFraudrpt.setPrsnnam(jo.get(wct.getElecod()).toString());
+				 jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+			}else if(wct.getElecod().equals("idcard")){
+				String resPrsncod = VerificationForm.VerIfPrsnCod(jo.get(wct.getElecod()).toString());
+				 if(!resPrsncod.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+					 logger.error(resPrsncod);
+					 fraudObj.setRetMsg(resPrsncod);
+					 tranObjToStr(fraudObj);
+					 return SUCCESS;
+				 }
+				wfFraudrpt.setPrsncod(jo.get(wct.getElecod()).toString());
+				jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+			}else if(wct.getElecod().equals("mobile")){
+				String resTelno = VerificationForm.VerIfTelNo(jo.get(wct.getElecod()).toString());
+				 if(!resTelno.equals(Constant.ResultStatus.RESULTSTATUS_SUCCESS.getCode())){
+					 logger.error(resTelno);
+					 fraudObj.setRetMsg(resTelno);
+					 tranObjToStr(fraudObj);
+					 return SUCCESS;
+				 }
+				wfFraudrpt.setTelno(jo.get(wct.getElecod()).toString());
+				jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+			}else if(wct.getElecod().equals("cbcreports")){
+				jtrninfo.put(wct.getElecod(), fraudObj.getCbcreports());
+			}else{
+				jtrninfo.put(wct.getElecod(), jo.get(wct.getElecod()));
+			}
+		}
+		jbody.put("trninfo", jtrninfo);
+		jsObj.put("header", jheader);
+		jsObj.put("body", jbody);
+		String cde = DateUtil.getCurrentDate8Len();
+		String cts = DateUtil.getCurrentTimeHMSS();
+		//报文生成报文文件
+		String rqd = FileConstant.createReqFile(jsObj.toString(),wfFraudrpt.getRptid(),cde,cts);
+		if(null == rqd){
+			 logger.error("rqd为空，生成报文文件失败！");
+			 fraudObj.setRetMsg("rqd为空，生成报文文件失败！");
+			 tranObjToStr(fraudObj);
+			 return SUCCESS;
+		}
+		wfFraudrpt.setCredtyp(Constant.CredTyp.CREDTYP_PRSN.getCode());
+		wfFraudrpt.setReqadrr(rqd);
+		wfFraudrpt.setPrdcod(fraudObj.getPrdcod());
+		wfFraudrpt.setPrdnam(fraudObj.getPrdnam());	
+		wfFraudrpt.setRptdte(cde);
+		wfFraudrpt.setRpttim(cts);
+		
+		wfFraudrpt.setParntcode(pcode);
+		wfFraudrpt.setPeoplecode(cp.getPeopleCode());
+		wfFraudrpt.setOrgno(cp.getOrgNo());//机构号
+		wfFraudrpt.setUsrid(cp.getUsrId());//报告查询核心人员编码
+		wfFraudrpt.setP_usrid((null == cp.getP_usrId()||"".equals(cp.getP_usrId()))?cp.getUsrId():cp.getP_usrId());//报告查询核心父人员编码
+		wfFraudrpt.setCorgno(cp.getCorgNo());//报告查询核心机构号
+		wfFraudrpt.setCporgno((null == cp.getCporgNo() || "".equals(cp.getCporgNo()))?cp.getCorgNo():cp.getCporgNo());//报告查询核心父机构号
+	
+
+		
+
+		wfFraudrpt.setRptsta(RptStatus.STATIS_QUERYIN.getCode());
+		wfFraudrpt.setDatcmitori(Constant.DatCmitori.DatCmitori_PLANT.getCode());
+		//拼装请求报文
+		String json =jsObj.toString();
+		//生成传参实体
+		HttpCommonEntity entity = HttpParamUtil.generateRptRequest(Constant.getChnlcode(),null,IsBatch.IS_NO.getValue(),MsgType.MESSAGE_TYPE_REQUEST.getValue(), json);
+logger.debug("生成的参数实体:" + entity.toString());			
+		//向核心发起HTTP请求,并接收响应报文
+		entity = this.httpProviderService.httpCommunicate(entity);
+		if(null == entity){
+			 logger.error("请求核心接口核心返回为空！");
+			 fraudObj.setRetMsg("请求核心接口核心返回为空！");
+			 tranObjToStr(fraudObj);
+			 return SUCCESS;
+		}
+		HttpResponseCommonEntity resEntity =  entity.getResponse();
+		String message = (String) resEntity.getReturnObj();
+		if(StringUtils.isBlank(message)){
+			logger.error("请求核心接口核心返回报文为空！");
+			fraudObj.setRetMsg("请求核心接口核心返回报文为空！");
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+logger.debug("核心返回的报文数据:" + message);		
+		//解析返回更新结果
+		GeneralRptResMsg rptmsg = (GeneralRptResMsg) PackageAndAnalyzeMessage.analyzeRptResMessage(message);
+		GeneralRptMsgHeader header = rptmsg.getHeader();
+logger.debug("解析得到前置流水" + header.getFnttrnjrn());		
+		wfFraudrpt.setFntjrn(header.getFnttrnjrn());//将核心系统返回的流水号保存
+		WfDatCreditrpt creditrpt = new WfDatCreditrpt();
+		if(ResponseStatus.RESPONSE_STATUS_SUCCESS.getValue().equals(header.getStatus())){
+			wfFraudrpt.setRptmoddte(wfFraudrpt.getRptdte());
+			wfFraudrpt.setRptmodtim(wfFraudrpt.getRpttim());
+			BeanUtils.copyProperties(creditrpt, wfFraudrpt);
+			//保存一条信息
+			this.fraudService.createReport(creditrpt);
+logger.debug("更新报告记录完成, 报告ID:" + creditrpt.getRptid());
+			//返回前端操作成功
+			fraudObj.setRetMsg(WebResponseJson.getNormalInstance().getState());
+		}else{
+			fraudObj.setRetMsg(header.getResult());
+		}
+		tranObjToStr(fraudObj);
+		return SUCCESS;
+	}
+	
+	 
+   
+	/**
+	 * 根据前端传递的报告Id删除报告(更新报告状态)
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteByRptids() throws Exception{
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		if(StringUtils.isBlank(fraudObj.getRptids())){
+			logger.error("报告编号为空不能删除！");
+			fraudObj.setRetMsg(WebResponseJson.getExceptionInstance().getState());
+			tranObjToStr(fraudObj);
+			return SUCCESS;
+		}
+		
+		String[] rptidsArr = fraudObj.getRptids().split(",");
+		this.fraudService.deleteByRptids( rptidsArr);
+		fraudObj.setRetMsg(WebResponseJson.getNormalInstance().getState());
+		tranObjToStr(fraudObj);
+		return SUCCESS;
+	}
+	
+	
+	/**
+	 * 获取产品
+	 * @param prdcod
+	 * @return
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	public List<String> findPrdDtlByPrdcodFromCache(String prdcod){
+		FraudTrnObjInfo fraudObj = transStrToObj();
+		if(StringUtils.isBlank(prdcod)){
+			return null;
+		}
+		//得到产品原交易(缓存形式获取)
+		Cache cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		if(cache == null){
+			cache.setAvailable(false);//下次从cache中获取对象时,会重新load数据
+			cache = CacheFactory.getCacheInstance(CacheEnum.PrdDetilCache.getValue());
+		}
+		//获得所有的实体
+		List<WfCfgrefPrddetil> prdDetils= (List<WfCfgrefPrddetil>) cache.getRealValues();
+		List<String> trncodes = new ArrayList<String>();
+		for(WfCfgrefPrddetil prddtl : prdDetils){
+			if (prddtl.getSta().equals("1") && prddtl.equals(prdcod) ) {
+				trncodes.add(prddtl.getTrncod());
+			}
+		}
+		if(trncodes.size()==0){
+			trncodes = this.stmManagerService.queryByPrdcod(fraudObj.getPrdcod());
+		}
+		
+		return trncodes;
+	}
+	/**
+	 * 流量统计
+	 * @return
+	 */
+public String countFlow(){
+	Map<String,String> map = new HashMap<String,String>();
+	map.put("terraceFlow", "444");//验证平台使用流量
+	map.put("nozzleFlow", "545");//个人异常使用流量
+	//map.put("publicFlow", "666");//公众上报
+	ajaxResponseMessage(map.toString());
+	return null;
+}
+private TableReqParams tranStrToObj(String reqParams){
+	return JsonBinder.fromJson(reqParams, TableReqParams.class);
+}
+	public void setFraudService(IFraudService fraudService) {
+		this.fraudService = fraudService;
+	}
+	
+
+
+	public void setStmManagerService(IStmManagerService stmManagerService) {
+		this.stmManagerService = stmManagerService;
+	}
+
+	
+
+	public void setHttpProviderService(IHttpProviderService httpProviderService) {
+		this.httpProviderService = httpProviderService;
+	}
+
+
+	
+	public void setBasePageService(IBasePageService basePageService) {
+		this.basePageService = basePageService;
+	}
+	
+	public void setRptService(IRptService rptService) {
+		this.rptService = rptService;
+	}
+	
+	private FraudTrnObjInfo transStrToObj(){
+		return JsonBinder.fromJson(fraudObjStr, FraudTrnObjInfo.class);
+	}
+	
+	private void tranObjToStr(FraudTrnObjInfo trnObj){
+		fraudObjStr = JsonBinder.toJson(trnObj);
+	}
+
+	
+	public String getFraudObjStr() {
+		return fraudObjStr;
+	}
+	public void setFraudObjStr(String fraudObjStr) {
+		this.fraudObjStr = fraudObjStr;
+	}
+	public String getReqParams() {
+		return reqParams;
+	}
+	public void setReqParams(String reqParams) {
+		this.reqParams = reqParams;
+	}
+	public String getResData() {
+		return resData;
+	}
+	public void setResData(String resData) {
+		this.resData = resData;
+	}
+	
+	
+}

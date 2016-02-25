@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<!-- 查询登录父账号下的所有子账号 -->
+<query name="AccDao.queryChildren"
+		cacheable="true">
+		<![CDATA[
+			select p from PeopleInfo p where p.parntCode=:parntCode and peopleState=:peopleState
+		]]>
+	</query>
+<!-- 查询登录父账号下的所有团队 -->
+<sql-query name="AccDao.queryOrganize"
+		cacheable="true">
+		<![CDATA[
+			with org(sid,corgno,parentOrg,orgname) as (select sid,corgno,parentorg,orgName from po_organizeinfo where parentorg=:sid union all select a.sid,a.corgno,a.parentorg,a.orgname 
+ from po_organizeinfo a, org b where a.parentorg= b.sid) select corgno,parentorg,orgname from org
+		]]>
+	</sql-query>
+<!-- 根据团队id查团队下的人员 -->
+<query name="AccDao.getPeopleByOrgId"
+		cacheable="true">
+		<![CDATA[
+			select p from PeopleInfo p where p.organizeInfo=:organizeInfo and p.peopleState=:peopleState
+		]]>
+	</query>
+<!-- 查询用户下的所有产品-->
+<query name="AccDao.queryPrds"
+		cacheable="true">
+		<![CDATA[
+			select wcp from WfCfgdefPrdinfo wcp where wcp.prdcod in (select wcc.prdcod from WfCfgrefCompusrprd wcc 
+			where wcc.peoplecode=:peoplecode and wcc.sta=:sta)
+		]]>
+	</query>
+<!-- 查询用户对应产品(用户产品关系表)-->
+<query name="AccDao.getCompusrprd"
+		cacheable="true">
+		<![CDATA[
+			select wcc from WfCfgrefCompusrprd wcc where wcc.peoplecode=:peoplecode and wcc.sta=:sta
+		]]>
+	</query>
+<!-- 根据用户id查用户对象-->
+<query name="AccDao.getPeople"
+		cacheable="true">
+		<![CDATA[
+			select p  from PeopleInfo p   where p.sid=:id
+		]]>
+	</query>
+<!-- 根据团队id查团队对象-->
+<query name="AccDao.getOrganize"
+		cacheable="true">
+		<![CDATA[
+			select o  from OrganizeInfo o   where o.sid=:id
+		]]>
+	</query>
+<!-- 根据id删除用户-->
+<query name="AccDao.deletePeople"
+		cacheable="true">
+		<![CDATA[
+			update PeopleInfo p set p.peopleState=:state where p.sid=:id
+		]]>
+	</query>
+<!-- 根据角色组id查角色组-->
+<query name="AccDao.getRoleGroupById"
+		cacheable="true">
+		<![CDATA[
+			select  rg from RoleGroupInfo rg where rg.sid=:id
+		]]>
+	</query>
+	
+	<!-- 根据产品编码查询当前使用的用户-->
+<query name="AccDao.queryCompusrByPrdcod"
+		cacheable="true">
+		<![CDATA[
+			select  new com.sinoway.acc.entity.PeopleShowInfo(p.usrId,p.peopleName,p.peopleCode) from PeopleInfo p,WfCfgrefCompusrprd cup
+			where p.peopleCode=cup.peoplecode
+			and cup.prdcod = :prdcod
+			and cup.sta = :sta
+		]]>
+	</query>
+	<!-- 根据id查询使用人信息 -->
+<query name="AccDao.findPeopleInfoById"
+		cacheable="true">
+		<![CDATA[
+			select p from PeopleInfo p where p.sid=:sid and peopleState=:peopleState
+		]]>
+	</query>
+	
+<!-- 根据peoplecode校验输入的账号是否重复 -->
+<query name="AccDao.findPeopleInfoByPeoplecode"
+		cacheable="true">
+		<![CDATA[
+			select p from PeopleInfo p where p.peopleCode =:peopleCode
+		]]>
+	</query>
+	<!-- 根据orgname校验输入的团队名称是否重复 -->
+<query name="AccDao.findPeopleInfoByNewTeam"
+		cacheable="true">
+		<![CDATA[
+			select o from OrganizeInfo o where o.orgName =:newTeam
+		]]>
+	</query>
+	
+
+
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+#pbar_main {
+	text-align: center;
+}
+
+#pbar_fullbg {
+	background-color: gray;
+	left: 0;
+	opacity: 0.5;
+	position: absolute;
+	top: 0;
+	z-index: 3;
+	filter: alpha(opacity =50);
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+}
+
+.pbar_dialog {
+	background-color: #fff;
+	left: 55%;
+	margin: -200px 0 0 -200px;
+	padding: 1px;
+	position: fixed !important; /* 浮动对话框 */
+	position: absolute;
+	top: 70%;
+	height: 50px;
+	width: 250px;
+	z-index: 5;
+	border-radius: 5px;
+	display: none;
+	font-size: 20px;
+	font-family: "微软雅黑", "Arial";
+	font-color: #555;
+}
+
+.pbar_dialog img {
+	position: relative;
+	top: 10px;
+	left: -8px;
+}

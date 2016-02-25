@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BCfgdefPrsnusr" >
+  <resultMap id="BaseResultMap" type="com.sinoway.base.entity.BCfgdefPrsnusr" >
+    <!-- ID -->
+	<id column="ID" property="id" jdbcType="VARCHAR" />
+
+
+    <!-- USRID -->
+    <result column="USRID" property="usrid" jdbcType="VARCHAR" />
+    <!-- 个人用户：100 -->
+    <result column="USRTYPE" property="usrtype" jdbcType="VARCHAR" />
+    <!-- USRNAM -->
+    <result column="USRNAM" property="usrnam" jdbcType="VARCHAR" />
+    <!-- USRPASS -->
+    <result column="USRPASS" property="usrpass" jdbcType="VARCHAR" />
+    <!-- TRDPASSWORD -->
+    <result column="TRDPASSWORD" property="trdpassword" jdbcType="VARCHAR" />
+    <!-- ORGNO -->
+    <result column="ORGNO" property="orgno" jdbcType="VARCHAR" />
+    <!-- ORGNAM -->
+    <result column="ORGNAM" property="orgnam" jdbcType="VARCHAR" />
+    <!-- USRSTA -->
+    <result column="USRSTA" property="usrsta" jdbcType="VARCHAR" />
+    <!-- USRLVL -->
+    <result column="USRLVL" property="usrlvl" jdbcType="VARCHAR" />
+    <!-- TRUENAM -->
+    <result column="TRUENAM" property="truenam" jdbcType="VARCHAR" />
+    <!-- NICKNAM -->
+    <result column="NICKNAM" property="nicknam" jdbcType="VARCHAR" />
+    <!-- MOBILEPHE -->
+    <result column="MOBILEPHE" property="mobilephe" jdbcType="VARCHAR" />
+    <!-- EMAIL -->
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <!-- CERTTYPE -->
+    <result column="CERTTYPE" property="certtype" jdbcType="VARCHAR" />
+    <!-- CERTCOD -->
+    <result column="CERTCOD" property="certcod" jdbcType="VARCHAR" />
+    <!-- QQ -->
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <!-- WECHAT -->
+    <result column="WECHAT" property="wechat" jdbcType="VARCHAR" />
+
+  </resultMap>
+  
+  <sql id="base_column_list" >
+    ID,
+			USRID,
+			USRTYPE,
+			USRNAM,
+			USRPASS,
+			TRDPASSWORD,
+			ORGNO,
+			ORGNAM,
+			USRSTA,
+			USRLVL,
+			TRUENAM,
+			NICKNAM,
+			MOBILEPHE,
+			EMAIL,
+			CERTTYPE,
+			CERTCOD,
+			QQ,
+			WECHAT
+  </sql>
+  
+  <sql id="base_column_set_noid">
+
+    <if test="usrid != null" >	  USRID = #{usrid,jdbcType=VARCHAR},	</if>
+    <if test="usrtype != null" >	  USRTYPE = #{usrtype,jdbcType=VARCHAR},	</if>
+    <if test="usrnam != null" >	  USRNAM = #{usrnam,jdbcType=VARCHAR},	</if>
+    <if test="usrpass != null" >	  USRPASS = #{usrpass,jdbcType=VARCHAR},	</if>
+    <if test="trdpassword != null" >	  TRDPASSWORD = #{trdpassword,jdbcType=VARCHAR},	</if>
+    <if test="orgno != null" >	  ORGNO = #{orgno,jdbcType=VARCHAR},	</if>
+    <if test="orgnam != null" >	  ORGNAM = #{orgnam,jdbcType=VARCHAR},	</if>
+    <if test="usrsta != null" >	  USRSTA = #{usrsta,jdbcType=VARCHAR},	</if>
+    <if test="usrlvl != null" >	  USRLVL = #{usrlvl,jdbcType=VARCHAR},	</if>
+    <if test="truenam != null" >	  TRUENAM = #{truenam,jdbcType=VARCHAR},	</if>
+    <if test="nicknam != null" >	  NICKNAM = #{nicknam,jdbcType=VARCHAR},	</if>
+    <if test="mobilephe != null" >	  MOBILEPHE = #{mobilephe,jdbcType=VARCHAR},	</if>
+    <if test="email != null" >	  EMAIL = #{email,jdbcType=VARCHAR},	</if>
+    <if test="certtype != null" >	  CERTTYPE = #{certtype,jdbcType=VARCHAR},	</if>
+    <if test="certcod != null" >	  CERTCOD = #{certcod,jdbcType=VARCHAR},	</if>
+    <if test="qq != null" >	  QQ = #{qq,jdbcType=VARCHAR},	</if>
+    <if test="wechat != null" >	  WECHAT = #{wechat,jdbcType=VARCHAR}	</if>
+
+  </sql>
+  
+  <sql id="base_column_where">
+  	  <where>
+		<if test="id != null" >
+		 and ID = #{id,jdbcType=VARCHAR}
+		</if>
+
+
+	    <if test="usrid != null" >
+		  and USRID = #{usrid,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrtype != null" >
+		  and USRTYPE = #{usrtype,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrnam != null" >
+		  and USRNAM = #{usrnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrpass != null" >
+		  and USRPASS = #{usrpass,jdbcType=VARCHAR}
+		</if>
+	    <if test="trdpassword != null" >
+		  and TRDPASSWORD = #{trdpassword,jdbcType=VARCHAR}
+		</if>
+	    <if test="orgno != null" >
+		  and ORGNO = #{orgno,jdbcType=VARCHAR}
+		</if>
+	    <if test="orgnam != null" >
+		  and ORGNAM = #{orgnam,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrsta != null" >
+		  and USRSTA = #{usrsta,jdbcType=VARCHAR}
+		</if>
+	    <if test="usrlvl != null" >
+		  and USRLVL = #{usrlvl,jdbcType=VARCHAR}
+		</if>
+	    <if test="truenam != null" >
+		  and TRUENAM = #{truenam,jdbcType=VARCHAR}
+		</if>
+	    <if test="nicknam != null" >
+		  and NICKNAM = #{nicknam,jdbcType=VARCHAR}
+		</if>
+	    <if test="mobilephe != null" >
+		  and MOBILEPHE = #{mobilephe,jdbcType=VARCHAR}
+		</if>
+	    <if test="email != null" >
+		  and EMAIL = #{email,jdbcType=VARCHAR}
+		</if>
+	    <if test="certtype != null" >
+		  and CERTTYPE = #{certtype,jdbcType=VARCHAR}
+		</if>
+	    <if test="certcod != null" >
+		  and CERTCOD = #{certcod,jdbcType=VARCHAR}
+		</if>
+	    <if test="qq != null" >
+		  and QQ = #{qq,jdbcType=VARCHAR}
+		</if>
+	    <if test="wechat != null" >
+		  and WECHAT = #{wechat,jdbcType=VARCHAR}
+		</if>
+
+      </where>
+  </sql>
+  
+  <sql id="order_clause">
+  	<if test="orderClause != null">
+  		order by ${orderClause}
+  	</if>
+  </sql>
+  
+  <select id="countByMap" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_PRSNUSR
+    <include refid="base_column_where"></include>
+  </select>
+   
+  <select id="countByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrsnusr" resultType="java.lang.Integer" >
+    select count(*) from B_CFGDEF_PRSNUSR
+  </select>
+  
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_PRSNUSR
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <select id="selectByEntity" resultMap="BaseResultMap" parameterType="com.sinoway.base.entity.BCfgdefPrsnusr" >
+    select 
+    <include refid="base_column_list" />
+    from B_CFGDEF_PRSNUSR
+    <include refid="base_column_where"></include>
+  </select>
+  
+  <insert id="insertByMap" parameterType="java.util.Map" >
+    insert into B_CFGDEF_PRSNUSR (ID,
+			USRID,
+			USRTYPE,
+			USRNAM,
+			USRPASS,
+			TRDPASSWORD,
+			ORGNO,
+			ORGNAM,
+			USRSTA,
+			USRLVL,
+			TRUENAM,
+			NICKNAM,
+			MOBILEPHE,
+			EMAIL,
+			CERTTYPE,
+			CERTCOD,
+			QQ,
+			WECHAT)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{usrid,jdbcType=VARCHAR},
+    #{usrtype,jdbcType=VARCHAR},
+    #{usrnam,jdbcType=VARCHAR},
+    #{usrpass,jdbcType=VARCHAR},
+    #{trdpassword,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{orgnam,jdbcType=VARCHAR},
+    #{usrsta,jdbcType=VARCHAR},
+    #{usrlvl,jdbcType=VARCHAR},
+    #{truenam,jdbcType=VARCHAR},
+    #{nicknam,jdbcType=VARCHAR},
+    #{mobilephe,jdbcType=VARCHAR},
+    #{email,jdbcType=VARCHAR},
+    #{certtype,jdbcType=VARCHAR},
+    #{certcod,jdbcType=VARCHAR},
+    #{qq,jdbcType=VARCHAR},
+    #{wechat,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <insert id="insertByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrsnusr" >
+    insert into B_CFGDEF_PRSNUSR (ID,
+			USRID,
+			USRTYPE,
+			USRNAM,
+			USRPASS,
+			TRDPASSWORD,
+			ORGNO,
+			ORGNAM,
+			USRSTA,
+			USRLVL,
+			TRUENAM,
+			NICKNAM,
+			MOBILEPHE,
+			EMAIL,
+			CERTTYPE,
+			CERTCOD,
+			QQ,
+			WECHAT)
+    values (
+	#{id,jdbcType=VARCHAR},
+
+
+    #{usrid,jdbcType=VARCHAR},
+    #{usrtype,jdbcType=VARCHAR},
+    #{usrnam,jdbcType=VARCHAR},
+    #{usrpass,jdbcType=VARCHAR},
+    #{trdpassword,jdbcType=VARCHAR},
+    #{orgno,jdbcType=VARCHAR},
+    #{orgnam,jdbcType=VARCHAR},
+    #{usrsta,jdbcType=VARCHAR},
+    #{usrlvl,jdbcType=VARCHAR},
+    #{truenam,jdbcType=VARCHAR},
+    #{nicknam,jdbcType=VARCHAR},
+    #{mobilephe,jdbcType=VARCHAR},
+    #{email,jdbcType=VARCHAR},
+    #{certtype,jdbcType=VARCHAR},
+    #{certcod,jdbcType=VARCHAR},
+    #{qq,jdbcType=VARCHAR},
+    #{wechat,jdbcType=VARCHAR}
+
+    )
+  </insert>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map">
+  	delete from B_CFGDEF_PRSNUSR
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <delete id="deleteByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrsnusr">
+  	delete from B_CFGDEF_PRSNUSR 
+  	<include refid="base_column_where"></include>
+  </delete>
+  
+  <update id="updateByMap" parameterType="java.util.Map">
+  	update B_CFGDEF_PRSNUSR 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+	where
+ 	ID = #{id}
+
+  </update>
+  
+  <update id="updateByEntity" parameterType="com.sinoway.base.entity.BCfgdefPrsnusr">
+  	update B_CFGDEF_PRSNUSR 
+  	<set> 
+     <include refid="base_column_set_noid" />
+    </set>
+    where
+ 	ID = #{id}
+
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into B_CFGDEF_PRSNUSR (ID,
+			USRID,
+			USRTYPE,
+			USRNAM,
+			USRPASS,
+			TRDPASSWORD,
+			ORGNO,
+			ORGNAM,
+			USRSTA,
+			USRLVL,
+			TRUENAM,
+			NICKNAM,
+			MOBILEPHE,
+			EMAIL,
+			CERTTYPE,
+			CERTCOD,
+			QQ,
+			WECHAT)
+   values
+   <foreach collection="list" item="item" index="index" separator=",">
+   	( 
+	#{item.id,jdbcType=VARCHAR},
+
+
+    #{item.usrid,jdbcType=VARCHAR},
+    #{item.usrtype,jdbcType=VARCHAR},
+    #{item.usrnam,jdbcType=VARCHAR},
+    #{item.usrpass,jdbcType=VARCHAR},
+    #{item.trdpassword,jdbcType=VARCHAR},
+    #{item.orgno,jdbcType=VARCHAR},
+    #{item.orgnam,jdbcType=VARCHAR},
+    #{item.usrsta,jdbcType=VARCHAR},
+    #{item.usrlvl,jdbcType=VARCHAR},
+    #{item.truenam,jdbcType=VARCHAR},
+    #{item.nicknam,jdbcType=VARCHAR},
+    #{item.mobilephe,jdbcType=VARCHAR},
+    #{item.email,jdbcType=VARCHAR},
+    #{item.certtype,jdbcType=VARCHAR},
+    #{item.certcod,jdbcType=VARCHAR},
+    #{item.qq,jdbcType=VARCHAR},
+    #{item.wechat,jdbcType=VARCHAR}
+
+    )
+   </foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from B_CFGDEF_PRSNUSR 
+  	where 
+  	ID
+
+  	in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">   
+		 #{item.id,jdbcType=VARCHAR}
+
+    </foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+  
+  </update>
+  
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-11 16:04:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sinoway.acc.entity.WfCfgdefCompinfo" table="WF_CFGDEF_COMPINFO">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="compno" type="string">
+            <column name="COMPNO" length="24" />
+        </property>
+        <property name="compnam" type="string">
+            <column name="COMPNAM" length="64" />
+        </property>
+        <property name="compaddr" type="string">
+            <column name="COMPADDR" length="128" />
+        </property>
+        <property name="prsnnam" type="string">
+            <column name="PRSNNAM" length="24" />
+        </property>
+        <property name="phnone" type="string">
+            <column name="PHNONE" length="64" />
+        </property>
+        <property name="strdte" type="string">
+            <column name="STRDTE" length="8" />
+        </property>
+        <property name="enddte" type="string">
+            <column name="ENDDTE" length="8" />
+        </property>
+        <property name="comptyp" type="string">
+            <column name="COMPTYP" length="3" />
+        </property>
+        <property name="sta" type="string">
+            <column name="STA" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,71 @@
+* {
+	margin: 0;
+	padding: 0
+}
+
+ul,li {
+	list-style: none
+}
+
+.box {
+	border: 1px solid #ccc;
+	margin: 10px;
+}
+
+/**流程监控标题*/
+#pmTitleDiv {
+	width: 90%;
+	height: 50px;
+	position: relative;
+	top: 20px;
+	left: 20px;
+	font-size: 25px;
+	font-weight: bolder;
+}
+
+div.tagMenu ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+div.tagMenu li {
+	display: block;
+	float: left;
+	width: 86px;
+}
+
+div.tagMenu li {
+	font-weight: bold;
+	text-align: center;
+	padding: 4px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+div.tagMenu li:hover {
+	cursor: pointer;
+}
+
+.content {
+	width: 98%;
+}
+
+#list_content {
+	height: auto;
+	margin-top: 10px;
+	width: 100%;
+}
+
+#tools span {
+	display: block;
+	margin-left: 20px;
+	padding: 0px;
+	float: right;
+	line-height: 20px;
+	cursor: pointer;
+}
+
+#tools span img {
+	float: left;
+}

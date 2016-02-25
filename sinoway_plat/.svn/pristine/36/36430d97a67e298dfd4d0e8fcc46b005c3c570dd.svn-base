@@ -1,0 +1,328 @@
+/**
+* 以下为登录界面的样式
+*/
+/**登录界面Body*/
+#loginBody {
+	background-color: #d6dee0;
+}
+
+/**登录界面顶部区域背景图*/
+#topAreaDiv { /* background-color: #d6efe5; */
+	background-image: url(../../images/red/dk_logo_bg.jpg);
+}
+
+/**登录界面顶部区域LOGO*/
+#topAreaDiv #logoDiv {
+	background-image: url(../../images/red/loginLogo.jpg);
+}
+/**登录界面中间区域标题文字效果*/
+.login_title {
+	color:#B71C20;
+}
+/**登录界面中间区域背景图*/
+.login_index {
+	background-image: url(../../images/red/loginCenterBg.jpg);
+}
+
+/**账号和密码的字体颜色*/
+.font_red {
+	color: #b71c22;
+}
+
+/**登录按钮*/
+.submit_login {
+	background-image: url(../../images/red/loginBtn.jpg);
+}
+
+/**
+* 以下为主界面的样式
+*/
+
+/**整个界面的背景图片*/
+.body_background {
+	/*background-color: #E92116;*/
+	background-color: #FFBEC3;
+}
+
+/*顶部背景色*/
+.nov_bigsmall {
+	background: url(../../images/red/bg_top.jpg) repeat-x;
+}
+
+/*顶部字体颜色*/
+.nov_bigsmall .font_colors0 {
+	color: #FFFFFF;
+}
+
+/**空白页的背景颜色*/
+#blackMainDiv {
+	background-color: transparent;
+}
+
+/*左侧隐藏后的背景图片
+.left_login {
+	background: #f2ceb9 url(../../images/red/leftArea.png) no-repeat;
+}
+*/
+#leftindex {
+	/*background:#BB000A;*/
+	background:#E9A7B6;
+}
+/*搜索框左边*/
+.input_text01 {
+	color: #a5a5a5;
+	background: url(../../images/red/ioco_06.png) no-repeat;
+}
+
+/*搜索框右边*/
+.submit_but09 {
+	background: url(../../images/red/ioco_07.png);
+}
+
+/*系统菜单项背景图*/
+.submit_but10 {
+	background: url(../../images/red/ioco_02.png);
+}
+
+/*系统菜子菜单*/
+.cc100 a {
+	background: url(../../images/red/iocn_14.jpg) left center no-repeat;
+	color: #9F5258;
+}
+
+/* 任务菜单背景图 */
+#leftindex div .title {
+	/*background: url(../../images/red/taskMenu.png) no-repeat;*/
+	background-color:#0c8cc7;
+	color:#fff;
+}
+
+/* 任务菜单背景图 : IE6*/
+* html #leftindex div .title {
+	/*background: url(../../images/red/taskMenuIE6.jpg) no-repeat;*/
+	background-color:#0c8cc7;
+	color:#fff;
+}
+
+/**任务链接颜色*/
+.link01 a:link,.link01 a:visited {
+	color: #9F5258;
+}
+
+/*隐藏左侧栏图像，隐藏前的图像*/
+.hideBefore {
+	background-image: url(../../images/red/dk_toLeft.jpg);
+}
+
+/**默认字体颜色**/
+.defaulFontColor{
+	color:#FFF;
+}
+
+.defaulFontColor2{
+	color:#000000;
+}
+
+div.taskdiv {
+	border-color: #E3E3E3;
+}
+
+.lefttaskmenu .title {
+	color: #FFF;
+}
+
+.lefttaskmenu a {
+	color: #FFF;
+}
+
+/*隐藏左侧栏图像，隐藏后的图像*/
+.hideAfter {
+	background-image: url(../../images/red/dk_toRight.png);
+}
+
+/*机构人员管理区域头*/
+.poAreaHead {
+	margin-left: 5px;
+	font-size: 14px;
+	padding-left: 20px;
+	position: relative;
+	top: 5px;
+	height: 25px;
+	color: #000;
+	background: url(../../images/red/iocn_06.jpg) no-repeat;
+}
+
+/*表格表头背景色和字体色*/
+.font_colors07 {
+	color: #FFFFFF;
+	background-color: #BB000A;
+}
+
+/*表格的奇数列背景色*/
+.gridOdd {
+	background-color: #CBD6E0;
+	color: black;
+}
+
+/*表格的偶数列背景色*/
+.gridEven {
+	background-color: #FFFFFF;
+	color: black;
+}
+
+/**窗体*/
+#showPageDiv {
+	border: 1px solid #c76c6f;
+}
+
+/**窗体的标题*/
+#showPageTitle {
+	background-color: #c76c6f;
+	color: white;
+}
+
+/*提示框*/
+#msgDiv {
+	border: 1px solid #c76c6f;
+}
+
+/*提示的标题*/
+#msgTitle {
+	background-color: #c76c6f;
+	color: white;
+}
+
+/*进度条：需替换 WebRoot\common\images\process.jpg*/
+#processDiv {
+	border: 1px solid #c76c6f;
+}
+
+/*进度条的标题*/
+#processtitle {
+	background-color: #c76c6f;
+	color: white;
+}
+
+/**授权框*/
+#authDiv {
+	background-color: #c76c6f;
+	border: 1px solid #c76c6f;
+}
+
+#authTitle {
+	background-color: #c76c6f;
+	color: white;
+}
+
+/*操作链接*/
+.operateLink {
+	color: #FF0000;
+}
+
+/**
+*以下为自动任务界面的样式
+*/
+
+/**自动任务标题*/
+#asTitleDiv {
+	color: #c76c6f;
+}
+
+/**顶部背景色*/
+#top {
+	background-color: #C76C6F;
+}
+/**顶部字体色*/
+#top h2 {
+	color: #FFF;
+}
+
+/**顶部中间分隔条背景色*/
+#top .split {
+	background-color: #FFFFFF;
+}
+
+/**中间分隔条背景色*/
+#main .split {
+	background-color: #C76C6F;
+}
+
+/**底部背景色和字体色*/
+#footer {
+	background-color: #FFBEC3;
+	color: #FFFFFF;
+}
+
+/**
+*以下为流程监控界面的样式
+*/
+/**流程监控标题*/
+#pmTitleDiv {
+	color: #c76c6f;
+}
+
+div.tagMenu li {
+	color: #FFFFFF;
+	background-color: #c76c6f;
+}
+
+div.tagMenu li:hover {
+	background-color: #cc0000;
+}
+
+div.tagMenu li.current {
+	background-color: #cc0000;
+}
+
+#headera #tableHead {
+	background-color: #c76c6f;
+}
+
+#login_bg {
+	width: 100%;
+	height: 100%;
+	background: #CCCCCC;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+}
+
+.cc01 a {
+	color: #9f5258;
+}
+
+.cc02 a {
+	color: #930606;
+}
+
+.cc03 a {
+	color: #333333;
+}
+
+.cc04 a {
+	color: #930606;
+}
+
+.ztree li a:hover {
+	background-color:#FFBEC3;
+}
+/**
+ *	Basic Layout Theme
+ * 
+ *	This theme uses the default layout class-names for all classes
+ *	Add any 'custom class-names', from options: paneClass, resizerClass, togglerClass
+ */
+/*不设置背景,以支持换皮肤背景*/
+.ui-layout-pane {  
+	border: 1px solid #BBB; 
+	padding: 0px; 
+	overflow: auto;
+}
+/* all 'resizer-bars' */ 
+.ui-layout-resizer { 
+	background: #FFBEC3; 
+} 
+/* all 'toggler-buttons' */
+.ui-layout-toggler {  
+	background: #AAA; 
+}

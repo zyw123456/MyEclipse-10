@@ -1,0 +1,23 @@
+package com.sinoway.common.que;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import sun.misc.BASE64Decoder;
+public class TestCatchPool {
+
+	
+	
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		   // 解码，然后将字节转换为文件
+		
+}
+}

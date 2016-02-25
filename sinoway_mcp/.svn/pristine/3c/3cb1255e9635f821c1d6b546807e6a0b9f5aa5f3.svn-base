@@ -1,0 +1,139 @@
+BCfgdefFntsrvportCache.isOpen = true
+BCfgdefFntsrvportCache.cacheSize = 0
+BCfgdefFntsrvportCache.defaultExpire = 0
+
+BCfgdefChnltrnauthCache.isOpen = false
+BCfgdefChnltrnauthCache.cacheSize = 0
+BCfgdefChnltrnauthCache.defaultExpire = 0
+
+BCfgdefChnltrdCache.isOpen = true
+BCfgdefChnltrdCache.cacheSize = 0
+BCfgdefChnltrdCache.defaultExpire = 0
+
+BCfgrefCompusrprdCache.isOpen = false
+BCfgrefCompusrprdCache.cacheSize = 0
+BCfgrefCompusrprdCache.defaultExpire = 0
+
+BCfgdefChanlCache.isOpen = false
+BCfgdefChanlCache.cacheSize = 0
+BCfgdefChanlCache.defaultExpire = 0
+
+BCfgdefChargeCache.isOpen = false
+BCfgdefChargeCache.cacheSize = 0
+BCfgdefChargeCache.defaultExpire = 0
+
+BCfgdefChnlblackCache.isOpen = false
+BCfgdefChnlblackCache.cacheSize = 0
+BCfgdefChnlblackCache.defaultExpire = 0
+
+BCfgdefCompusrCache.isOpen = false
+BCfgdefCompusrCache.cacheSize = 0
+BCfgdefCompusrCache.defaultExpire = 0
+
+BCfgdefExpinfoCache.isOpen = false
+BCfgdefExpinfoCache.cacheSize = 0
+BCfgdefExpinfoCache.defaultExpire = 0
+
+BCfgdefFntcustsrvCache.isOpen = false
+BCfgdefFntcustsrvCache.cacheSize = 0
+BCfgdefFntcustsrvCache.defaultExpire = 0
+
+BCfgdefFntkeyinfoCache.isOpen = true
+BCfgdefFntkeyinfoCache.cacheSize = 0
+BCfgdefFntkeyinfoCache.defaultExpire = 0
+
+BCfgdefFntsrvinfoCache.isOpen = true
+BCfgdefFntsrvinfoCache.cacheSize = 0
+BCfgdefFntsrvinfoCache.defaultExpire = 0
+
+BCfgdefFnttrnaddrCache.isOpen = true
+BCfgdefFnttrnaddrCache.cacheSize = 0
+BCfgdefFnttrnaddrCache.defaultExpire = 0
+
+BCfgdefFnttrninfoCache.isOpen = true
+BCfgdefFnttrninfoCache.cacheSize = 0
+BCfgdefFnttrninfoCache.defaultExpire = 0
+
+BCfgdefIneleCache.isOpen = false
+BCfgdefIneleCache.cacheSize = 0
+BCfgdefIneleCache.defaultExpire = 0
+
+BCfgdefMetatrnCache.isOpen = false
+BCfgdefMetatrnCache.cacheSize = 0
+BCfgdefMetatrnCache.defaultExpire = 0
+
+BCfgdefOrgblackCache.isOpen = false
+BCfgdefOrgblackCache.cacheSize = 0
+BCfgdefOrgblackCache.defaultExpire = 0
+
+BCfgdefOrginfoCache.isOpen = false
+BCfgdefOrginfoCache.cacheSize = 0
+BCfgdefOrginfoCache.defaultExpire = 0
+
+BCfgdefOuttrneleCache.isOpen = false
+BCfgdefOuttrneleCache.cacheSize = 0
+BCfgdefOuttrneleCache.defaultExpire = 0
+
+BCfgdefPrddetilCache.isOpen = false
+BCfgdefPrddetilCache.cacheSize = 0
+BCfgdefPrddetilCache.defaultExpire = 0
+
+BCfgdefPrdinfoCache.isOpen = false
+BCfgdefPrdinfoCache.cacheSize = 0
+BCfgdefPrdinfoCache.defaultExpire = 0
+
+BCfgdefPrdtrnCache.isOpen = false
+BCfgdefPrdtrnCache.cacheSize = 0
+BCfgdefPrdtrnCache.defaultExpire = 0
+
+BCfgdefQueueCache.isOpen = true
+BCfgdefQueueCache.cacheSize = 0
+BCfgdefQueueCache.defaultExpire = 0
+
+BCfgdefSuppusrCache.isOpen = false
+BCfgdefSuppusrCache.cacheSize = 0
+BCfgdefSuppusrCache.defaultExpire = 0
+
+BCfgdefSysparamCache.isOpen = true
+BCfgdefSysparamCache.cacheSize = 0
+BCfgdefSysparamCache.defaultExpire = 0
+
+BCfgdefTrnblackCache.isOpen = false
+BCfgdefTrnblackCache.cacheSize = 0
+BCfgdefTrnblackCache.defaultExpire = 0
+
+BCfgdefUsrblackCache.isOpen = false
+BCfgdefUsrblackCache.cacheSize = 0
+BCfgdefUsrblackCache.defaultExpire = 0
+
+BCfgdefUsrTrnblackCache.isOpen = false
+BCfgdefUsrTrnblackCache.cacheSize = 0
+BCfgdefUsrTrnblackCache.defaultExpire = 0
+
+BCfgrefCompwalCache.isOpen = false
+BCfgrefCompwalCache.cacheSize = 0
+BCfgrefCompwalCache.defaultExpire = 0
+
+BCfgrefFntinouttrnCache.isOpen = true
+BCfgrefFntinouttrnCache.cacheSize = 0
+BCfgrefFntinouttrnCache.defaultExpire = 0
+
+BCfgrefInouteleCache.isOpen = false
+BCfgrefInouteleCache.cacheSize = 0
+BCfgrefInouteleCache.defaultExpire = 0
+
+BCfgrefSuppwalCache.isOpen = false
+BCfgrefSuppwalCache.cacheSize = 0
+BCfgrefSuppwalCache.defaultExpire = 0
+
+BCfgrefTrnineleCache.isOpen = false
+BCfgrefTrnineleCache.cacheSize = 0
+BCfgrefTrnineleCache.defaultExpire = 0
+
+BCfgrefTrnouteleCache.isOpen = false
+BCfgrefTrnouteleCache.cacheSize = 0
+BCfgrefTrnouteleCache.defaultExpire = 0
+
+BCfgrefPrdtrnchnlCache.isOpen = false
+BCfgrefPrdtrnchnlCache.cacheSize = 0
+BCfgrefPrdtrnchnlCache.defaultExpire = 0

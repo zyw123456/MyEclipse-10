@@ -1,0 +1,540 @@
+/*start left.css*/
+body {
+	margin: 0px;
+	padding: 0px;
+	font-size: 12px;
+	color: #333333;
+	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana",
+		"sans-serif"; center center no-repeat;
+	background: #F2F2F2;
+}
+
+div,ul,li {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+a {
+	cursor: pointer
+}
+
+.font_colors01 { /* 	color: #FFFFFF; */
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.font_colors02 {
+	color: #333333;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.font_colors03 {
+	color: #333333;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.font_colors04 {
+	color: #a5a5a5;
+	font-size: 12px;
+}
+
+.font_colors05 {
+	color: #b40001;
+	font-size: 12px;
+}
+
+.font_colors06 {
+	color: #000000;
+	font-size: 12px;
+}
+
+/*机构人员人员表格表头*/
+.font_colors07 { /* 	color: #FFFFFF; */
+	font-size: 12px;
+	font-weight: bold;
+	/* 	background-color: #c76c6f; */
+}
+
+.submit_but04 {
+	width: 93px;
+	height: 24px;
+	background: url(../images/iocn_10.png) no-repeat;
+	border: 0px;
+}
+
+.submit_but05 {
+	width: 55px;
+	height: 24px;
+	background: url(../images/iocn_14.png) no-repeat;
+	border: 0px;
+}
+
+.submit_but45_24 {
+	width: 45px;
+	height: 24px;
+	background: url(../images/iocn_45_24.png) no-repeat;
+	border: 0px;
+	text-align: center;
+	margin-left: 1px;
+	margin-right: 1px;
+	margin-bottom: 2px;
+}
+
+.submit_but64_24 {
+	width: 64px;
+	height: 24px;
+	background: url(../images/iocn_64_24.png) repeat-x;
+	border: 0px;
+	text-align: center;
+	margin-left: 1px;
+	margin-right: 1px;
+	margin-bottom: 2px;
+}
+
+.submit_but06 {
+	width: 65px;
+	height: 26px;
+	background: url(../images/iocn_12.jpg) no-repeat;
+	border: 0px;
+}
+
+.submit_but07 {
+	width: 50px;
+	height: 24px;
+	background: url(../images/iocn_13.jpg) no-repeat;
+	border: 0px;
+}
+
+.submit_but08 {
+	width: 50px;
+	height: 24px;
+	background-url: url(../images/iocn_1.png);
+	background-repeat: no-repeat;
+	border: 0px;
+}
+
+.submit_but12 {
+	width: 64px;
+	height: 24px;
+	background: url(../images/iocn_12.png) no-repeat;
+	border: 0px;
+}
+
+.submit_but09 {
+	width: 30px;
+	height: 26px;
+	/* 	background: url(../images/ioco_07.png); */
+	border: 0px;
+	float: left;
+}
+
+.submit_but10 {
+	width: 145px;
+	height: 25px;
+	/* 	background: url(../images/ioco_02.png); */
+	border: 0px;
+	float: left;
+	margin-left: 12px;
+	_line-height: 25px; /*兼容IE6*/
+}
+
+.border_left01 {
+	border-left: 1px dotted #333333;
+}
+
+.border_bottom01 {
+	border-bottom: 1px dotted #333333;
+}
+
+.input_text01 { /* 	color: #a5a5a5; */
+	font-size: 12px;
+	width: 122px;
+	height: 26px;
+	/* 	background: url(../images/ioco_06.png) no-repeat; */
+	border: 0px;
+	float: left;
+	padding-left: 10px;
+	_line-height: 26px; /*兼容IE6*/
+}
+
+.input_text02 {
+	color: #a5a5a5;
+	font-size: 12px;
+	width: 695px;
+}
+
+.input_text03 {
+	color: #a5a5a5;
+	font-size: 12px;
+	width: 1000px;
+}
+
+.input_text04 {
+	color: #333333;
+	font-size: 12px;
+	width: 120px;
+}
+
+.input_text05 {
+	font-size: 12px;
+	width: 30px;
+	left: 20px;
+}
+
+.margin_top01 { /* 	margin-top: 5px; */
+	
+}
+
+.padding_top01 {
+	padding-top: 10px;
+}
+
+.link01 a:link,.link01 a:visited { /* 	color: white; */
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+}
+
+.link01 a:hover,.link01 a:active {
+	color: #930606;
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.link02 a:link,.link02 a:visited {
+	color: #333333;
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+}
+
+.link02 a:hover,.link02 a:active {
+	color: #930606;
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+}
+
+#nov_top {
+	width: 100%;
+	background: #000000;
+	margin: 0 auto;
+	height: 35px;
+}
+
+#nov_bigsmall {
+	width: 100%;
+	/* 	background: url(../images/bg_top.jpg) repeat-x; */
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: hidden;
+}
+
+#nov_bigsmall div#logoDiv {
+	height: 33px;
+	width: 223px;
+	float: left;
+	display: block;
+	line-height: 34px;
+	position: relative;
+}
+
+#nov_bigsmall span {
+	height: 34px;
+	display: block;
+	float: left;
+	line-height: 34px;
+}
+
+#nov_nr {
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+h1 {
+	color: #B3000E;
+	font-size: 12px;
+	background: url(../images/ioco_01.png) no-repeat;
+	padding-left: 25px;
+	_padding-top: 5px; /*兼容IE6*/
+	height: 24px;
+}
+
+.disblock {
+	display: block;
+}
+
+.disblock2 { /* 	width: 50%;
+	display: block;
+	float: left; */
+	
+}
+
+.nov_moon {
+	width: 1024px;
+	height: auto;
+	float: left;
+}
+
+.nov_moon2 {
+	height: 160px;
+	overflow: auto;
+	width: 1023px;
+	margin-top: 10px;
+	float: left;
+}
+
+.divmargin {
+	width: 100%;
+	height: 20px;
+	float: left;
+}
+
+#left_login {
+	width: 187px;
+	/* background: url(../images/ioco_10.png) no-repeat; */
+	background-repeat : no-repeat;
+	height: 100%;
+	position: absolute;
+	top: 35px;
+	left: 0px;
+}
+
+#left_loginov {
+	width: 187px;
+	position: absolute;
+	top: 60px;
+	_top: 85px; /*兼容IE6*/
+	left: 0px;
+	height: auto;
+}
+
+#login_cai {
+	width: 187px;
+	height: 370px;
+	float: left;
+}
+
+/**系统菜单*/
+#login_cai div#systemMenuDiv {
+	width: 178px;
+	height: 20px;
+}
+
+/**系统菜单 IE6*/
+* html #login_cai div#systemMenuDiv {
+	display: none;
+}
+
+#login_cai ul {
+	display: block;
+	padding-left: 12px;
+}
+
+.login_cai_child {
+	display: block;
+	padding-left: 12px;
+	_margin-top: -12px;
+	overflow\0: hidden; /* IE8偏移bug*/
+}
+
+#login_ren {
+	width: 187px;
+	height: 260px;
+	float: left;
+}
+
+#login_ren div#taskMenuImgDiv {
+	width: 178px;
+	height: 24px;
+}
+
+#login_ren ul {
+	padding-left: 15px;
+}
+
+#login_ren li {
+	background: url(../images/iocn_14.jpg) left center no-repeat;
+	padding-left: 15px;
+}
+
+.cc01 a {
+	background: url(../images/ioco_03.png) left center no-repeat;
+	padding-left: 15px;
+	text-decoration: none;
+}
+
+.cc02 a {
+	background: url(../images/ioco_04.png) left center no-repeat;
+	padding-left: 15px;
+	text-decoration: none;
+}
+
+.cc03 a {
+	background: url(../images/ioco_05.png) left center no-repeat;
+	padding-left: 15px;
+	text-decoration: none;
+}
+
+.cc04 a {
+	background: url(../images/ioco_05_1.png) left center no-repeat;
+	padding-left: 15px;
+	text-decoration: none;
+}
+
+.cc100 a {
+	padding-left: 15px;
+	text-decoration: none;
+}
+
+.cc_ul {
+	float: left;
+	height: auto;
+}
+
+#lefttog {
+	position: absolute;
+	left: 177px;
+	top: 289px;
+	width: 9px;
+	height: 104px;
+	z-index: 1;
+	cursor: pointer;
+}
+
+.uoon {
+	width: 99%;
+	height: 380px;
+	background: #FFFFFF;
+	color:#000;
+	border: 1PX solid #a4b5c9;
+}
+/*end left.css*/
+
+/*start jg_css.css*/
+#login_nov {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	padding-top: 0px;
+}
+
+#ry_noc {
+	position: relative;
+	/*left: 10px;
+	top: 10px;*/
+	float: left;
+	overflow: hidden;
+}
+
+#ry_boc {
+	position: relative;
+	/*top: 10px;
+	left: 20px;*/
+	left: 10px;
+	overflow: hidden;
+}
+/*end jg_css.css*/
+
+/*start css.css*/
+.padding_bottom01 {
+	padding-bottom: 10px;
+}
+/*end css.css*/
+
+/*start use index*/
+.font_red { /* 	color: #b71c22; */
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.submit_login {
+	width: 88px;
+	height: 30px;
+	background-repeat: no-repeat;
+	/* background: url(../images/dk_login_ico.jpg) no-repeat; */
+	border: 0px;
+}
+
+.login_text01 {
+	width: 141px;
+	height: 30px;
+	_line-height: 30px; /*IE6输入框居中显示*/
+	line-height: 30px; /*IE7及以上输入框居中显示*/
+	background: url(../images/dk_login_text.png);
+	border: 0px;
+}
+.login_title {
+	width: 1024px;
+	height: 56px;
+	position: absolute;
+	top: 300px;
+	left: 670px;
+	margin: -256px 0 0 -512px;
+	text-align:center;
+	_line-height: 58px; /*IE6输入框居中显示*/
+	line-height: 58px; /*IE7及以上输入框居中显示*/
+	font-size:50px;
+	font-weight:bold;
+}
+.login_index {
+	width: 1024px;
+	height: 404px;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 366px;
+	left: 670px;
+	margin: -256px 0 0 -512px;
+}
+
+#topAreaDiv {
+	height: 39px;
+	background-repeat: repeat-x;
+	position: absolute;
+	z-index: 100;
+}
+
+/**登录界面顶部区域LOGO图片*/
+#topAreaDiv #logoDiv {
+	width: 163px;
+	height: 39px;
+}
+
+/*end use index*/
+
+/*start am*/
+#am_left {
+	position: absolute;
+	left: 0px;
+	top: 5px;
+	width: 33%;
+	height: 90%;
+	float: left;
+	z-index: 1;
+}
+/*end am*/
+
+/**公用*/
+.leftTd {
+	text-align: right;
+	width: 60px;
+}
+
+.rightTd {
+	text-align: left;
+}
+
+/**多选按钮*/
+.commonCheckBox {
+	position: relative;
+	top: 3px;
+}
